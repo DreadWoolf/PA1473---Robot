@@ -18,21 +18,30 @@ from pybricks.tools import wait
 
 # Initialize the EV3 Brick
 ev3 = EV3Brick()
+elevationMotor = Motor(Port.B, Direction.COUNTERCLOCKWISE, [8, 20])  #8, 40
+clawMotor = Motor(Port.A)
+rotationMotor = Motor (Port.C, Direction.COUNTERCLOCKWISE, [12, 20]) #12, 36
+# robot = DriveBase(left_motor, right_motor, wheel_diameter=55.5, axle_track=robotAxletrack[RobotIdentity])
+
+# Sensor definitions
+colorSense = ColorSensor(Port.S2)
+pressureSense = TouchSensor(Port.S1)
+
 
 # Configure the gripper motor on Port A with default settings.
-gripper_motor = Motor(Port.A)
+gripper_motor = clawMotor #Motor(Port.A)
 
 # Configure the elbow motor. It has an 8-teeth and a 40-teeth gear
 # connected to it. We would like positive speed values to make the
 # arm go upward. This corresponds to counterclockwise rotation
 # of the motor.
-elbow_motor = Motor(Port.B, Direction.COUNTERCLOCKWISE, [8, 40])
+elbow_motor = elevationMotor #Motor(Port.B, Direction.COUNTERCLOCKWISE, [8, 40])
 
 # Configure the motor that rotates the base. It has a 12-teeth and a
 # 36-teeth gear connected to it. We would like positive speed values
 # to make the arm go away from the Touch Sensor. This corresponds
 # to counterclockwise rotation of the motor.
-base_motor = Motor(Port.C, Direction.COUNTERCLOCKWISE, [12, 36])
+base_motor = rotationMotor #Motor(Port.C, Direction.COUNTERCLOCKWISE, [12, 36])
 
 # Limit the elbow and base accelerations. This results in
 # very smooth motion. Like an industrial robot.
@@ -41,12 +50,12 @@ base_motor.control.limits(speed=60, acceleration=120)
 
 # Set up the Touch Sensor. It acts as an end-switch in the base
 # of the robot arm. It defines the starting point of the base.
-base_switch = TouchSensor(Port.S1)
+base_switch = pressureSense
 
 # Set up the Color Sensor. This sensor detects when the elbow
 # is in the starting position. This is when the sensor sees the
 # white beam up close.
-elbow_sensor = ColorSensor(Port.S3)
+elbow_sensor = ColorSensor(Port.S2)
 
 # Initialize the elbow. First make it go down for one second.
 # Then make it go upwards slowly (15 degrees per second) until
@@ -55,8 +64,8 @@ elbow_sensor = ColorSensor(Port.S3)
 # in place so it does not move.
 elbow_motor.run_time(-30, 1000)
 elbow_motor.run(15)
-while elbow_sensor.reflection() < 32:
-    wait(10)
+# while elbow_sensor.reflection() < 32:
+#     wait(10)
 elbow_motor.reset_angle(0)
 elbow_motor.hold()
 

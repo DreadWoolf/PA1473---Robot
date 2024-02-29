@@ -52,7 +52,11 @@ def main():
 
     ev3.speaker.beep()
 
-    rotate()
+
+    # elevationMotor.control.limits(speed=60, acceleration=120)
+
+
+    rotate(speed = 60)
 
 
 
@@ -62,11 +66,33 @@ def main():
 
 
 
-def rotate():
+def rotate(speed, speed_limit = 60, acceleration_limit = 120):
+    rotationMotor.control.limits(speed=speed, acceleration=acceleration_limit)
 
-    rotationMotor.turn(20)
-    return 0
 
+    while True:
+        if pressureSense.pressed():
+            print("Angle ", rotationMotor.angle())
+            rotationMotor.reset_angle(0)
+            rotationMotor.run_angle(speed,-90)
+            print("Changed Angle ", rotationMotor.angle())
+            wait(4000)
+        else:
+            rotationMotor.run(60)
+
+
+    # wait(10000)
+    # while not pressureSense.pressed():
+    #     wait(10)
+    
+    ev3.speaker.beep()
+    rotationMotor.run(-90)
+
+    # rotationMotor.reset_angle()
+    # rotationMotor.hold()
+
+    # rotationMotor.turn(20)
+    
 
 
     # wait(calibrationTime)
