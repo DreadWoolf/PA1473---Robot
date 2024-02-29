@@ -56,7 +56,10 @@ def main():
     # elevationMotor.control.limits(speed=60, acceleration=120)
 
 
-    rotate(speed = 60)
+    # Run the code for all eternity!
+    while True:
+        rotate(speed = 60)
+
 
 
 
@@ -67,200 +70,52 @@ def main():
 
 
 def rotate(speed, speed_limit = 60, acceleration_limit = 120):
-    rotationMotor.control.limits(speed=speed, acceleration=acceleration_limit)
+    smallGear = 12  #Tooths
+    bigGear = 36   #Tooths
+    multiplyAngle = (bigGear/smallGear)
 
+    rotationMotor.control.limits(speed=speed_limit, acceleration=acceleration_limit)
+    # angle = 90 * multiplyAngle
 
-    while True:
-        if pressureSense.pressed():
-            print("Angle ", rotationMotor.angle())
-            rotationMotor.reset_angle(0)
-            rotationMotor.run_angle(speed,-90)
-            print("Changed Angle ", rotationMotor.angle())
-            wait(4000)
-        else:
-            rotationMotor.run(60)
-
-
-    # wait(10000)
-    # while not pressureSense.pressed():
-    #     wait(10)
     
-    ev3.speaker.beep()
-    rotationMotor.run(-90)
-
-    # rotationMotor.reset_angle()
-    # rotationMotor.hold()
-
-    # rotationMotor.turn(20)
-    
-
-
-    # wait(calibrationTime)
-
-#     BackgroundRef = right_light.reflection() # Calibrate background reflection.
-#     print("Background: ", BackgroundRef)
-#     ev3.speaker.beep()
-#     wait(calibrationTime)
-
-#     tapeRef = right_light.reflection()  # Calibrate tape reflection.
-#     print("Tape: ", tapeRef)
-#     ev3.speaker.beep()
-
-
-#     wait(calibrationTime)
-#     ev3.speaker.beep()
-
-#     threshold = (tapeRef + BackgroundRef) / 2
-
-#     ## Auto calibrate proportional_gain.
-#     PROPORTIONAL_GAIN = k * (BackgroundRef-tapeRef) + m
-#     print("porportional gain: ", PROPORTIONAL_GAIN)
-
-
-#     FindThePath(BackgroundRef, tapeRef)
-
-
-#     while True:
-#         ## If the line is lost, atempt to find it again.
-#         if right_light.reflection() == 0 or left_light.reflection() == 0:
-#             print("Lost the line!")
-#             robot.stop()
-#             FindThePath(BackgroundRef, tapeRef)
-
-        
-#         deviation = right_light.reflection() - threshold
-#         speed = CruiseControl(speed, startspeed)
-#         turn_rate = PROPORTIONAL_GAIN * deviation
-
-#         ## uppdate the traveled distance.
-#         distance =  robot.distance()
-
-
-#         FoundPark = FindParking(BackgroundRef, threshold)
-
-#         if FoundPark == True:
-#             ## To overcome the tape.
-#             if shouldpark == True and tmpDistance + 50 < distance:
-#                     # Check if all the parkings is found, if not store if it's empty or not.
-#                     if len(parkSpace) < parkAmount:
-#                         tmpBool = checkParkEmpty()
-#                         parkSpace.append(tmpBool)
-#                         # Print the found parking and if it's empty or not with "true" or "False".
-#                         ev3.screen.print("Park", len(parkSpace), tmpBool)
-#                     else:
-#                         ## first 0, second 1 with rest from modulu.
-#                         if parkSpace[currentParking % parkAmount] == True:
-#                             print(currentParking)
-#                             # Check if we are on lap 2 or more.
-#                             if currentParking >= parkAmount and currentParking % parkAmount == 0:
-#                                 ev3.speaker.beep()
-
-#                             park(parkDepth)
-#                         else:
-#                             ev3.speaker.beep()
-
-#                         ev3.screen.print("Current park: " + str(parkSpace[currentParking % parkAmount]))
-#                         currentParking += 1
-#                         ev3.screen.print("Next park: " + str(parkSpace[currentParking % parkAmount]))
-
-#                     shouldpark = False
-#                     tmpDistance = 0
-#             elif tmpDistance + 50 < distance:
-#                     print("second park line")
-#                     tmpDistance = distance
-#                     shouldpark = True
-
-#         if distance - tmpDistance > parklength:
-#             tmpDistance = 0
-#             shouldpark = False
-
-
-#         robot.drive(speed, turn_rate)
+    if pressureSense.pressed():
+        print("Angle ", rotationMotor.angle())
+        rotationMotor.reset_angle(0)
+        rotationMotor.run_angle(speed,-90 * multiplyAngle)
+        print("Changed Angle ", rotationMotor.angle())
+        wait(4000)
+    else:
+        rotationMotor.run(60)
 
 
 
 
-# def CruiseControl(speed:int, startspeed:int):
-#     ## Distances is in mm.
-#     if distance_sensor.distance() < 80:
-#         speed = 0
-#         ev3.speaker.beep()
-#     elif distance_sensor.distance() < 200 and speed > 0:
-#         speed = speed - 0.1
-#     elif distance_sensor.distance() > 200 and speed < startspeed:
-#         speed = speed + 0.1
+# class SortingRobot:
+#     def __init__(self, zone, color):
+#         self.zone = zone
+#         self.color = color
 
-#     return speed
+#     def write(self, zone):
+#         print(zone)
 
-
-# def FindParking(background:int, threshold:int):
-#     if left_light.reflection() < background - threshold:
-#         return True
-#     else:
-#         return False
+#     def rotate(self, speed):
+#         rotate(speed)
 
 
-# def checkParkEmpty():
-#     turnRight = 90
-#     turnLeft = -90
-#     robot.turn(turnLeft)
-#     if distance_sensor.distance() < 200:
-#         robot.turn(turnRight)
-#         return False
-#     robot.turn(turnRight)
-#     return True
-    
+# zones = {
+#     1: 'Red',
+#     2: 'blue'
+# }
 
-
-# def park(parkDepth:int):
-#     parkTime = 5000 # 5s
-#     turnLeft = -90
-
-#     robot.turn(90)
-#     robot.straight(-parkDepth)
-#     wait(parkTime)
-
-#     while distance_sensor.distance() < 100:
-#         wait(10)
-    
-#     robot.straight(parkDepth)
-#     robot.turn(turnLeft)
+# color = 'red'
+# robot = SortingRobot(zones, color)
+# SortingRobot.write()
 
 
 
-# def FindThePath(background:int, tape:int):
-#     onTheLine = False
-#     tempspeed = 0.0
-#     while(onTheLine == False):
-        
-#         if left_light.reflection() == 0 or right_light.reflection() == 0 or distance_sensor.distance() < 100:
-#             DcDrive(0,0)
-#             print("Found obstacle")
-#             robot.straight(-100)
-#             robot.turn(180)
-#             tempspeed = tempspeed/2
-#             robot.stop()
-#             wait(10)
-#         elif right_light.reflection() > tape * 0.8 and right_light.reflection() < tape * 1.2: 
-            
-#             onTheLine = True
-#             DcDrive(0,0)
-#             print("Found the line!")
-
-#         DcDrive(tempspeed, 40)
-
-#         if tempspeed < 40:
-#             tempspeed += 0.01  #0.001
-
-
-# def DcDrive(left_pow:int, right_pow:int):
-#     left_motor.dc(left_pow)
-#     right_motor.dc(right_pow)
-
-
-# def getReflection(light_reflection):
-#     get_reflection = light_reflection
-#     return get_reflection
+def getColor():
+    get_color = 'red'
+    return get_color
 
 
 ## Checks if this is the running script, and not imported from somewhere!
