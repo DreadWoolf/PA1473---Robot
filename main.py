@@ -3,7 +3,7 @@
 # Pybricks imports
 from pybricks import robotics
 from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
+from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
 from pybricks.parameters import Port, Stop, Direction, Color
 from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
@@ -23,7 +23,8 @@ rotationMotor = Motor (Port.C)
 
 # Sensor definitions
 colorSense = ColorSensor(Port.S2)
-# pressureSense = ColorSensor(Port.S1)
+pressureSense = TouchSensor(Port.S1)
+
 # distance_sensor = UltrasonicSensor(Port.S4)
 
 """
