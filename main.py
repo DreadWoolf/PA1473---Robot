@@ -12,35 +12,19 @@ from pybricks.robotics import DriveBase
 
 
 # Your code goes here
-
-## Orginal is 104, but then some robots do not turn accurate.
-## May be because of dust in motors or something else.
-robotAxletrack = {
-    'A' : 105,  ## Accurate
-    'B' : 104,
-    'C' : 104,
-    'D' : 120,  ## Accurate
-    'E' : 106,
-    'F' : 104,
-    'G' : 107   ## Accurate
-}
-
-RobotIdentity = 'E'
-
-
-
 # Robot definitions
 ev3 = EV3Brick()
 
 # Motor definitions
-left_motor = Motor(Port.B)
-right_motor = Motor(Port.C)
-robot = DriveBase(left_motor, right_motor, wheel_diameter=55.5, axle_track=robotAxletrack[RobotIdentity])
+elevationMotor = Motor(Port.B)
+clawMotor = Motor(Port.A)
+rotationMotor = Motor (Port.C)
+# robot = DriveBase(left_motor, right_motor, wheel_diameter=55.5, axle_track=robotAxletrack[RobotIdentity])
 
 # Sensor definitions
-left_light = ColorSensor(Port.S2)
-right_light = ColorSensor(Port.S3)
-distance_sensor = UltrasonicSensor(Port.S4)
+colorSense = ColorSensor(Port.S2)
+# pressureSense = ColorSensor(Port.S1)
+# distance_sensor = UltrasonicSensor(Port.S4)
 
 """
 Important! The code may not function correctly if the first line from the template is not included.
@@ -66,6 +50,24 @@ def main():
     PROPORTIONAL_GAIN = 3.5
 
     ev3.speaker.beep()
+
+    rotate()
+
+
+
+
+
+
+
+
+
+def rotate():
+
+    rotationMotor.turn(20)
+    return 0
+
+
+
     # wait(calibrationTime)
 
 #     BackgroundRef = right_light.reflection() # Calibrate background reflection.
