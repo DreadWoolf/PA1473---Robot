@@ -1,4 +1,4 @@
-print("meow")#!/usr/bin/env pybricks-micropython
+#!/usr/bin/env pybricks-micropython
 
 from pybricks import robotics
 from pybricks.hubs import EV3Brick
