@@ -21,8 +21,8 @@ elevationMotor = Motor(Port.B)  #8, 40
 clawMotor = Motor(Port.A)
 rotationMotor = Motor (Port.C) #12, 36
 
-
-
+## Orginal is 104, but then some robots do not turn accurate.
+## May be because of dust in motors or something else.
 RobotRegister = {
     'A' : 0,  ## Accurate
     'B' : 19,
@@ -98,7 +98,7 @@ def main():
 
 
 def armMovement(angleTarget, operatingSpeed = 60):
-    # Thooths on the gears.
+    
     bigGear = 40
     smallGear = 8
     multiplyAngle = -(bigGear/smallGear)
