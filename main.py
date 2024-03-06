@@ -21,6 +21,9 @@ elevationMotor = Motor(Port.B)  #8, 40
 clawMotor = Motor(Port.A)
 rotationMotor = Motor (Port.C) #12, 36
 
+# Sensor definitions
+colorSense = ColorSensor(Port.S2)
+pressureSense = TouchSensor(Port.S1)
 
 
 RobotRegister = {
@@ -34,17 +37,6 @@ RobotRegister = {
 }
 
 RobotIdentity = 'B'
-
-
-# Sensor definitions
-colorSense = ColorSensor(Port.S2)
-pressureSense = TouchSensor(Port.S1)
-
-# distance_sensor = UltrasonicSensor(Port.S4)
-
-"""
-Important! The code may not function correctly if the first line from the template is not included.
-"""
  
 
 zones = {
@@ -64,103 +56,70 @@ zoneLocation = {
 }
 
 
-
 def main():
-
     ev3.speaker.beep()
 
-    test = 3
     times = 5
-    # startcolor = colorSense.color()
 
-    # if (startcolor == "Color.Yellow"):
-    #     elevationMotor.reset_angle(0)
-    # else:
-    #     elevationMotor.run(-60)
-    # while True:
+    print("Calibrate arm")
+    armMovement(angleTarget=35)
+    calibrate()
 
-    #     rotate(operatingSpeed=60)
-    # Run the code for all eternity!
+    for i in range(times):
+        goToZone = random.randint(1,3)
+        rotateBase(operatingSpeed= 60, angle = zoneLocation[goToZone])
+        print("Open claws")
+        armMovement(angleTarget= -35)
+        print("Grip")
+        armMovement(angleTarget= 35)
+        print("Check color")
+        # run target, might be better.
+        calibrate()
+        armMovement(angleTarget= -35)
+        print("Let go")
+        armMovement(angleTarget= 35)
+        print("Close the empty claws")
+        # rotateBase(operatingSpeed= 60, angle = zoneLocation[0])
 
-    # armMovement(angleTarget=-32)
-
-    print("the color is: ", colorSense.color())
-    while times > 0:
-        armMovement(angleTarget=35)
-        test = rotate(operatingSpeed= 60, angle = zoneLocation[test])
-        print("the color is: ", colorSense.color())
-        times -= 1
-        armMovement(angleTarget=-35)
-    # armMovement(angleTarget=-45)
-
-
+    armMovement(angleTarget= -35)
+    
 
 
 
 def armMovement(angleTarget, operatingSpeed = 60):
-    # Thooths on the gears.
+    # Thooths on the gears of the arm.
     bigGear = 40
     smallGear = 8
     multiplyAngle = -(bigGear/smallGear)
+
     print("start arm angle " , elevationMotor.angle())
     elevationMotor.run_angle(operatingSpeed,angleTarget * multiplyAngle)
     print("targeted arm angle " , elevationMotor.angle())
-    
-    # while test ==True:
-    #     if(colorSense.color() == Color.Black):
-    #         ev3.speaker.beep()
 
-    #         test=False
-            
-        
-    #elevationMotor.control.limits(speed=60, acceleration=120)
+
+
+def calibrate():
+    while not pressureSense.pressed():
+        rotationMotor.run(60)
     
+    rotationMotor.reset_angle(0)
+
+
+def rotateBase(operatingSpeed, angle, speed_limit = 60, acceleration_limit = 120):
+    smallGear = 12  #Tooths for gear moving clockwise. 
+    bigGear = 36   #Tooths for gear moving counter clockwise. 
+    multiplyAngle = -(bigGear/smallGear)
+
+    rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
     return 0
 
 
-
-
-
-
-
-def rotate(operatingSpeed, angle, speed_limit = 60, acceleration_limit = 120):
-    smallGear = 12  #Tooths
-    bigGear = 36   #Tooths
-    multiplyAngle = -(bigGear/smallGear)
-
-    # errorMargin = RobotRegister[RobotIdentity]
-
-    # rotationMotor.control.limits(speed = speed_limit, acceleration = acceleration_limit)
-
-    # angle = 90 * multiplyAngle
-
-    while True:
-        if pressureSense.pressed():
-            print("Angle ", rotationMotor.angle())
-            rotationMotor.reset_angle(0)
-            rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
-            print("Changed Angle ", rotationMotor.angle())
-            wait(4000)
-            return (random.randint(1,3))
-        else:
-            rotationMotor.run(60)
-
-    # if pressureSense.pressed():
-    #     print("Angle ", rotationMotor.angle())
-    #     rotationMotor.reset_angle(0)
-    #     rotationMotor.run_angle(operatingSpeed, 90 * multiplyAngle)
-    #     print("Changed Angle ", rotationMotor.angle())
-    #     wait(4000)
-    # else:
-    #     rotationMotor.run(60)
-            
-
-
-def getColor():
-    get_color = 'red'
-    return get_color
+# def getColor():
+#     get_color = 'red'
+#     return get_color
 
 
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
+    # armMovement(angleTarget=-35)
     main()
