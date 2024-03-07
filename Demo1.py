@@ -69,23 +69,16 @@ def main():
         goToZone = random.randint(1,3)
         rotateBase(operatingSpeed= 60, angle = zoneLocation[goToZone])
         print("Open claws")
-        clawMovement(open = True)
         armMovement(angleTarget= -35)
-
         print("Grip")
-        clawMovement(open = False)
         armMovement(angleTarget= 35)
-
         print("Check color")
         # run target, might be better.
         calibrate()
-
         armMovement(angleTarget= -35)
         print("Let go")
-        clawMovement(open = True)
         armMovement(angleTarget= 35)
         print("Close the empty claws")
-        clawMovement(open = False)
         # rotateBase(operatingSpeed= 60, angle = zoneLocation[0])
 
     # Go back to start.
@@ -127,22 +120,7 @@ def rotateBase(operatingSpeed, angle, speed_limit = 60, acceleration_limit = 120
 #     return get_color
 
 
-def clawMovement(open:bool):
-    smallGear = 12  #Tooths for gear moving clockwise. 
-    bigGear = 16   #Tooths for gear moving counter clockwise. 
-    multiplyAngle = -(bigGear/smallGear)
-
-    if open:
-        clawMotor.run_angle(60 ,(60) * multiplyAngle)
-    # wait(4000)
-    else:
-        clawMotor.run_angle(60 ,(-60) * multiplyAngle)
-    return 0
-
-
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
-    # armMovement(angleTarget= -35 * 2)
-    # for i in range(3):
-    #     clawMovement()
+    # armMovement(angleTarget=-35)
     main()
