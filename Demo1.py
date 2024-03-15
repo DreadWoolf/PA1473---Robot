@@ -27,13 +27,13 @@ pressureSense = TouchSensor(Port.S1)
 
 
 RobotRegister = {
-    'A' : 0,  ## Accurate
-    'B' : 19,
+    'A' : 0,
+    'B' : 19, ## Accurate
     'C' : 0,
-    'D' : 0,  ## Accurate
+    'D' : 0,  
     'E' : 0,
     'F' : 0,
-    'G' : 0   ## Accurate
+    'G' : 0
 }
 
 RobotIdentity = 'B'
@@ -70,13 +70,16 @@ def main():
         rotateBase(operatingSpeed= 60, angle = zoneLocation[goToZone])
         print("Open claws")
         armMovement(angleTarget= -35)
+
         print("Grip")
         armMovement(angleTarget= 35)
         print("Check color")
-        # run target, might be better.
+        
         calibrate()
+        
         armMovement(angleTarget= -35)
         print("Let go")
+        
         armMovement(angleTarget= 35)
         print("Close the empty claws")
         # rotateBase(operatingSpeed= 60, angle = zoneLocation[0])
@@ -113,11 +116,6 @@ def rotateBase(operatingSpeed, angle, speed_limit = 60, acceleration_limit = 120
 
     rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
     return 0
-
-
-# def getColor():
-#     get_color = 'red'
-#     return get_color
 
 
 ## Checks if this is the running script, and not imported from somewhere!
