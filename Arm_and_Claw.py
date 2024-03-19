@@ -16,11 +16,8 @@ def Pickup(angleTarget:int, openClawsFirst:bool, height:int):
 
 
 def Place(angleTarget:int, openClawsFirst:bool):
-    # if openClawsFirst:
-
-    ## OBS kommer greppa även om håller i något!!!
     
-    clawMovement(open = openClawsFirst) # If openFirst = True will open here.
+    # clawMovement(open = openClawsFirst) # If openFirst = True will open here.
     armMovement(angleTarget= angleTarget)
     clawMovement(open= (not openClawsFirst)) # If not open first will grip here.
     armMovement(angleTarget= -angleTarget)
