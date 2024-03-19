@@ -85,37 +85,39 @@ def main():
     # armMovement(angleTarget=-32)
 
     print("the color is: ", colorSense.color())
+
     while times > 0:
-        armMovement(angleTarget=35)
-        test = rotate(operatingSpeed= 60, angle = zoneLocation[test])
+        armMovement(angleTarget=35)  # Move arm up
+        test = rotate(operatingSpeed=60, angle=zoneLocation[test])
         print("the color is: ", colorSense.color())
+        armMovement(angleTarget=-35, grab_item=True)  # Move arm down and grab
         times -= 1
-        armMovement(angleTarget=-35)
-    # armMovement(angleTarget=-45)
+        armMovement(angleTarget=-45)  # Move arm to initial position
+
 
 
 
 
 
 def armMovement(angleTarget, operatingSpeed = 60):
-    
-    bigGear = 40
-    smallGear = 8
-    multiplyAngle = -(bigGear/smallGear)
-    print("start arm angle " , elevationMotor.angle())
-    elevationMotor.run_angle(operatingSpeed,angleTarget * multiplyAngle)
-    print("targeted arm angle " , elevationMotor.angle())
-    
-    # while test ==True:
-    #     if(colorSense.color() == Color.Black):
-    #         ev3.speaker.beep()
+  """
+  This function controls the elevation motor and optionally grabs an item.
 
-    #         test=False
-            
-        
-    #elevationMotor.control.limits(speed=60, acceleration=120)
-    
-    return 0
+  Args:
+      angleTarget: The target angle for the elevation motor.
+      operatingSpeed: The speed at which the motor operates (default: 60).
+      grab_item: Boolean flag indicating whether to grab an item after movement (default: False).
+  """
+  # Existing code for calculating gear ratio and printing starting angle...
+
+  elevationMotor.run_angle(operatingSpeed, angleTarget * multiplyAngle)
+
+  # Add a new argument and conditional statement for grabbing:
+  if grab_item:
+    grab_item(operating_speed)
+
+  # Print targeted angle and return...
+
 
 
 
@@ -159,6 +161,22 @@ def rotate(operatingSpeed, angle, speed_limit = 60, acceleration_limit = 120):
 def getColor():
     get_color = 'red'
     return get_color
+
+
+def grab_item(operating_speed=60, grab_angle=90):
+  """
+  This function controls the claw motor to grab an item.
+
+  Args:
+      operating_speed: The speed at which the motor operates (default: 60).
+      grab_angle: The angle to which the claw motor should move to grab (default: 90).
+  """
+  clawMotor.reset_angle(angle=0)
+  clawMotor.run_angle(operating_speed, grab_angle)
+
+
+
+
 
 
 ## Checks if this is the running script, and not imported from somewhere!
