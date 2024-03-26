@@ -79,6 +79,7 @@ def main():
     print("Calibrate arm")
     
 
+<<<<<<< Updated upstream
     Calibrate()
     # zone0Calibration()
     run = 0
@@ -169,6 +170,28 @@ def main():
 
 #     # if openClawsFirst == False:
 #     #     clawMovement(open=(not openClawsFirst))
+=======
+def getColor():
+    # Get RGB values from the sensor (assuming they are in the range 0-100)
+    red, green, blue = colorSense.rgb()
+    # Define margin of error
+    margin = 6  # Adjust the margin as needed
+    # Define colors and their conditions
+    colors = [
+        ("Red", lambda r, g, b: (r > g + margin or r > g - margin) and (r > b + margin or r > b - margin ) and r > 33 - margin ),
+        ("Green", lambda r, g, b: (g > r + margin or g > r - margin) and g > b + margin or g > b - margin and g > 33 - margin ),
+        ("Blue", lambda r, g, b: (b > r + margin or b > r - margin) and (b > g + margin or b > g - margin) and b > 33 - margin ),
+        #("Greenb", lambda r, g, b: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > 33 - margin and b > 33 - margin ),  # Condition for Greenb
+        # Add more colors here
+        # ("ColorName", lambda r, g, b: <condition>)
+    ]
+    # Check each color condition
+    for color_name, condition in colors:
+        if condition(red, green, blue):
+            return color_name
+
+    return "None of them"  # Object doesn't match any color predominantly
+>>>>>>> Stashed changes
 
 
 # def Place(angleTarget:int, openClawsFirst:bool):

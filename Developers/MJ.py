@@ -9,7 +9,6 @@ from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
 
 
-import random
 
 
 # Your code goes here
@@ -17,24 +16,10 @@ import random
 ev3 = EV3Brick()
 
 # Motor definitions
-elevationMotor = Motor(Port.B)  #8, 40
+elevationMotor = Motor(Port.B)
 clawMotor = Motor(Port.A)
-rotationMotor = Motor (Port.C) #12, 36
-
-## Orginal is 104, but then some robots do not turn accurate.
-## May be because of dust in motors or something else.
-RobotRegister = {
-    'A' : 0,  ## Accurate
-    'B' : 19,
-    'C' : 0,
-    'D' : 0,  ## Accurate
-    'E' : 0,
-    'F' : 0,
-    'G' : 0   ## Accurate
-}
-
-RobotIdentity = 'B'
-
+rotationMotor = Motor (Port.C)
+# robot = DriveBase(left_motor, right_motor, wheel_diameter=55.5, axle_track=robotAxletrack[RobotIdentity])
 
 # Sensor definitions
 colorSense = ColorSensor(Port.S2)
@@ -47,72 +32,33 @@ Important! The code may not function correctly if the first line from the templa
 """
  
 
-zones = {
-    0: 'DropOf',
-    1: 'red',
-    2: 'blue',
-    3: 'yellow'
-}
-
-errorMargin = RobotRegister[RobotIdentity]
-
-zoneLocation = {
-    0: 0,
-    1: 90 + errorMargin,
-    2: 135 + errorMargin + 2,
-    3: 180 + errorMargin + 3
-}
-
-
-
 def main():
+    speed = startspeed = 50
+    tmpDistance = 0
+
+    calibrationTime = 5000 # 5s #2000
+
+    parkAmount = 5  # 3
+    parklength = 230    ##200
+    parkDepth =  200    ##100
+    currentParking = parkAmount
+    parkSpace = []
+    shouldpark = False
+    
+    ## k and m is for an equation for calibration of proportional_gain.
+    k = -0.5
+    m = 18
+    PROPORTIONAL_GAIN = 3.5
 
     ev3.speaker.beep()
-    test = 3
-    times = 5
-    startcolor = colorSense.color()
 
-    if (startcolor == Color.Yellow):
-        elevationMotor.reset_angle(0)
-    else:
-        elevationMotor.run(-60)
-    # while True:
 
-    #     rotate(operatingSpeed=60)
+    # elevationMotor.control.limits(speed=60, acceleration=120)
+
+
     # Run the code for all eternity!
-
-    print("the color is: ", colorSense.color())
-    while times > 0:
-        armMovement(angleTarget=45)
-        test = rotate(operatingSpeed= 60, angle = zoneLocation[test])
-        print("the color is: ", colorSense.color())
-        times -= 1
-        armMovement(angleTarget=-45)
-    # armMovement(angleTarget=-45)
-
-
-
-
-
-def armMovement(angleTarget, operatingSpeed = 60):
-    
-    bigGear = 40
-    smallGear = 8
-    multiplyAngle = -(bigGear/smallGear)
-    print("start arm angle " , elevationMotor.angle())
-    elevationMotor.run_angle(operatingSpeed,angleTarget * multiplyAngle)
-    print("targeted arm angle " , elevationMotor.angle())
-    
-    # while test ==True:
-    #     if(colorSense.color() == Color.Black):
-    #         ev3.speaker.beep()
-
-    #         test=False
-            
-        
-    #elevationMotor.control.limits(speed=60, acceleration=120)
-    
-    return 0
+    while True:
+        rotate(speed = 60)
 
 
 
@@ -120,44 +66,76 @@ def armMovement(angleTarget, operatingSpeed = 60):
 
 
 
-def rotate(operatingSpeed, angle, speed_limit = 60, acceleration_limit = 120):
+
+
+
+def rotate(speed, speed_limit = 60, acceleration_limit = 120):
     smallGear = 12  #Tooths
     bigGear = 36   #Tooths
-    multiplyAngle = -(bigGear/smallGear)
+    multiplyAngle = (bigGear/smallGear)
 
-    # errorMargin = RobotRegister[RobotIdentity]
-
-    # rotationMotor.control.limits(speed = speed_limit, acceleration = acceleration_limit)
-
+    rotationMotor.control.limits(speed=speed_limit, acceleration=acceleration_limit)
     # angle = 90 * multiplyAngle
 
-    while True:
-        if pressureSense.pressed():
-            print("Angle ", rotationMotor.angle())
-            rotationMotor.reset_angle(0)
-            rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
-            print("Changed Angle ", rotationMotor.angle())
-            wait(4000)
-            return (random.randint(1,3))
-        else:
-            rotationMotor.run(60)
+    
+    if pressureSense.pressed():
+        print("Angle ", rotationMotor.angle())
+        rotationMotor.reset_angle(0)
+        rotationMotor.run_angle(speed,-90 * multiplyAngle)
+        print("Changed Angle ", rotationMotor.angle())
+        wait(4000)
+    else:
+        rotationMotor.run(60)
 
-    # if pressureSense.pressed():
-    #     print("Angle ", rotationMotor.angle())
-    #     rotationMotor.reset_angle(0)
-    #     rotationMotor.run_angle(operatingSpeed, 90 * multiplyAngle)
-    #     print("Changed Angle ", rotationMotor.angle())
-    #     wait(4000)
-    # else:
-    #     rotationMotor.run(60)
-            
+
+
+
+# class SortingRobot:
+#     def __init__(self, zone, color):
+#         self.zone = zone
+#         self.color = color
+
+#     def write(self, zone):
+#         print(zone)
+
+#     def rotate(self, speed):
+#         rotate(speed)
+
+
+# zones = {
+#     1: 'Red',
+#     2: 'blue'
+# }
+
+# color = 'red'
+# robot = SortingRobot(zones, color)
+# SortingRobot.write()
+
 
 
 def getColor():
-    get_color = 'red'
-    return get_color
+    # Get RGB values from the sensor (assuming they are in the range 0-100)
+    red, green, blue = colorSense.rgb()
+    # Define margin of error
+    margin = 6  # Adjust the margin as needed
+    # Define colors and their conditions
+    colors = [
+        ("Red", lambda r, g, b: (r > g + margin or r > g - margin) and (r > b + margin or r > b - margin ) and r > 33 - margin ),
+        ("Green", lambda r, g, b: (g > r + margin or g > r - margin) and g > b + margin or g > b - margin and g > 33 - margin ),
+        ("Blue", lambda r, g, b: (b > r + margin or b > r - margin) and (b > g + margin or b > g - margin) and b > 33 - margin ),
+        #("Greenb", lambda r, g, b: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > 33 - margin and b > 33 - margin ),  # Condition for Greenb
+        # Add more colors here
+        # ("ColorName", lambda r, g, b: <condition>)
+    ]
+    # Check each color condition
+    for color_name, condition in colors:
+        if condition(red, green, blue):
+            return color_name
+
+    return "None of them"  # Object doesn't match any color predominantly
 
 
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
     main()
+
