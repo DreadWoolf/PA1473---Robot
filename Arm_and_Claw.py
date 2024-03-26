@@ -1,7 +1,8 @@
 from Parameters import *
+from Arm_and_Claw import *
 
 
-def Pickup(angleTarget:int, openClawsFirst:bool, height:int):
+def Pickup(angleTarget:int, openClawsFirst:bool, height:int = 0):
     # if height <= 0:
     clawMovement(open = openClawsFirst) # If openFirst = True will open here.
     armMovement(angleTarget= angleTarget)

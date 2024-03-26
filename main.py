@@ -1,66 +1,4 @@
-"""# #!/usr/bin/env pybricks-micropython
-
-# # Pybricks imports
-# from pybricks import robotics
-# from pybricks.hubs import EV3Brick
-# from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
-# from pybricks.parameters import Port, Stop, Direction, Color
-# from pybricks.tools import wait, StopWatch
-# from pybricks.robotics import DriveBase
-
-
-# import random
-
-
-# # Your code goes here
-# # Robot definitions
-# ev3 = EV3Brick()
-
-# # Motor definitions
-# elevationMotor = Motor(Port.B)  #8, 40
-# clawMotor = Motor(Port.A)
-# rotationMotor = Motor (Port.C) #12, 36
-
-# # Sensor definitions
-# colorSense = ColorSensor(Port.S2)
-# pressureSense = TouchSensor(Port.S1)
-
-
-# RobotRegister = {
-#     'A' : 0,  ## Accurate
-#     'B' : 19,
-#     'C' : 0,
-#     'D' : 0,  ## Accurate
-#     'E' : 0,
-#     'F' : 0,
-#     'G' : 0   ## Accurate
-# }
-
-# RobotIdentity = 'B'
- 
-
-# zones = {
-#     0: 'DropOf',
-#     1: 'red',
-#     2: 'blue',
-#     3: 'yellow'
-# }
-
-# errorMargin = RobotRegister[RobotIdentity]
-
-# zoneLocation = {
-#     0: 0,
-#     1: 90 + errorMargin,
-#     2: 135 + errorMargin + 2,
-#     3: 180 + errorMargin + 3
-# }
-
-# zoneHeight = {
-#     0: 0,
-#     1: 0,
-#     2: 0,
-#     3: 0
-# }"""
+#!/usr/bin/env pybricks-micropython
 
 # Should import all, and work otherwise uncoment the stuff.
 from Parameters import *
@@ -71,6 +9,7 @@ def main():
 
     times = 5
     zoneAmount = 3
+    cargo = False
     
     print("Calibrate arm")
     
@@ -86,18 +25,26 @@ def main():
 
         goToZone = location
 
-        rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
-        if cargo:
-            Place(angleTarget= -35, openClawsFirst= False)
-            # print("Open claws")
-            # clawMovement(open = True)
-            # armMovement(angleTarget= -35)
 
-            # print("Grip")
-            # clawMovement(open = False)
-            # armMovement(angleTarget= 35)
+        if cargo:
+            #Sort
+            ev3.speaker.beep()
+            wait(2)
+            ev3.speaker.beep()
+
+            LocationZero()
+            Place(angleTarget= -35, openClawsFirst= False)
+            cargo = False
+
+            lastZone = 0
+
         else:
+            rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
             Pickup(angleTarget= -35, openClawsFirst= True)
+
+            # picked up package true or false.
+
+            cargo = True
 
             # print("Open claws")
             # clawMovement(open = True)
@@ -108,30 +55,37 @@ def main():
             # armMovement(angleTarget= 35)
 
         print("Check color \nWhere to next= ", location)
-
-        
         cargo = False
 
         
-        if location == 2:
+        
+
+        # if cargo:
+            
+        #     # goToZone = 0
+        #     # cargo = False
+        #     # Go to drop of.
+        # else:
+
+
+        if location >= zoneAmount:
+            location = 0
+            goToZone = 0
+        else:
+            lastZone = location
+            location += 1
+            goToZone = location
+            if location >= zoneAmount + 1:
+                location = 0
+                LocationZero()
+                wait(1000)
+                ev3.speaker.beep()
+        
+        # Testing placment (problem since the code above is increasing before this)
+        if location == 2 + 1:
             cargo = True
             print("loc is True")
-        
-        print("YEEEEEEEEEEEEIIIIII")
-        print(location)
-
-        if cargo:
-            goToZone = 0
-            cargo = False
-            # Go to drop of.
-        else:
-            if location >= zoneAmount:
-                location = 0
-                goToZone = 0
-            else:
-                lastZone = location
-                location += 1
-                goToZone = location
+                    
 
         
 
@@ -151,46 +105,6 @@ def main():
 
     # Go back to start, if arm is higher than ground level.
     armMovement(angleTarget= -35)
-
-"""
-# def Pickup(angleTarget:int, openClawsFirst:bool, height:int):
-#     # if height <= 0:
-#     clawMovement(open = openClawsFirst) # If openFirst = True will open here.
-#     armMovement(angleTarget= angleTarget)
-#     clawMovement(open= (not openClawsFirst)) # If not open first will grip here.
-#     armMovement(angleTarget= -angleTarget)
-#     # else:
-#     #     clawMovement(open = openClawsFirst) # If openFirst = True will open here.
-#     #     armMovement(angleTarget= angleTarget)
-
-#     # if openClawsFirst == False:
-#     #     clawMovement(open=(not openClawsFirst))
-
-
-# def Place(angleTarget:int, openClawsFirst:bool):
-#     # if openClawsFirst:
-
-#     ## OBS kommer greppa även om håller i något!!!
-    
-#     clawMovement(open = openClawsFirst) # If openFirst = True will open here.
-#     armMovement(angleTarget= angleTarget)
-#     clawMovement(open= (not openClawsFirst)) # If not open first will grip here.
-#     armMovement(angleTarget= -angleTarget)
-#     # if openClawsFirst == False:
-#     #     clawMovement(open=(not openClawsFirst))
-
-
-
-# def armMovement(angleTarget, operatingSpeed = 60):
-#     # Thooths on the gears of the arm.
-#     bigGear = 40
-#     smallGear = 8
-#     multiplyAngle = -(bigGear/smallGear)
-
-#     print("start arm angle " , elevationMotor.angle())
-#     elevationMotor.run_angle(operatingSpeed,angleTarget * multiplyAngle)
-#     print("targeted arm angle " , elevationMotor.angle())
-"""
 
 
 def Calibrate():
@@ -214,29 +128,16 @@ def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit 
 
     if angle == 0:
         LocationZero()
-        print("Going back")
+        print("\nGoing back")
     else:
         print("...")
         rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
 
 
 
-"""# def clawMovement(open:bool):
-#     smallGear = 12  #Tooths for gear moving clockwise. 
-#     bigGear = 16   #Tooths for gear moving counter clockwise. 
-#     multiplyAngle = -(bigGear/smallGear)
-
-#     if open:
-#         clawMotor.run_angle(60 ,(60) * multiplyAngle)
-#     # wait(4000)
-#     else:
-#         clawMotor.run_angle(60 ,(-60) * multiplyAngle)
-#     return 0"""
-
-
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
-    # armMovement(angleTarget= -35 * 2)
+    armMovement(angleTarget= 35)
     # for i in range(3):
-    #     clawMovement()
+    # clawMovement(False)
     main()
