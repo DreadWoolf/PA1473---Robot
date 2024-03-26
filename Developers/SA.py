@@ -1,11 +1,8 @@
+#!/usr/bin/env pybricks-micropython
+from pybricks import robotics
+from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
+from pybricks.parameters import Port, Stop, Direction, Color
+from pybricks.tools import wait, StopWatch
+from pybricks.robotics import DriveBase
 
-errorMargin = 10
-
-zoneLocation = {
-    0: 0,
-    1: 90 + errorMargin,
-    2: 135 + errorMargin + 2,
-    3: 180 + errorMargin + 3
-}
-
-print(zoneLocation[0])
