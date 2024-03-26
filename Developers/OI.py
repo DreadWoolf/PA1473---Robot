@@ -13,5 +13,6 @@ rotationMotor = Motor (Port.C)
 smallGear = 12  #Tooths for gear moving clockwise. 
 bigGear = 36   #Tooths for gear moving counter clockwise. 
 multiplyAngle = -(bigGear/smallGear)
-elevationMotor.run_angle(60,(35) * multiplyAngle)
-    
+#elevationMotor.run_angle(60,(60) * multiplyAngle)
+#print(clawMotor.run_until_stalled(-10, then=Stop.BRAKE, duty_limit=None))
+print(elevationMotor.run_until_stalled(30, then=Stop.BRAKE, duty_limit=None))
