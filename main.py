@@ -1,4 +1,8 @@
 #!/usr/bin/env pybricks-micropython
+<<<<<<< HEAD
+=======
+"""# #!/usr/bin/env pybricks-micropython
+>>>>>>> f4129f5b6acebd30f863c83f9e0de8352cee4128
 
 # # Pybricks imports
 # from pybricks import robotics
@@ -62,7 +66,7 @@
 #     3: 0
 # }"""
 
-# Should import all, and work otherwise uncoment the stuff.
+# Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
 from Arm_and_Claw import *
 
