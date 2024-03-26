@@ -1,3 +1,4 @@
+#!/usr/bin/env pybricks-micropython
 """# #!/usr/bin/env pybricks-micropython
 
 # # Pybricks imports
@@ -62,7 +63,7 @@
 #     3: 0
 # }"""
 
-# Should import all, and work otherwise uncoment the stuff.
+# Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
 from Arm_and_Claw import *
 
