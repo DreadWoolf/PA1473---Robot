@@ -1,4 +1,4 @@
-"""# #!/usr/bin/env pybricks-micropython
+#!/usr/bin/env pybricks-micropython
 
 # # Pybricks imports
 # from pybricks import robotics
