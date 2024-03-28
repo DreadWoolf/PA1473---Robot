@@ -1,23 +1,22 @@
-# def main():
-#     def rotate(speed, speed_limit = 60, acceleration_limit = 120):
-#         smallGear = 12  #Tooths
-#         bigGear = 36   #Tooths
-#         multiplyAngle = (bigGear/smallGear)
+from Parameters import rotationMotor, pressureSense
 
-#         rotationMotor.control.limits(speed=speed, acceleration=acceleration_limit)
-#         # angle = 90 * multiplyAngle
-
-        
-#         if pressureSense.pressed():
-#             print("Angle ", rotationMotor.angle())
-#             rotationMotor.reset_angle(0)
-#             rotationMotor.run_angle(speed,-90 * multiplyAngle)
-#             print("Changed Angle ", rotationMotor.angle())
-#             wait(4000)
-#         else:
-#             rotationMotor.run(60)
+def LocationZero():
+    while not pressureSense.pressed():
+        rotationMotor.run(60)
+    
+    rotationMotor.reset_angle(0)
 
 
+def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit = 120):
+    smallGear = 12  #Tooths for gear moving clockwise. 
+    bigGear = 36   #Tooths for gear moving counter clockwise. 
+    multiplyAngle = -(bigGear/smallGear)
 
-# if __name__ == "__main__":
-#     main()
+    print("angle = ", angle)
+
+    if angle == 0:
+        LocationZero()
+        print("\nGoing back")
+    else:
+        print("...")
+        rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)

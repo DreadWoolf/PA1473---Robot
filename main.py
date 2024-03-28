@@ -3,6 +3,7 @@
 # Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
 from Arm_and_Claw import *
+from rotationMotor import rotateBase
 
 def main():
     ev3.speaker.beep()
@@ -27,23 +28,39 @@ def main():
 
 
         if cargo:
-            #Sort
+            sortZone = 0
+            ######################################
+            ######################################
+            ######################################
+            #       sortZone = Sort algorithm()
+            ######################################
+            ######################################
+            ######################################
+
             ev3.speaker.beep()
             wait(2)
             ev3.speaker.beep()
 
-            LocationZero()
+            # Make sure this works...
+            if sortZone == 0:
+                rotateBase(angle= zoneLocation[sortZone])
+            else:
+                rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+            
             Place(angleTarget= -35, openClawsFirst= False)
             cargo = False
 
-            lastZone = 0
+            lastZone = sortZone  # 0
 
         else:
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
             Pickup(angleTarget= -35, openClawsFirst= True)
 
             # picked up package true or false.
-
+            ######################################
+            ######################################
+            ######################################
+            # Check if we have cargo!
             cargo = True
 
             # print("Open claws")
@@ -77,10 +94,15 @@ def main():
             goToZone = location
             if location >= zoneAmount + 1:
                 location = 0
-                LocationZero()
+                # LocationZero()
+                rotateBase(angle= 0)
                 wait(1000)
                 ev3.speaker.beep()
         
+        
+        ######################################
+        ######################################
+        ######################################
         # Testing placment (problem since the code above is increasing before this)
         if location == 2 + 1:
             cargo = True
@@ -108,30 +130,31 @@ def main():
 
 
 def Calibrate():
-    LocationZero()
+    # LocationZero()
+    rotateBase(angle= 0)
     return 0
 
 
-def LocationZero():
-    while not pressureSense.pressed():
-        rotationMotor.run(60)
+# def LocationZero():
+#     while not pressureSense.pressed():
+#         rotationMotor.run(60)
     
-    rotationMotor.reset_angle(0)
+#     rotationMotor.reset_angle(0)
 
 
-def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit = 120):
-    smallGear = 12  #Tooths for gear moving clockwise. 
-    bigGear = 36   #Tooths for gear moving counter clockwise. 
-    multiplyAngle = -(bigGear/smallGear)
+# def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit = 120):
+#     smallGear = 12  #Tooths for gear moving clockwise. 
+#     bigGear = 36   #Tooths for gear moving counter clockwise. 
+#     multiplyAngle = -(bigGear/smallGear)
 
-    print("angle = ", angle)
+#     print("angle = ", angle)
 
-    if angle == 0:
-        LocationZero()
-        print("\nGoing back")
-    else:
-        print("...")
-        rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
+#     if angle == 0:
+#         LocationZero()
+#         print("\nGoing back")
+#     else:
+#         print("...")
+#         rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
 
 
 

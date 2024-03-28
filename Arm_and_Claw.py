@@ -1,5 +1,6 @@
-from Parameters import *
-from Arm_and_Claw import *
+# from Parameters import *
+from Parameters import elevationMotor, clawMotor
+# from Arm_and_Claw import *
 
 
 def Pickup(angleTarget:int, openClawsFirst:bool, height:int = 0):

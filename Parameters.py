@@ -27,19 +27,19 @@ pressureSense = TouchSensor(Port.S1)
 
 
 RobotRegister = {
-    'A' : 0,  ## Accurate
-    'B' : 19,
+    'A' : 0,
+    'B' : 19,  ## Accurate
     'C' : 0,
-    'D' : 0,  ## Accurate
+    'D' : 0,  
     'E' : 0,
     'F' : 0,
-    'G' : 0   ## Accurate
+    'G' : 0
 }
 
 RobotIdentity = 'B'
  
 
-zones = {
+zoneSort = {
     0: 'DropOf',
     1: 'red',
     2: 'blue',
