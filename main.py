@@ -2,8 +2,9 @@
 
 # Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
-from Arm_and_Claw import *
+from Arm_and_Claw import Place, Pickup, armMovement
 from rotationMotor import rotateBase
+from colorAlgorithm import colorSort
 
 def main():
     ev3.speaker.beep()
@@ -12,11 +13,8 @@ def main():
     zoneAmount = 3
     cargo = False
     
-    print("Calibrate arm")
-    
-
     Calibrate()
-    # zone0Calibration()
+    
     run = 0
     location = 1
     lastZone = 0
@@ -33,24 +31,31 @@ def main():
             ######################################
             ######################################
             #       sortZone = Sort algorithm()
-            ######################################
-            ######################################
-            ######################################
+            sortZone = colorSort()
 
-            ev3.speaker.beep()
-            wait(2)
-            ev3.speaker.beep()
+            if sortZone == 'Error':
+                print("Error for sortZone!")
+                # Does this exist?!
+                ev3.speaker.error()
 
-            # Make sure this works...
-            if sortZone == 0:
-                rotateBase(angle= zoneLocation[sortZone])
+                ev3.speaker.beep()
+                wait(2)
+                ev3.speaker.beep()
+
             else:
-                rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+                ######################################
+                ######################################
+                ######################################
+                # Make sure this works...
+                if sortZone == 0:
+                    rotateBase(angle= zoneLocation[sortZone])
+                else:
+                    # This might not work as intended... (if we want to go to the next zone for example)
+                    rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+                lastZone = sortZone  # 0
             
             Place(angleTarget= -35, openClawsFirst= False)
             cargo = False
-
-            lastZone = sortZone  # 0
 
         else:
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
@@ -131,6 +136,10 @@ def main():
 
 def Calibrate():
     # LocationZero()
+
+    print("Calibrate arm")
+    print("Calibrate claw\n\n")
+
     rotateBase(angle= 0)
     return 0
 
