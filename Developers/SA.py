@@ -6,6 +6,28 @@ from pybricks.parameters import Port, Stop, Direction, Color
 from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
 
+
+def newcolor():
+    fcolor = colorSense.color()
+    ref = colorSense.reflection()
+    dis = 3
+    red, green, blue = colorSense.rgb()
+    colorlist = sorted([red, green, blue])
+    newcolor = 0
+    margin = 15
+    count = 2
+    r =colorlist[0] > colorlist[1]+margin 
+    r2 = colorlist[0] > colorlist[1]-margin
+    if r or r2:
+        newcolor += (r or r2)
+    
+   
+
+
+
+
+    
+
 def getColor():
     # Get RGB values from the sensor (assuming they are in the range 0-100)
     fcolor = colorSense.color()
