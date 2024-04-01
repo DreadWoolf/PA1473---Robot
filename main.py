@@ -9,53 +9,66 @@ from colorAlgorithm import colorSort
 def main():
     ev3.speaker.beep()
 
-    times = 5
+    times = 2
     zoneAmount = 3
-    cargo = False
+    potentialCargo = False
+    periodTime = 4000 # 4s (4000)
     
     Calibrate()
     
     run = 0
     location = 1
     lastZone = 0
-    # for i in range(times):
-    while run < times:
+    
+    while run < times: # times = 2.
         run += 1
 
         goToZone = location
 
 
-        if cargo:
+        if potentialCargo:
             sortZone = 0
             ######################################
             ######################################
             ######################################
             #       sortZone = Sort algorithm()
-            sortZone = colorSort()
+            # sortZone = colorSort()
+            sortZone, color = colorSort()
 
-            if sortZone == 'Error':
-                print("Error for sortZone!")
-                # Does this exist?!
-                ev3.speaker.error()
+            if sortZone == 'Error' or sortZone == "nothing":
 
-                ev3.speaker.beep()
-                wait(2)
-                ev3.speaker.beep()
+                ## Will continue if found nothing, otherwise place the cargo.
+                if sortZone == "Error":
+                    
+                    ev3.speaker.beep()
+                    wait(4)
+                    ev3.speaker.beep()
+
+                    ### print error on robot.
+                    ev3.screen.print("ERROR, color not supported")
+                    wait(100)
+
+                    ## Drop of again, if detected random color.
+                    Place(angleTarget=-35, openClawsFirst=False)
 
             else:
+                ### Screen print 
+                ev3.screen.print("Color: " + color + " to zone: " + str(sortZone))
+                wait(100)
                 ######################################
                 ######################################
                 ######################################
                 # Make sure this works...
                 if sortZone == 0:
-                    rotateBase(angle= zoneLocation[sortZone])
+                    rotateBase(angle= zoneLocation[sortZone]) # Go to zone '0'.
                 else:
                     # This might not work as intended... (if we want to go to the next zone for example)
                     rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+                # Uppdate the lastZone.
                 lastZone = sortZone  # 0
             
             Place(angleTarget= -35, openClawsFirst= False)
-            cargo = False
+            potentialCargo = False
 
         else:
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
@@ -66,20 +79,9 @@ def main():
             ######################################
             ######################################
             # Check if we have cargo!
-            cargo = True
+            potentialCargo = True
 
         print("Check color \nWhere to next= ", location)
-        cargo = False
-
-        
-        
-
-        # if cargo:
-            
-        #     # goToZone = 0
-        #     # cargo = False
-        #     # Go to drop of.
-        # else:
 
 
         if location >= zoneAmount:
@@ -93,7 +95,7 @@ def main():
                 location = 0
                 # LocationZero()
                 rotateBase(angle= 0)
-                wait(1000)
+                wait(periodTime)  # 4000
                 ev3.speaker.beep()
         
         
@@ -101,9 +103,9 @@ def main():
         ######################################
         ######################################
         # Testing placment (problem since the code above is increasing before this)
-        if location == 2 + 1:
-            cargo = True
-            print("loc is True")
+        # if location == 2 + 1:
+        #     potentialCargo = True
+        #     print("loc is True")
                     
 
         

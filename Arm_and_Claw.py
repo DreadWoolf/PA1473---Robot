@@ -13,7 +13,7 @@ def Pickup(angleTarget:int, openClawsFirst:bool, height:int = 0):
 
 def Place(angleTarget:int, openClawsFirst:bool):
     
-    # If openFirst = True will open here.
+    # If openFirst = True will open first.
     armMovement(angleTarget= angleTarget)
     clawMovement(open= (not openClawsFirst)) # If not open first will grip here.
     armMovement(angleTarget= -angleTarget)

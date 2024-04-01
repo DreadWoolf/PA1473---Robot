@@ -1,28 +1,28 @@
+from Parameters import colorSense
 
 ## ladda in vilka färgar ska vart.
 zoneSort = {
     'red'       : 0,
-    'nothing'   : 1,
+    'green'     : 1,
     'blue'      : 2,
-    'yellow'    : 3
+    'nothing'   : 3
 }
 
 
-######################################
 def newcolor():
     tred=0
     tgreen=0
     tblue=0
 
-    for i in 50:
+    for i in range(50):
       red,green,blue=colorSense.rgb()
       tred += red
       tgreen += green
       tblue += blue
 
-    tred=tred//50
-    tblue=tblue//50
-    tgreen=tgreen//50
+    tred=tred//51
+    tblue=tblue//51
+    tgreen=tgreen//51
 
     list1 = [tred,tgreen,tblue]
     list2 = ["r","g","b"]
@@ -45,22 +45,14 @@ def newcolor():
                     if  abs(list1[i] - list1[j]) <= margin:
                         cond = cond + " and abs("+list2[i]+ "-" +list2[j]+") <= margin "
 
-    condition = lambda r,g,b:eval(cond)
-
-
-    r=12
-    g=13
-    b=50
-    print(cond)
-    if condition(r,g,b):
-        print("yeah")
-    else:
-        print("nah")
-    
+    condition = lambda r,g,b,re:eval(cond)
+    return condition
 
     
 
 def getColor():
+    newcolor = newcolor()
+    colors.apend(("newcolor",newcolor))
     # Get RGB values from the sensor (assuming they are in the range 0-100)
     fcolor = colorSense.color()
     ref = colorSense.reflection()
@@ -91,7 +83,15 @@ def getColor():
 def colorSort():
     color = getColor()
 
-    if color in zoneSort:    
-        return zoneSort[color]
+    if color == 'nothing':
+        return color  # nothing
+    elif color in zoneSort:    
+        # return zoneSort[color]  
+        return zoneSort[color], color
     else:
-        return 'Error'
+        # return 'Error'
+        return 'Error', None
+    
+
+if __name__ == "__main__":
+    print(colorSort())
