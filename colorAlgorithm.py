@@ -1,5 +1,5 @@
 
-
+## ladda in vilka färgar ska vart.
 zoneSort = {
     'red'       : 0,
     'nothing'   : 1,
