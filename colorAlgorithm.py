@@ -10,7 +10,21 @@ zoneSort = {
 
 ######################################
 def newcolor():
-    list1 = [12,11,50]
+    tred=0
+    tgreen=0
+    tblue=0
+
+    for i in 50:
+      red,green,blue=colorSense.rgb()
+      tred += red
+      tgreen += green
+      tblue += blue
+
+    tred=tred//50
+    tblue=tblue//50
+    tgreen=tgreen//50
+
+    list1 = [tred,tgreen,tblue]
     list2 = ["r","g","b"]
     cond=""
     margin = 3
