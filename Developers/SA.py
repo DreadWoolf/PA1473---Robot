@@ -8,18 +8,39 @@ from pybricks.robotics import DriveBase
 
 
 def newcolor():
-    fcolor = colorSense.color()
-    ref = colorSense.reflection()
-    dis = 3
-    red, green, blue = colorSense.rgb()
-    colorlist = sorted([red, green, blue])
-    newcolor = 0
-    margin = 15
-    count = 2
-    r =colorlist[0] > colorlist[1]+margin 
-    r2 = colorlist[0] > colorlist[1]-margin
-    if r or r2:
-        newcolor += (r or r2)
+    
+    list1 = [12,11,50]
+    list2 = ["r","g","b"]
+    cond=""
+    margin = 3
+
+
+    rec = 0
+    for i in range(len(list1)):
+        for j in (range(len(list1))):
+            if i != j:  # To avoid comparing the number with itself
+                if i == 0:
+                    if list1[i] > list1[j]+margin and list1[i] > list1[j]-margin:
+                        cond += " ("+list2[i] + ">" +list2[j]+"+margin or "+list2[i] + ">" + list2[j]+"-margin) "
+                    if  abs(list1[i] - list1[j]) <= margin:
+                        cond+= " abs("+list2[i]+ "-" +list2[j]+") <= margin "
+                else: 
+                    if list1[i] > list1[j]+margin and list1[i] > list1[j]-margin:
+                        cond = cond +" and ("+list2[i] + ">"+ list2[j]+" +margin or " + list2[i] + ">" + list2[j]+"-margin) "
+                    if  abs(list1[i] - list1[j]) <= margin:
+                        cond = cond + " and abs("+list2[i]+ "-" +list2[j]+") <= margin "
+
+    condition = lambda r,g,b:eval(cond)
+
+
+    r=12
+    g=13
+    b=50
+    print(cond)
+    if condition(r,g,b):
+        print("yeah")
+    else:
+        print("nah")
     
    
 
