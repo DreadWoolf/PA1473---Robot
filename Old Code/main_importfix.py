@@ -68,6 +68,14 @@ def main():
             # Check if we have cargo!
             cargo = True
 
+            # print("Open claws")
+            # clawMovement(open = True)
+            # armMovement(angleTarget= -35)
+
+            # print("Grip")
+            # clawMovement(open = False)
+            # armMovement(angleTarget= 35)
+
         print("Check color \nWhere to next= ", location)
         cargo = False
 
@@ -136,11 +144,32 @@ def Calibrate():
     return 0
 
 
+# def LocationZero():
+#     while not pressureSense.pressed():
+#         rotationMotor.run(60)
+    
+#     rotationMotor.reset_angle(0)
+
+
+# def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit = 120):
+#     smallGear = 12  #Tooths for gear moving clockwise. 
+#     bigGear = 36   #Tooths for gear moving counter clockwise. 
+#     multiplyAngle = -(bigGear/smallGear)
+
+#     print("angle = ", angle)
+
+#     if angle == 0:
+#         LocationZero()
+#         print("\nGoing back")
+#     else:
+#         print("...")
+#         rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
+
+
 
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
     armMovement(angleTarget= 35)
-    
     # for i in range(3):
     # clawMovement(False)
     main()
