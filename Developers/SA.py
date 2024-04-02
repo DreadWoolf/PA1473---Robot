@@ -1,76 +1,148 @@
 #!/usr/bin/env pybricks-micropython
-from pybricks import robotics
-from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
-from pybricks.parameters import Port, Stop, Direction, Color
-from pybricks.tools import wait, StopWatch
-from pybricks.robotics import DriveBase
 
+# Should import all, and work otherwise uncomment the stuff.
+from Parameters import *
+from Arm_and_Claw import Place, Pickup, armMovement
+from rotationMotor import rotateBase
+from colorAlgorithm import colorSort
 
-def newcolor():
-    list1 = [12,11,50]
-    list2 = ["r","g","b"]
-    cond=""
-    margin = 3
+def main():
+    ev3.speaker.beep()
 
-
-    rec = 0
-    for i in range(len(list1)):
-        for j in (range(len(list1))):
-            if i != j:  # To avoid comparing the number with itself
-                if i == 0:
-                    if list1[i] > list1[j]+margin and list1[i] > list1[j]-margin:
-                        cond += " ("+list2[i] + ">" +list2[j]+"+margin or "+list2[i] + ">" + list2[j]+"-margin) "
-                    if  abs(list1[i] - list1[j]) <= margin:
-                        cond+= " abs("+list2[i]+ "-" +list2[j]+") <= margin "
-                else: 
-                    if list1[i] > list1[j]+margin and list1[i] > list1[j]-margin:
-                        cond = cond +" and ("+list2[i] + ">"+ list2[j]+" +margin or " + list2[i] + ">" + list2[j]+"-margin) "
-                    if  abs(list1[i] - list1[j]) <= margin:
-                        cond = cond + " and abs("+list2[i]+ "-" +list2[j]+") <= margin "
-
-    condition = lambda r,g,b:eval(cond)
-
-
-    r=12
-    g=13
-    b=50
-    print(cond)
-    if condition(r,g,b):
-        print("yeah")
-    else:
-        print("nah")
+    times = 2
+    zoneAmount = 3
+    potentialCargo = False
+    periodTime = 4000 # 4s (4000)
     
-   
-
-
-
-
+    Calibrate()
     
+    run = 0
+    location = 1
+    lastZone = 0
+    
+    while run < times: # times = 2.
+        run += 1
 
-def getColor():
-    # Get RGB values from the sensor (assuming they are in the range 0-100)
-    fcolor = colorSense.color()
-    ref = colorSense.reflection()
-    dis = 3
-    red, green, blue = colorSense.rgb()
-    red, green, blue = dis*red, dis*green, dis*blue
-    # Define margin of error
-    margin = 33  # Adjust the margin as needed
-    lmargin = 15
-    # Define colors and their conditions
-    colors = [
-        ("Red", lambda r, g, b ,re: (r > g + margin or r > g - margin) and (r > b + margin or r > b - margin ) and (r > (margin - lmargin)*dis) and  (50+lmargin>=re>=50-lmargin)),
-        ("Green", lambda r, g, b ,re: (g > r + margin or g > r - margin) and (g > b + margin or g > b - margin) and (g > (margin - lmargin)*dis) or (fcolor=="Color.YELLOW" or fcolor=="Color.GREEN")),
-        ("Blue", lambda r, g, b, re: (b > r + margin or b > r - margin) and (b > g + margin or b > g - margin) and (b > (margin - lmargin)*dis)),
-        ("Greenb", lambda r, g, b, re: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > (margin-lmargin)*dis and b > (margin-lmargin)*dis ),  # Condition for Greenb
-        ("nothing", lambda r, g, b, re: ((margin)>=r>=0) and ((margin)>=g>=0) or ((margin)>=b>=0))
-        # Add more colors here
-        # ("ColorName", lambda r, g, b: <condition>)
-    ]
-    # Check each color condition
-    for color_name, condition in colors:
-        if condition(red, green, blue, ref):
-            return color_name
+        goToZone = location
 
-    return "unknown item"  # Object doesn't match any color predominantly
+
+        if potentialCargo:
+            sortZone = 0
+            ######################################
+            ######################################
+            ######################################
+            #       sortZone = Sort algorithm()
+            # sortZone = colorSort()
+            sortZone, color = colorSort()
+
+            if sortZone == 'Error' or sortZone == "nothing":
+
+                ## Will continue if found nothing, otherwise place the cargo.
+                if sortZone == "Error":
+                    
+                    ev3.speaker.beep()
+                    wait(4)
+                    ev3.speaker.beep()
+
+                    ### print error on robot.
+                    ev3.screen.print("ERROR, color not supported")
+                    wait(100)
+
+                    ## Drop of again, if detected random color.
+                    Place(angleTarget=-35, openClawsFirst=False)
+
+            else:
+                ### Screen print 
+                ev3.screen.print("Color: " + color + " to zone: " + str(sortZone))
+                wait(100)
+                ######################################
+                ######################################
+                ######################################
+                # Make sure this works...
+                if sortZone == 0:
+                    rotateBase(angle= zoneLocation[sortZone]) # Go to zone '0'.
+                else:
+                    # This might not work as intended... (if we want to go to the next zone for example)
+                    rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+                # Uppdate the lastZone.
+                lastZone = sortZone  # 0
+            
+            Place(angleTarget= -35, openClawsFirst= False)
+            potentialCargo = False
+
+        else:
+            rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
+            Pickup(angleTarget= -35, openClawsFirst= True)
+
+            # picked up package true or false.
+            ######################################
+            ######################################
+            ######################################
+            # Check if we have cargo!
+            potentialCargo = True
+
+        print("Check color \nWhere to next= ", location)
+
+
+        if location >= zoneAmount:
+            location = 0
+            goToZone = 0
+        else:
+            lastZone = location
+            location += 1
+            goToZone = location
+            if location >= zoneAmount + 1:
+                location = 0
+                # LocationZero()
+                rotateBase(angle= 0)
+                wait(periodTime)  # 4000
+                ev3.speaker.beep()
+        
+        
+        ######################################
+        ######################################
+        ######################################
+        # Testing placment (problem since the code above is increasing before this)
+        # if location == 2 + 1:
+        #     potentialCargo = True
+        #     print("loc is True")
+                    
+
+        
+
+        print("GoToZone = ", goToZone)
+        # goToZone = 0
+
+        # rotateBase(angle=zoneLocation[goToZone])
+        # # zone0Calibration()
+
+        # armMovement(angleTarget= -35)
+        # print("Let go")
+        # clawMovement(open = True)
+        # armMovement(angleTarget= 35)
+        # print("Close the empty claws")
+        # clawMovement(open = False)
+        # # rotateBase(operatingSpeed= 60, angle = zoneLocation[0])
+
+    # Go back to start, if arm is higher than ground level.
+    armMovement(angleTarget= -35)
+
+
+def Calibrate():
+    # LocationZero()
+
+    print("Calibrate arm")
+    print("Calibrate claw\n\n")
+
+    rotateBase(angle= 0)
+    return 0
+
+
+
+## Checks if this is the running script, and not imported from somewhere!
+if __name__ == "__main__":
+    armMovement(angleTarget= 35)
+    
+    # for i in range(3):
+    # clawMovement(False)
+    main()
