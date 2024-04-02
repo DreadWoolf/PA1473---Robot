@@ -8,7 +8,6 @@ from pybricks.robotics import DriveBase
 
 
 def newcolor():
-    
     list1 = [12,11,50]
     list2 = ["r","g","b"]
     cond=""
