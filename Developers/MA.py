@@ -45,27 +45,6 @@ def manual_movment():
 
     #elevationMotor.run_angle(60,90*multiplyAngle)
 
-<<<<<<< HEAD
-    while temp:
-        yeah = ev3.buttons.pressed()
-        print(yeah)
-        for button in yeah:
-            button_str = str(button)
-            if button_str == "Button.UP":
-                elevationMotor.run_angle(60,-10)
-            if button_str == "Button.DOWN":
-                elevationMotor.run_angle(60,10)
-            if button_str == "Button.CENTER":
-                horangle = rotationMotor.angle() 
-                verangle = elevationMotor.angle()
-                rotationMotor.run_angle(60,-horangle)
-                elevationMotor.run_angle(60,-verangle)
-                temp=False 
-            if button_str == "Button.LEFT":
-                rotationMotor.run_angle(60,-10)
-            if button_str == "Button.RIGHT":
-                rotationMotor.run_angle(60,10)
-=======
 #elevationMotor.run_angle(60,90*multiplyAngle)
 
 while temp:
@@ -88,27 +67,21 @@ while temp:
             rotationMotor.run_angle(60,-10)
         elif button_str == "Button.RIGHT":
             rotationMotor.run_angle(60,10)
-        if combos == ["Button.RIGHT", "Button.LEFT"] or combos == ["Button.LEFT", "Button.RIGHT"] :
-           clawMotor.run_angle(10,-10)
-        if combos == ["Button.UP", "Button.DOWN"] or combos == ["Button.DOWN", "Button.UP"] :
-           clawMotor.run_angle(10,10)        
         # if "Button.RIGHT" in combos and "Button.LEFT" in combos:
         #     clawMotor.run_angle(60, (60) * multiplyAngle)    
         # elif "Button.UP" in combos and "Button.DOWN" in combos:
         #     clawMotor.run_angle(-60, (60) * multiplyAngle)
         # if combos == ["Button.RIGHT", "Button.LEFT"] or combos == ["Button.LEFT", "Button.RIGHT"] :
-        #    clawMotor.run_angle(5 ,(60) * multiplyAngle)
+        #    clawMotor.run_angle(60 ,(60) * multiplyAngle)
         # if combos == ["Button.UP", "Button.DOWN"] or combos == ["Button.DOWN", "Button.UP"] :
-        #    clawMotor.run_angle(-5 ,(60) * multiplyAngle)
-           
-    #    if button_str == "Button.LEFT" and button_str == "Button.RIGHT":
-    #        clawMotor.run_angle(60 ,(60) * multiplyAngle)
+        #    clawMotor.run_angle(-60 ,(60) * multiplyAngle)
+#        if button_str == "Button.LEFT" and button_str == "Button.RIGHT":
+#            clawMotor.run_angle(60 ,(60) * multiplyAngle)
 
     print("hor angle ===",horangle)
     print ("real hor angle ===",rotationMotor.angle() )
     print("ver angle ===",verangle)
     print("real ver angle ===", elevationMotor.angle())
->>>>>>> 65e24e1e8b151f1fc21dc2882a7a39f525a5ddd5
 
 def getColor():
     # Get RGB values from the sensor (assuming they are in the range 0-100)
