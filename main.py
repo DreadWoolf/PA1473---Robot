@@ -14,7 +14,7 @@ def main():
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 41
+    armStartAngle = 43
     
     Calibrate(armStartAngle)
     

@@ -1,4 +1,7 @@
-from Parameters import colorSense
+#!/usr/bin/env pybricks-micropython
+
+
+from Parameters import colorSense, wait
 
 ## ladda in vilka färgar ska vart.
 zoneSort = {
@@ -54,7 +57,7 @@ def getColor():
     # Get RGB values from the sensor (assuming they are in the range 0-100)
     fcolor = colorSense.color()
     dis = 3
-    aos = 50
+    aos = 20  # Amount of scans.
     Tred, Tgreen, Tblue, Tref = 0,0,0,0
     for i in range(aos):   
         red, green, blue = colorSense.rgb()
@@ -93,14 +96,21 @@ def colorSort():
     color = getColor()
 
     if color == 'nothing':
-        return color  # nothing
+        print("...")
+        return color, None  # nothing
     elif color in zoneSort:    
         # return zoneSort[color]  
+        print("FÖR HELVETE!")
         return zoneSort[color], color
     else:
+        print("WTF")
         # return 'Error'
         return 'Error', None
     
 
 if __name__ == "__main__":
-    print(colorSort())
+    while True:
+        something, color = (colorSort())
+        print(something)
+        print(color)
+        wait(3000)
