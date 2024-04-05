@@ -1,5 +1,3 @@
-#!/usr/bin/env pybricks-micropython
-
 from Parameters import colorSense
 
 ## ladda in vilka färgar ska vart.
@@ -9,21 +7,6 @@ zoneSort = {
     'blue'      : 2,
     'nothing'   : 3
 }
-
-
-# Define margin of error
-margin = 33  # Adjust the margin as needed
-lmargin = 15
-
-colors = [
-        ("Red", lambda r, g, b ,re: (r > g + margin or r > g - margin) and (r > b + margin or r > b - margin ) and (r > (margin - lmargin)*dis) and  (50+lmargin>=re>=50-lmargin)),
-        ("Green", lambda r, g, b ,re: (g > r + margin or g > r - margin) and (g > b + margin or g > b - margin) and (g > (margin - lmargin)*dis) or (fcolor=="Color.YELLOW" or fcolor=="Color.GREEN")),
-        ("Blue", lambda r, g, b, re: (b > r + margin or b > r - margin) and (b > g + margin or b > g - margin) and (b > (margin - lmargin)*dis)),
-        ("Greenb", lambda r, g, b, re: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > (margin-lmargin)*dis and b > (margin-lmargin)*dis ),  # Condition for Greenb
-        ("nothing", lambda r, g, b, re: ((margin)>=r>=0) and ((margin)>=g>=0) or ((margin)>=b>=0))
-        # Add more colors here
-        # ("ColorName", lambda r, g, b: <condition>)
-    ]
 
 
 def newcolor():
@@ -37,9 +20,9 @@ def newcolor():
       tgreen += green
       tblue += blue
 
-    tred=tred//51
-    tblue=tblue//51
-    tgreen=tgreen//51
+    tred=tred//50
+    tblue=tblue//50
+    tgreen=tgreen//50
 
     list1 = [tred,tgreen,tblue]
     list2 = ["r","g","b"]
@@ -70,10 +53,21 @@ def newcolor():
 def getColor():
     # Get RGB values from the sensor (assuming they are in the range 0-100)
     fcolor = colorSense.color()
-    ref = colorSense.reflection()
     dis = 3
-    red, green, blue = colorSense.rgb()
-    red, green, blue = dis*red, dis*green, dis*blue
+    aos = 50
+    Tred, Tgreen, Tblue, Tref = 0,0,0,0
+    for i in range(aos):   
+        red, green, blue = colorSense.rgb()
+        ref = colorSense.reflection()
+        Tref += ref
+        Tred += red
+        Tgreen += green
+        Tblue += blue
+    Tred = Tred//aos
+    Tgreen = Tgreen//aos
+    Tblue = Tblue//aos
+    Tref = Tref//aos
+    Tred, Tgreen, Tblue = dis*Tred, dis*Tgreen, dis*Tblue
     # Define margin of error
     margin = 33  # Adjust the margin as needed
     lmargin = 15
@@ -89,17 +83,17 @@ def getColor():
     ]
     # Check each color condition
     for color_name, condition in colors:
-        if condition(red, green, blue, ref):
+        if condition(Tred, Tgreen, Tblue, Tref):
             return color_name
-
+        
     return "unknown item"  # Object doesn't match any color predominantly
 
 
 def colorSort():
     color = getColor()
-    print("Getcolor says: " + str(color))
+
     if color == 'nothing':
-        return color, None  # nothing
+        return color  # nothing
     elif color in zoneSort:    
         # return zoneSort[color]  
         return zoneSort[color], color
@@ -109,6 +103,4 @@ def colorSort():
     
 
 if __name__ == "__main__":
-    # newcolor = newcolor()
-    # colors.apend(("newcolor",newcolor))
     print(colorSort())
