@@ -26,7 +26,7 @@ def newcolor():
 
     list1 = [tred,tgreen,tblue]
     list2 = ["r","g","b"]
-    cond=""
+    cond = ""
     margin = 3
 
 
