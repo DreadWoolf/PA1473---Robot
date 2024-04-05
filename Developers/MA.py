@@ -88,16 +88,21 @@ while temp:
             rotationMotor.run_angle(60,-10)
         elif button_str == "Button.RIGHT":
             rotationMotor.run_angle(60,10)
+        if combos == ["Button.RIGHT", "Button.LEFT"] or combos == ["Button.LEFT", "Button.RIGHT"] :
+           clawMotor.run_angle(10,-10)
+        if combos == ["Button.UP", "Button.DOWN"] or combos == ["Button.DOWN", "Button.UP"] :
+           clawMotor.run_angle(10,10)        
         # if "Button.RIGHT" in combos and "Button.LEFT" in combos:
         #     clawMotor.run_angle(60, (60) * multiplyAngle)    
         # elif "Button.UP" in combos and "Button.DOWN" in combos:
         #     clawMotor.run_angle(-60, (60) * multiplyAngle)
         # if combos == ["Button.RIGHT", "Button.LEFT"] or combos == ["Button.LEFT", "Button.RIGHT"] :
-        #    clawMotor.run_angle(60 ,(60) * multiplyAngle)
+        #    clawMotor.run_angle(5 ,(60) * multiplyAngle)
         # if combos == ["Button.UP", "Button.DOWN"] or combos == ["Button.DOWN", "Button.UP"] :
-        #    clawMotor.run_angle(-60 ,(60) * multiplyAngle)
-#        if button_str == "Button.LEFT" and button_str == "Button.RIGHT":
-#            clawMotor.run_angle(60 ,(60) * multiplyAngle)
+        #    clawMotor.run_angle(-5 ,(60) * multiplyAngle)
+           
+    #    if button_str == "Button.LEFT" and button_str == "Button.RIGHT":
+    #        clawMotor.run_angle(60 ,(60) * multiplyAngle)
 
     print("hor angle ===",horangle)
     print ("real hor angle ===",rotationMotor.angle() )
