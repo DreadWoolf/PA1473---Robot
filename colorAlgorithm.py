@@ -89,11 +89,7 @@ def getColor():
     # Check each color condition
     for color_name, condition in colors:
         if condition(Tred, Tgreen, Tblue, Tref):
-<<<<<<< HEAD
             print("color name ", type(color_name))
-=======
-
->>>>>>> 90b7ffc1a67fc58e56c47b07c1526a150f66b06e
             return color_name
         
     return "unknown item"  # Object doesn't match any color predominantly
