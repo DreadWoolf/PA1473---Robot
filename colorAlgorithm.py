@@ -57,7 +57,7 @@ def getColor():
     # Get RGB values from the sensor (assuming they are in the range 0-100)
     fcolor = colorSense.color()
     dis = 3
-    aos = 20  # Amount of scans.
+    aos = 3
     Tred, Tgreen, Tblue, Tref = 0,0,0,0
     for i in range(aos):   
         red, green, blue = colorSense.rgb()
@@ -72,25 +72,32 @@ def getColor():
     Tref = Tref//aos
     Tred, Tgreen, Tblue = dis*Tred, dis*Tgreen, dis*Tblue
     # Define margin of error
-    margin = 33  # Adjust the margin as needed
-    lmargin = 15
+    margin = 15  # Adjust the margin as needed
+    lmargin = 5
     # Define colors and their conditions
     colors = [
-        ("Red", lambda r, g, b ,re: (r > g + margin or r > g - margin) and (r > b + margin or r > b - margin ) and (r > (margin - lmargin)*dis) and  (50+lmargin>=re>=50-lmargin)),
-        ("Green", lambda r, g, b ,re: (g > r + margin or g > r - margin) and (g > b + margin or g > b - margin) and (g > (margin - lmargin)*dis) or (fcolor=="Color.YELLOW" or fcolor=="Color.GREEN")),
-        ("Blue", lambda r, g, b, re: (b > r + margin or b > r - margin) and (b > g + margin or b > g - margin) and (b > (margin - lmargin)*dis)),
-        ("Greenb", lambda r, g, b, re: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > (margin-lmargin)*dis and b > (margin-lmargin)*dis ),  # Condition for Greenb
-        ("nothing", lambda r, g, b, re: ((margin)>=r>=0) and ((margin)>=g>=0) or ((margin)>=b>=0))
+        ("Red", lambda r, g, b ,re: (r > g + margin and r > g - margin) and (r > b + margin and r > b - margin ) and (r > (margin - lmargin)*dis) and  (50+lmargin>=re>=50-lmargin)),
+        ("Green", lambda r, g, b ,re: (g > r + margin and g > r - margin) and (g > b + margin and g > b - margin) and (g > (margin - lmargin)*dis) or  fcolor=="Color.GREEN"),
+        ("Blue", lambda r, g, b, re: (b > r + margin and b > r - margin) and (b > g + margin and b > g - margin) and (b > (margin - lmargin)*dis)),
+        ("Yellow", lambda r, g, b, re:(abs(g - r) <= margin) and (g > b + margin and g > b - margin) and (r > b + margin and r > b - margin ) or fcolor =="Color.YELLOW"),
+        ("Green", lambda r, g, b, re: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > (margin-lmargin)*dis and b > (margin-lmargin)*dis ),  # Condition for Greenb
+        ("nothing", lambda r, g, b, re: ((margin)>=r>=0) and ((margin)>=g>=0) and ((margin)>=b>=0))
         # Add more colors here
         # ("ColorName", lambda r, g, b: <condition>)
     ]
+    
     # Check each color condition
     for color_name, condition in colors:
         if condition(Tred, Tgreen, Tblue, Tref):
+<<<<<<< HEAD
             print("color name ", type(color_name))
+=======
+
+>>>>>>> 90b7ffc1a67fc58e56c47b07c1526a150f66b06e
             return color_name
         
     return "unknown item"  # Object doesn't match any color predominantly
+
 
 
 def colorSort():
