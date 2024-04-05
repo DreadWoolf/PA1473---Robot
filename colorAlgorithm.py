@@ -87,6 +87,7 @@ def getColor():
     # Check each color condition
     for color_name, condition in colors:
         if condition(Tred, Tgreen, Tblue, Tref):
+            print("color name ", type(color_name))
             return color_name
         
     return "unknown item"  # Object doesn't match any color predominantly
@@ -96,11 +97,12 @@ def colorSort():
     color = getColor()
 
     if color == 'nothing':
-        print("...")
+        print("nothing")
         return color, None  # nothing
     elif color in zoneSort:    
         # return zoneSort[color]  
         print("FÖR HELVETE!")
+
         return zoneSort[color], color
     else:
         print("WTF")

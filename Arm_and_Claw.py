@@ -16,6 +16,8 @@ def Place(angleTarget:int, openClawsFirst:bool):
     armMovement(angleTarget= angleTarget)
     clawMovement(open= (not openClawsFirst)) # If not open first will grip here.
     armMovement(angleTarget= -angleTarget)
+    clawMovement(open= (openClawsFirst)) # If not open first will grip here.
+
 
 
 
@@ -57,5 +59,5 @@ def clawMovement(open:bool, calibrate:bool = False):
         # clawMotor.run_until_stalled(-40, then=Stop.BRAKE, duty_limit=None)
         clawMotor.run_angle(60 ,(60) * multiplyAngle)
     else:
-        clawMotor.run_until_stalled(40, then=Stop.BRAKE, duty_limit=None)
+        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
         # clawMotor.run_angle(60 ,(-60) * multiplyAngle)

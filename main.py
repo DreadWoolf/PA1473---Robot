@@ -9,7 +9,7 @@ from colorAlgorithm import colorSort
 def main():
     ev3.speaker.beep()
 
-    times = 2
+    times = 5
     zoneAmount = 3
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
@@ -19,29 +19,26 @@ def main():
     Calibrate(armStartAngle)
     
     run = 0
-    location = 1
+    location = 0 # Go to first 1.
     lastZone = 0
+    goToZone = 0
     
     while run < times: # times = 2.
         run += 1
 
-        goToZone = location
+        # goToZone = location
 
 
         if potentialCargo:
+
             sortZone = 0
-            ######################################
-            ######################################
-            ######################################
-            #       sortZone = Sort algorithm()
-            # sortZone = colorSort()
             sortZone, color = colorSort()
 
             if sortZone == 'Error' or sortZone == 'nothing':
-                print("if sortzone works")
+                print("Sortzone ", sortZone)
 
                 ## Will continue if found nothing, otherwise place the cargo.
-                if sortZone == "Error":
+                if sortZone == "nothing":
                     
                     ev3.speaker.beep()
                     wait(4)
@@ -49,14 +46,14 @@ def main():
 
                     ### print error on robot.
                     ev3.screen.print("ERROR, color not supported")
-                    wait(100)
+                    wait(1000)
 
                     ## Drop of again, if detected random color.
                     Place(angleTarget=-armStartAngle, openClawsFirst=False)
 
             else:
                 ### Screen print 
-                ev3.screen.print("Color: " + color + " to zone: " + str(sortZone))
+                ev3.screen.print("Color: " + str(color) + " to zone: " + str(sortZone))
                 wait(100)
                 ######################################
                 ######################################
@@ -68,14 +65,36 @@ def main():
                     # This might not work as intended... (if we want to go to the next zone for example)
                     rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
                 # Uppdate the lastZone.
+                Place(angleTarget= -armStartAngle, openClawsFirst= False)
                 lastZone = sortZone  # 0
             
-            Place(angleTarget= -armStartAngle, openClawsFirst= False)
             potentialCargo = False
 
         else:
+
+            # lastZone = location
+            # location += 1
+            # if location >= zoneAmount:
+            #     location = 0
+            #     goToZone = 0
+            # else:
+
+            # lastZone = location
+            location += 1
+            goToZone = location
+            if location >= zoneAmount + 1:
+                location = 0
+                # LocationZero()
+                rotateBase(angle= 0)
+                wait(periodTime)  # 4000
+                ev3.speaker.beep()
+            
+            print("GoToZone = ", goToZone)
+
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
             Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
+
+            lastZone = location
 
             # picked up package true or false.
             ######################################
@@ -87,31 +106,21 @@ def main():
         print("Check color \nWhere to next= ", location)
 
 
-        if location >= zoneAmount:
-            location = 0
-            goToZone = 0
-        else:
-            lastZone = location
-            location += 1
-            goToZone = location
-            if location >= zoneAmount + 1:
-                location = 0
-                # LocationZero()
-                rotateBase(angle= 0)
-                wait(periodTime)  # 4000
-                ev3.speaker.beep()
-        
-        
-        ######################################
-        ######################################
-        ######################################
-        # Testing placment (problem since the code above is increasing before this)
-        # if location == 2 + 1:
-        #     potentialCargo = True
-        #     print("loc is True")
-                    
+        # if location >= zoneAmount:
+        #     location = 0
+        #     goToZone = 0
+        # else:
 
-        
+        #     lastZone = location
+        #     location += 1
+        #     goToZone = location
+        #     if location >= zoneAmount + 1:
+        #         location = 0
+        #         # LocationZero()
+        #         rotateBase(angle= 0)
+        #         wait(periodTime)  # 4000
+        #         ev3.speaker.beep()
+                    
 
         print("GoToZone = ", goToZone)
         # goToZone = 0
@@ -128,7 +137,7 @@ def main():
         # # rotateBase(operatingSpeed= 60, angle = zoneLocation[0])
 
     # Go back to start, if arm is higher than ground level.
-    armMovement(angleTarget= -35)
+    armMovement(angleTarget= -armStartAngle)
 
 
 def Calibrate(armStartAngle:int = 40):
