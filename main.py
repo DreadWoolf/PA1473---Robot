@@ -2,7 +2,7 @@
 
 # Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
-from Arm_and_Claw import Place, Pickup, armMovement
+from Arm_and_Claw import Place, Pickup, armMovement, clawMovement
 from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
 
@@ -13,8 +13,10 @@ def main():
     zoneAmount = 3
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
+
+    armStartAngle = 41
     
-    Calibrate()
+    Calibrate(armStartAngle)
     
     run = 0
     location = 1
@@ -35,7 +37,8 @@ def main():
             # sortZone = colorSort()
             sortZone, color = colorSort()
 
-            if sortZone == 'Error' or sortZone == "nothing":
+            if sortZone == 'Error' or sortZone == 'nothing':
+                print("if sorzone works")
 
                 ## Will continue if found nothing, otherwise place the cargo.
                 if sortZone == "Error":
@@ -49,7 +52,7 @@ def main():
                     wait(100)
 
                     ## Drop of again, if detected random color.
-                    Place(angleTarget=-35, openClawsFirst=False)
+                    Place(angleTarget=-armStartAngle, openClawsFirst=False)
 
             else:
                 ### Screen print 
@@ -67,12 +70,12 @@ def main():
                 # Uppdate the lastZone.
                 lastZone = sortZone  # 0
             
-            Place(angleTarget= -35, openClawsFirst= False)
+            Place(angleTarget= -armStartAngle, openClawsFirst= False)
             potentialCargo = False
 
         else:
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
-            Pickup(angleTarget= -35, openClawsFirst= True)
+            Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
 
             # picked up package true or false.
             ######################################
@@ -128,11 +131,20 @@ def main():
     armMovement(angleTarget= -35)
 
 
-def Calibrate():
+def Calibrate(armStartAngle:int = 40):
     # LocationZero()
 
     print("Calibrate arm")
+    # print(elevationMotor.angle())
+    # print(type(elevationMotor.angle()))
+    # tmp = int(elevationMotor.angle())
+    # print(tmp)
+    if elevationMotor.angle() != armStartAngle:
+        armMovement(armStartAngle, calibrate= True)
+
     print("Calibrate claw\n\n")
+    clawMovement(None, calibrate= True)
+    # clawMotor.run_until_stalled(40, then=Stop.BRAKE, duty_limit=None)
 
     rotateBase(angle= 0)
     return 0
@@ -141,8 +153,15 @@ def Calibrate():
 
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
-    armMovement(angleTarget= 35)
+    # armMovement(angleTarget= 40)
     
     # for i in range(3):
     # clawMovement(False)
+
+    # Calibrate(50)
+    # armMovement(angleTarget= 20)
+    # rotateBase(90)
+    # Calibrate(50)
+
+
     main()

@@ -1,3 +1,5 @@
+#!/usr/bin/env pybricks-micropython
+
 from Parameters import colorSense
 
 ## ladda in vilka färgar ska vart.
@@ -7,6 +9,21 @@ zoneSort = {
     'blue'      : 2,
     'nothing'   : 3
 }
+
+
+# Define margin of error
+margin = 33  # Adjust the margin as needed
+lmargin = 15
+
+colors = [
+        ("Red", lambda r, g, b ,re: (r > g + margin or r > g - margin) and (r > b + margin or r > b - margin ) and (r > (margin - lmargin)*dis) and  (50+lmargin>=re>=50-lmargin)),
+        ("Green", lambda r, g, b ,re: (g > r + margin or g > r - margin) and (g > b + margin or g > b - margin) and (g > (margin - lmargin)*dis) or (fcolor=="Color.YELLOW" or fcolor=="Color.GREEN")),
+        ("Blue", lambda r, g, b, re: (b > r + margin or b > r - margin) and (b > g + margin or b > g - margin) and (b > (margin - lmargin)*dis)),
+        ("Greenb", lambda r, g, b, re: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > (margin-lmargin)*dis and b > (margin-lmargin)*dis ),  # Condition for Greenb
+        ("nothing", lambda r, g, b, re: ((margin)>=r>=0) and ((margin)>=g>=0) or ((margin)>=b>=0))
+        # Add more colors here
+        # ("ColorName", lambda r, g, b: <condition>)
+    ]
 
 
 def newcolor():
@@ -51,8 +68,6 @@ def newcolor():
     
 
 def getColor():
-    newcolor = newcolor()
-    colors.apend(("newcolor",newcolor))
     # Get RGB values from the sensor (assuming they are in the range 0-100)
     fcolor = colorSense.color()
     ref = colorSense.reflection()
@@ -82,9 +97,9 @@ def getColor():
 
 def colorSort():
     color = getColor()
-
+    print("Getcolor says: " + str(color))
     if color == 'nothing':
-        return color  # nothing
+        return color, None  # nothing
     elif color in zoneSort:    
         # return zoneSort[color]  
         return zoneSort[color], color
@@ -94,4 +109,6 @@ def colorSort():
     
 
 if __name__ == "__main__":
+    # newcolor = newcolor()
+    # colors.apend(("newcolor",newcolor))
     print(colorSort())
