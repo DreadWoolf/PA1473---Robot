@@ -19,6 +19,7 @@ ev3 = EV3Brick()
 # Motor definitions
 elevationMotor = Motor(Port.B)  #8, 40
 rotationMotor = Motor (Port.C) #12, 36
+clawMotor = Motor(Port.A)
 
 def clear_terminal():
     # for windows
@@ -47,25 +48,37 @@ multiplyAngle = -(bigGear/smallGear)
 
 while temp:
     yeah = ev3.buttons.pressed()
+    combos = [str(obj) for obj in yeah]
     print(yeah)
     for button in yeah:
         button_str = str(button)
         if button_str == "Button.UP":
             elevationMotor.run_angle(60,-10)
-        if button_str == "Button.DOWN":
+        elif button_str == "Button.DOWN":
             elevationMotor.run_angle(60,10)
-        if button_str == "Button.CENTER":
+        elif button_str == "Button.CENTER":
             horangle = rotationMotor.angle() 
             verangle = elevationMotor.angle()
             rotationMotor.run_target(60,-horangle)
             elevationMotor.run_target(60,-verangle)
             temp=False 
-        if button_str == "Button.LEFT":
+        elif button_str == "Button.LEFT":
             rotationMotor.run_angle(60,-10)
-        if button_str == "Button.RIGHT":
+        elif button_str == "Button.RIGHT":
             rotationMotor.run_angle(60,10)
+        # if "Button.RIGHT" in combos and "Button.LEFT" in combos:
+        #     clawMotor.run_angle(60, (60) * multiplyAngle)    
+        # elif "Button.UP" in combos and "Button.DOWN" in combos:
+        #     clawMotor.run_angle(-60, (60) * multiplyAngle)
+        # if combos == ["Button.RIGHT", "Button.LEFT"] or combos == ["Button.LEFT", "Button.RIGHT"] :
+        #    clawMotor.run_angle(60 ,(60) * multiplyAngle)
+        # if combos == ["Button.UP", "Button.DOWN"] or combos == ["Button.DOWN", "Button.UP"] :
+        #    clawMotor.run_angle(-60 ,(60) * multiplyAngle)
+#        if button_str == "Button.LEFT" and button_str == "Button.RIGHT":
+#            clawMotor.run_angle(60 ,(60) * multiplyAngle)
+
     print("hor angle ===",horangle)
-    print ("rael hor angle ===",rotationMotor.angle() )
+    print ("real hor angle ===",rotationMotor.angle() )
     print("ver angle ===",verangle)
     print("real ver angle ===", elevationMotor.angle())
 
