@@ -38,7 +38,7 @@ def main():
             sortZone, color = colorSort()
 
             if sortZone == 'Error' or sortZone == 'nothing':
-                print("if sorzone works")
+                print("if sortzone works")
 
                 ## Will continue if found nothing, otherwise place the cargo.
                 if sortZone == "Error":
