@@ -5,6 +5,7 @@ from Parameters import *
 from Arm_and_Claw import Place, Pickup, armMovement, clawMovement
 from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
+from menu import menu
 
 from threading import Thread
 
@@ -128,10 +129,12 @@ def main():
 
 def testThreading():
     global RobotRun
-    for i in range(5):
-        # ev3.speaker.beep()
-        wait(1000)
-        # thread2
+    wait(1000)
+    menu()
+    # for i in range(5):
+    #     # ev3.speaker.beep()
+    #     wait(1000)
+    #     # thread2
     RobotRun = False
     ev3.speaker.beep()
     print("trying to stop now.")
