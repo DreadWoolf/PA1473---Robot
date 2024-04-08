@@ -150,7 +150,8 @@ zoneSort = {
     'yellow'   : 3
 }    
 ev3 = EV3Brick()
-def menu():
+def colorzones():
+    counter = 0
     colors = ["Red","Yellow", "Green","Blue"]
     if len(colors) == 0:
         return zoneSort
@@ -172,15 +173,18 @@ def menu():
                 ev3.screen.print(colors[current_index])
             
             if str(button) == "Button.CENTER":
+                counter += 1
                 ev3.screen.clear()
                 chosen = colors.pop(current_index)
                 print("Colors:", colors)
                 print("popped:", chosen)
-                chosen_zone = zoneSort[chosen.lower()] 
+                zoneSort[chosen.lower()] = counter
+                #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
 
             print(zoneSort)   
 
 
-print(menu())
+print(colorzones())
+#-----------------^---------------colorzones------------^------------
