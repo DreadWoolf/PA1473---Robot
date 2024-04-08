@@ -143,27 +143,44 @@ from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
 
 import random
+zoneSort = {
+    'red'       : 0,
+    'green'     : 1,
+    'blue'      : 2,
+    'yellow'   : 3
+}    
 ev3 = EV3Brick()
 def menu():
-    choicelist = ["start.code","zonecolor.selection", "zone.hight"]
+    colors = ["Red","Yellow", "Green","Blue"]
+    if len(colors) == 0:
+        return zoneSort
     current_index=0
-    ev3.screen.print(choicelist[current_index])
-    while True:
+    temp = True
+    ev3.screen.print(colors[current_index])
+    while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
         for button in buttons:
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
-                current_index = (current_index + 1) % len(choicelist)
-                ev3.screen.print(choicelist[current_index])
+                current_index = (current_index + 1) % len(colors)
+                ev3.screen.print(colors[current_index])
             
             if str(button) == "Button.RIGHT":
                 ev3.screen.clear()
-                current_index = (current_index - 1) % len(choicelist)
-                ev3.screen.print(choicelist[current_index])
+                current_index = (current_index - 1) % len(colors)
+                ev3.screen.print(colors[current_index])
             
             if str(button) == "Button.CENTER":
                 ev3.screen.clear()
-                ev3.screen.print("you chose ",choicelist[current_index])
+                chosen = colors.pop(current_index)
+                print("Colors:", colors)
+                print("popped:", chosen)
+                chosen_zone = zoneSort[chosen.lower()] 
+                #ev3.screen.print("you chose ",choicelist[current_index])
+                #temp=False
 
-menu()
+            print(zoneSort)   
+
+
+print(menu())
