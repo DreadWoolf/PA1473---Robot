@@ -14,7 +14,7 @@ def main():
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 43
+    armStartAngle = 41.5
     
     Calibrate(armStartAngle)
     
@@ -32,6 +32,7 @@ def main():
         if potentialCargo:
 
             sortZone = 0
+            wait(2)
             sortZone, color = colorSort()
 
             if sortZone == 'Error' or sortZone == 'nothing':
@@ -83,6 +84,7 @@ def main():
             location += 1
             goToZone = location
             if location >= zoneAmount + 1:
+                print("\n\n Reset and sleep")
                 location = 0
                 # LocationZero()
                 rotateBase(angle= 0)
