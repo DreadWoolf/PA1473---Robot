@@ -5,9 +5,9 @@ from Parameters import colorSense, wait
 
 ## ladda in vilka färgar ska vart.
 zoneSort = {
-    'red'       : 0,
-    'green'     : 1,
-    'blue'      : 2,
+    'Red'       : 0,
+    'Green'     : 1,
+    'Blue'      : 2,
     'nothing'   : 3
 }
 
@@ -99,14 +99,14 @@ def colorSort():
     color = getColor()
     print(color)
     if color == 'nothing':
-        print("...")
+        # print("...")
         return color, None  # nothing
     elif color in zoneSort:    
         # return zoneSort[color]  
-        print("FÖR HELVETE!")
+        # print("FÖR HELVETE!")
         return zoneSort[color], color
     else:
-        print("WTF")
+        # print("WTF")
         # return 'Error'
         return 'Error', None
     

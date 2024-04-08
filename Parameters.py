@@ -33,10 +33,10 @@ RobotRegister = {
     'D' : 0,  
     'E' : 0,
     'F' : 0,
-    'G' : 0
+    'G' : 17
 }
 
-RobotIdentity = 'B'
+RobotIdentity = 'G'
  
 
 zoneSort = {

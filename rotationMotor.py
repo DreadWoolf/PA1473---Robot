@@ -16,7 +16,6 @@ def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit 
 
     if angle == 0:
         LocationZero()
-        print("\nGoing back")
+        # print("\nGoing back")
     else:
-        print("...")
         rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)

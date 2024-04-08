@@ -28,7 +28,7 @@ def armMovement(angleTarget: int, height:int = 0, operatingSpeed = 60, calibrate
     multiplyAngle = -(bigGear/smallGear)
 
     if calibrate:
-        print("start arm angle " , elevationMotor.angle())
+        # print("start arm angle " , elevationMotor.angle())
         elevationMotor.run_target(speed = 40, target_angle = angleTarget * multiplyAngle)
         return
 
@@ -42,7 +42,7 @@ def armMovement(angleTarget: int, height:int = 0, operatingSpeed = 60, calibrate
     ######################################
     ######################################
     elevationMotor.run_angle(operatingSpeed,(angleTarget - height) * multiplyAngle)
-    print("targeted arm angle " , elevationMotor.angle())
+    # print("targeted arm angle " , elevationMotor.angle())
 
 
 def clawMovement(open:bool, calibrate:bool = False):
