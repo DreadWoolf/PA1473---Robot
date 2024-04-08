@@ -103,5 +103,26 @@ def getColor():
         
     return "unknown item"  # Object doesn't match any color predominantly
 
-while True:
-    getColor()
+def menu():
+    choicelist = ["start.code","zonecolor.selection", "zone.hight"]
+    current_index=0
+    ev3.screen.print(choicelist[current_index])
+    while True:
+        buttons= ev3.buttons.pressed()
+        wait(250)
+        for button in buttons:
+            if str(button) == "Button.LEFT":
+                ev3.screen.clear()
+                current_index = (current_index + 1) % len(choicelist)
+                ev3.screen.print(choicelist[current_index])
+            
+            if str(button) == "Button.RIGHT":
+                ev3.screen.clear()
+                current_index = (current_index - 1) % len(choicelist)
+                ev3.screen.print(choicelist[current_index])
+            
+            if str(button) == "Button.CENTER":
+                ev3.screen.clear()
+                ev3.screen.print("you chose ",choicelist[current_index])
+
+menu()
