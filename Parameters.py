@@ -56,7 +56,7 @@ errorMargin = RobotRegister[RobotIdentity]
 # }
 
 # Depending on the installation of the robot, either "Right" or "Left".
-oriontation = "Left"
+oriontation = "Right"
 
 rightOriented = {
     0: 0,
