@@ -1,3 +1,4 @@
+#!/usr/bin/env pybricks-micropython
 from Parameters import *
 
 def menu():
@@ -29,6 +30,10 @@ def menu():
                 if choicelist[current_index] == "set_origin":
                     origin = set_origin()
                     print(origin)
+                if choicelist[current_index] == "zonecolor_selection":
+                    czones=colorzones()
+                    print(czones)
+
 
 def zone_hight():
     zonenum = [1,2,3]
@@ -86,3 +91,47 @@ def set_origin():
                 rotationMotor.run_angle(60,-10)
             if button_str == "Button.RIGHT":
                 rotationMotor.run_angle(60,10)
+def colorzones():
+    zoneSort = {
+    'red'       : 0,
+    'green'     : 1,
+    'blue'      : 2,
+    'yellow'   : 3
+    }    
+    counter = 0
+    colors = ["Red","Yellow", "Green","Blue"]
+    current_index=0
+    temp = True
+    ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
+    while temp:
+        buttons= ev3.buttons.pressed()
+        wait(250)
+        for button in buttons:
+            if len(colors) == 0:
+                ev3.screen.print("done!")
+                temp = False
+                return zoneSort
+            if str(button) == "Button.LEFT":
+                ev3.screen.clear()
+                current_index = (current_index + 1) % len(colors)
+                ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
+            
+            if str(button) == "Button.RIGHT":
+                ev3.screen.clear()
+                current_index = (current_index - 1) % len(colors)
+                ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
+            
+            if str(button) == "Button.CENTER":
+                counter += 1
+                ev3.screen.clear()
+                chosen = colors.pop(current_index % len(colors)) 
+                print("Colors:", colors)
+                print("popped:", chosen)
+                zoneSort[chosen.lower()] = counter
+                #chosen_zone = zoneSort[chosen.lower()] 
+                #ev3.screen.print("you chose ",choicelist[current_index])
+                #temp=False
+
+            print(zoneSort)   
+
+menu()
