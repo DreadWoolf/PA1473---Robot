@@ -153,8 +153,6 @@ ev3 = EV3Brick()
 def colorzones():
     counter = 0
     colors = ["Red","Yellow", "Green","Blue"]
-    if len(colors) == 0:
-        return zoneSort
     current_index=0
     temp = True
     ev3.screen.print(colors[current_index])
@@ -162,6 +160,10 @@ def colorzones():
         buttons= ev3.buttons.pressed()
         wait(250)
         for button in buttons:
+            if len(colors) == 0:
+                ev3.screen.print("done!")
+                temp = False
+                return zoneSort
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(colors)
@@ -184,7 +186,7 @@ def colorzones():
                 #temp=False
 
             print(zoneSort)   
-
-
-print(colorzones())
+theend = colorzones()
+print("OKAY STOP")
+print(theend)
 #-----------------^---------------colorzones------------^------------
