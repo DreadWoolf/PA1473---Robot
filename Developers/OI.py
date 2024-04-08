@@ -121,7 +121,7 @@ def colorzones():
     colors = ["Red","Yellow", "Green","Blue"]
     current_index=0
     temp = True
-    ev3.screen.print(colors[current_index])
+    ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
@@ -133,12 +133,12 @@ def colorzones():
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(colors)
-                ev3.screen.print(colors[current_index])
+                ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
             
             if str(button) == "Button.RIGHT":
                 ev3.screen.clear()
                 current_index = (current_index - 1) % len(colors)
-                ev3.screen.print(colors[current_index])
+                ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
             
             if str(button) == "Button.CENTER":
                 counter += 1
