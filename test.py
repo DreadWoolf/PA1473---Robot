@@ -1,22 +1,22 @@
 from threading import Thread
 
 
-randomdict = {
-    "hej": 2
-}
+# randomdict = {
+#     "hej": 2
+# }
 
-print(randomdict["hej"])
+# print(randomdict["hej"])
 
-randomdict["hej"] = 5
+# randomdict["hej"] = 5
 
-print(randomdict["hej"])
+# print(randomdict["hej"])
 
-print(randomdict)
+# print(randomdict)
 
-randomdict["test"] = 3
+# randomdict["test"] = 3
 
-print(randomdict["test"])
-print(randomdict)
+# print(randomdict["test"])
+# print(randomdict)
 
 from threading import Thread
 import time

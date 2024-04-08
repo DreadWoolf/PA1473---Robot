@@ -8,6 +8,13 @@ from colorAlgorithm import colorSort
 
 from threading import Thread
 
+
+# Create two threads for each task
+thread1 = Thread()
+thread2 = Thread()
+
+Robotrun = True
+
 def main():
     ev3.speaker.beep()
 
@@ -16,7 +23,7 @@ def main():
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 39  # 40
+    armStartAngle = 50#39  # 40
     
     Calibrate(armStartAngle)
     
@@ -25,21 +32,9 @@ def main():
     lastZone = 0
     goToZone = 0
 
-    # Create two threads for each task
-    thread1 = Thread(target=task1)
-    thread2 = Thread(target=task2)
-
-    # Start the threads
-    thread1.start()
-    thread2.start()
-
-    # Wait for both threads to finish
-    thread1.join()
-    thread2.join()
-
-    print("Both tasks are completed.")
     
-    while run < times: # times = 2.
+    running = True
+    while running: #run < times: # times = 2.
         # run += 1
 
         if potentialCargo:
@@ -92,40 +87,25 @@ def main():
             potentialCargo = False
 
         elif location >= zoneAmount:  # + 1
+            location = 0
+            goToZone = 0
+            lastZone = 0
+            rotateBase(angle= 0)
+            if RobotRun:
                 print("\n\n Reset and sleep")
-                location = 0
-                goToZone = 0
-                lastZone = 0
-                
-                rotateBase(angle= 0)
                 wait(periodTime)  # 4000
                 ev3.speaker.beep()
                 run += 1
+            else:
+                running = False
         else:
-            
 
-            # lastZone = location
-            # location += 1
-            # if location >= zoneAmount:
-            #     location = 0
-            #     goToZone = 0
-            # else:
-
-            # lastZone = location
             location += 1
 
             if location == lastZone: ## If we sorted to the zone we wanna go to.
                 location += 1
 
             goToZone = location
-            # if location >= zoneAmount + 1:  # + 1
-            #     print("\n\n Reset and sleep")
-            #     location = 0
-            #     goToZone = 0
-            #     # LocationZero()
-            #     rotateBase(angle= 0)
-            #     wait(periodTime)  # 4000
-            #     ev3.speaker.beep()
             
 
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
@@ -139,45 +119,35 @@ def main():
             ######################################
             # Check if we have cargo!
             potentialCargo = True
-
-        # print("Check color \nWhere to next= ", location)
-
-
-        print("GoToZone = ", goToZone)
-        # goToZone = 0
-
-        # rotateBase(angle=zoneLocation[goToZone])
-        # # zone0Calibration()
-
-        # armMovement(angleTarget= -35)
-        # print("Let go")
-        # clawMovement(open = True)
-        # armMovement(angleTarget= 35)
-        # print("Close the empty claws")
-        # clawMovement(open = False)
-        # # rotateBase(operatingSpeed= 60, angle = zoneLocation[0])
+        print("GoToZone = ", goToZone + 1)
 
     # Go back to start, if arm is higher than ground level.
     armMovement(angleTarget= -armStartAngle)
     print("\n\nStopped!")
 
 
+def testThreading():
+    global RobotRun
+    for i in range(5):
+        # ev3.speaker.beep()
+        wait(1000)
+        # thread2
+    RobotRun = False
+    ev3.speaker.beep()
+    print("trying to stop now.")
+
+    # Motor.stop()
+    return 0
+
 def Calibrate(armStartAngle:int = 40):
-    # LocationZero()
 
     ev3.screen.print("Callibrate arm")
-    # print(elevationMotor.angle())
-    # print(type(elevationMotor.angle()))
-    # tmp = int(elevationMotor.angle())
-    # print(tmp)
     if elevationMotor.angle() != armStartAngle:
         armMovement(armStartAngle, calibrate= True)
 
-    # print("Calibrate claw\n\n")
     ev3.screen.print("Callibrate claw")
 
     clawMovement(None, calibrate= True)
-    # clawMotor.run_until_stalled(40, then=Stop.BRAKE, duty_limit=None)
 
     ev3.screen.print("Callibrate rotation")
     rotateBase(angle= 0)
@@ -188,4 +158,18 @@ def Calibrate(armStartAngle:int = 40):
 
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
-    main()
+    # Create two threads for each task
+    thread1 = Thread(target=testThreading)
+    thread2 = Thread(target=main)
+
+    # Start the threads
+    thread1.start()
+    thread2.start()
+
+    # # Wait for both threads to finish
+    thread1.join()
+    thread2.join()
+
+    print("Both tasks have started.")
+
+    # main()
