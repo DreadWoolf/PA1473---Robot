@@ -173,6 +173,4 @@ if __name__ == "__main__":
     # armMovement(angleTarget= 20)
     # rotateBase(90)
     # Calibrate(50)
-
-
     main()

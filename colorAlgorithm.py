@@ -97,7 +97,7 @@ def getColor():
 
 def colorSort():
     color = getColor()
-
+    print(color)
     if color == 'nothing':
         print("...")
         return color, None  # nothing
