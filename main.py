@@ -6,6 +6,8 @@ from Arm_and_Claw import Place, Pickup, armMovement, clawMovement
 from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
 
+from threading import Thread
+
 def main():
     ev3.speaker.beep()
 
@@ -22,6 +24,20 @@ def main():
     location = 0 # Go to first 1.
     lastZone = 0
     goToZone = 0
+
+    # Create two threads for each task
+    thread1 = Thread(target=task1)
+    thread2 = Thread(target=task2)
+
+    # Start the threads
+    thread1.start()
+    thread2.start()
+
+    # Wait for both threads to finish
+    thread1.join()
+    thread2.join()
+
+    print("Both tasks are completed.")
     
     while run < times: # times = 2.
         # run += 1
