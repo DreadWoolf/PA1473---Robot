@@ -12,7 +12,7 @@ def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit 
     bigGear = 36   #Tooths for gear moving counter clockwise. 
     multiplyAngle = -(bigGear/smallGear)
 
-    print("angle = ", angle)
+    # print("angle = ", angle)
 
     if angle == 0:
         LocationZero()

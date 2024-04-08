@@ -1,8 +1,10 @@
+#!/usr/bin/env pybricks-micropython
+
 # from Parameters import *
 from Parameters import elevationMotor, clawMotor, Stop
 
 
-def Pickup(angleTarget:int, openClawsFirst:bool, height:int = 0):
+def Pickup(angleTarget:int, openClawsFirst:bool = True, height:int = 0):
     # if height <= 0:
     clawMovement(open = openClawsFirst) # If openFirst = True will open here.
     armMovement(angleTarget= angleTarget)
@@ -10,7 +12,7 @@ def Pickup(angleTarget:int, openClawsFirst:bool, height:int = 0):
     armMovement(angleTarget= -angleTarget)
 
 
-def Place(angleTarget:int, openClawsFirst:bool):
+def Place(angleTarget:int, openClawsFirst:bool = False):
     
     # If openFirst = True will open first.
     armMovement(angleTarget= angleTarget)
@@ -61,3 +63,18 @@ def clawMovement(open:bool, calibrate:bool = False):
     else:
         clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
         # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
+
+if __name__ == "__main__":
+    angletrget = 40
+    print("Calibrate")
+    armMovement(angletrget, calibrate=True)
+    clawMovement(True, calibrate=True)  # Calibrate
+    
+    print("Pickup")
+    Pickup(-angletrget)
+    print("Place")
+    Place(-angletrget)
+    
+    print("Stopping")
+    armMovement(-angletrget)
+

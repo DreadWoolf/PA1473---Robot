@@ -9,7 +9,7 @@ from colorAlgorithm import colorSort
 def main():
     ev3.speaker.beep()
 
-    times = 7
+    times = 2  #10
     zoneAmount = 3
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
@@ -24,18 +24,7 @@ def main():
     goToZone = 0
     
     while run < times: # times = 2.
-        run += 1
-
-        # goToZone = location
-
-        # if location >= zoneAmount:  # + 1
-        #         print("\n\n Reset and sleep")
-        #         location = 0
-        #         goToZone = 0
-        #         # LocationZero()
-        #         rotateBase(angle= 0)
-        #         wait(periodTime)  # 4000
-        #         ev3.speaker.beep()
+        # run += 1
 
         if potentialCargo:
 
@@ -63,13 +52,18 @@ def main():
                     lastZone = location
 
             else:
-                ### Screen print 
-                ev3.screen.print(str(color) + " to: " + str(sortZone))
                 wait(100)
                 ######################################
                 ######################################
                 ######################################
                 # Make sure this works...
+                if sortZone == lastZone:
+                    ### Screen print 
+                    ev3.screen.print(str(color) + " to: " + str(sortZone))
+                else:
+                    ev3.screen.print("Package at right location")
+                    
+                
                 if sortZone == 0:
                     rotateBase(angle= zoneLocation[sortZone]) # Go to zone '0'.
                 else:
@@ -85,10 +79,12 @@ def main():
                 print("\n\n Reset and sleep")
                 location = 0
                 goToZone = 0
-                # LocationZero()
+                lastZone = 0
+                
                 rotateBase(angle= 0)
                 wait(periodTime)  # 4000
                 ev3.speaker.beep()
+                run += 1
         else:
             
 
@@ -153,7 +149,7 @@ def main():
 def Calibrate(armStartAngle:int = 40):
     # LocationZero()
 
-    print("Calibrate arm")
+    ev3.screen.print("Callibrate arm")
     # print(elevationMotor.angle())
     # print(type(elevationMotor.angle()))
     # tmp = int(elevationMotor.angle())
@@ -161,24 +157,19 @@ def Calibrate(armStartAngle:int = 40):
     if elevationMotor.angle() != armStartAngle:
         armMovement(armStartAngle, calibrate= True)
 
-    print("Calibrate claw\n\n")
+    # print("Calibrate claw\n\n")
+    ev3.screen.print("Callibrate claw")
+
     clawMovement(None, calibrate= True)
     # clawMotor.run_until_stalled(40, then=Stop.BRAKE, duty_limit=None)
 
+    ev3.screen.print("Callibrate rotation")
     rotateBase(angle= 0)
+    ev3.screen.clear()
     return 0
 
 
 
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
-    # armMovement(angleTarget= 40)
-    
-    # for i in range(3):
-    # clawMovement(False)
-
-    # Calibrate(50)
-    # armMovement(angleTarget= 20)
-    # rotateBase(90)
-    # Calibrate(50)
     main()

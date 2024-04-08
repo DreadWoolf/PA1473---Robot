@@ -33,7 +33,7 @@ RobotRegister = {
     'D' : 0,  
     'E' : 0,
     'F' : 0,
-    'G' : 17
+    'G' : 18
 }
 
 RobotIdentity = 'G'

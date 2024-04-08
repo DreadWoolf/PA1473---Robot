@@ -99,16 +99,11 @@ def colorSort():
     color = getColor()
     print(color)
     if color == 'nothing':
-        # print("...")
-        return color, None  # nothing
+        return color, None  # nothing, the color is not in the list.
     elif color in zoneSort:    
-        # return zoneSort[color]  
-        # print("FÖR HELVETE!")
-        return zoneSort[color], color
+        return zoneSort[color], color # Return the color.
     else:
-        # print("WTF")
-        # return 'Error'
-        return 'Error', None
+        return 'Error', None # Did not find any color.
     
 
 if __name__ == "__main__":
