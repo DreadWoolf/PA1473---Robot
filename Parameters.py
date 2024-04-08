@@ -48,12 +48,39 @@ zoneSort = {
 
 errorMargin = RobotRegister[RobotIdentity]
 
-zoneLocation = {
+# zoneLocation = {
+#     0: 0,
+#     1: 90 + errorMargin,
+#     2: 135 + errorMargin + 2,
+#     3: 180 + errorMargin + 3
+# }
+
+# Depending on the installation of the robot, either "Right" or "Left".
+oriontation = "Left"
+
+rightOriented = {
+    0: 0,
+    1: 45 + errorMargin,
+    2: 90 + errorMargin + 2,
+    3: 180 + errorMargin + 3
+}
+
+leftOriented = {
     0: 0,
     1: 90 + errorMargin,
     2: 135 + errorMargin + 2,
     3: 180 + errorMargin + 3
 }
+
+if oriontation == "Left":
+    zoneLocation = leftOriented
+elif oriontation == "Right":
+    zoneLocation = rightOriented
+else:
+    print("Error, with setup")
+    exit()
+
+
 
 zoneHeight = {
     0: 0,

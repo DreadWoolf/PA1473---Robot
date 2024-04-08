@@ -56,8 +56,8 @@ def newcolor():
 def getColor():
     # Get RGB values from the sensor (assuming they are in the range 0-100)
     fcolor = colorSense.color()
-    dis = 3
-    aos = 3
+    dis = 2
+    aos = 2
     Tred, Tgreen, Tblue, Tref = 0,0,0,0
     for i in range(aos):   
         red, green, blue = colorSense.rgb()
@@ -66,6 +66,7 @@ def getColor():
         Tred += red
         Tgreen += green
         Tblue += blue
+        wait(10)
     Tred = Tred//aos
     Tgreen = Tgreen//aos
     Tblue = Tblue//aos
@@ -79,7 +80,7 @@ def getColor():
         ("Red", lambda r, g, b ,re: (r > g + margin and r > g - margin) and (r > b + margin and r > b - margin ) and (r > (margin - lmargin)*dis) and  (50+lmargin>=re>=50-lmargin)),
         ("Green", lambda r, g, b ,re: (g > r + margin and g > r - margin) and (g > b + margin and g > b - margin) and (g > (margin - lmargin)*dis) or  fcolor=="Color.GREEN"),
         ("Blue", lambda r, g, b, re: (b > r + margin and b > r - margin) and (b > g + margin and b > g - margin) and (b > (margin - lmargin)*dis)),
-        ("Yellow", lambda r, g, b, re:(abs(g - r) <= margin) and (g > b + margin and g > b - margin) and (r > b + margin and r > b - margin ) or fcolor =="Color.YELLOW"),
+        ("Yellow", lambda r, g, b, re:(abs(g - (r/2)) <= margin) and (g > b + margin and g > b - margin) and (r > b + margin and r > b - margin ) or fcolor =="Color.YELLOW"),
         ("Green", lambda r, g, b, re: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > (margin-lmargin)*dis and b > (margin-lmargin)*dis ),  # Condition for Greenb
         ("nothing", lambda r, g, b, re: ((margin)>=r>=0) and ((margin)>=g>=0) and ((margin)>=b>=0))
         # Add more colors here
@@ -89,23 +90,20 @@ def getColor():
     # Check each color condition
     for color_name, condition in colors:
         if condition(Tred, Tgreen, Tblue, Tref):
-            print("color name ", type(color_name))
             return color_name
         
     return "unknown item"  # Object doesn't match any color predominantly
-
 
 
 def colorSort():
     color = getColor()
 
     if color == 'nothing':
-        print("nothing")
+        print("...")
         return color, None  # nothing
     elif color in zoneSort:    
         # return zoneSort[color]  
         print("FÖR HELVETE!")
-
         return zoneSort[color], color
     else:
         print("WTF")
