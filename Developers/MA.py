@@ -106,8 +106,9 @@ def getColor():
 def menu():
     choicelist = ["start.code","zonecolor.selection", "zone.hight"]
     current_index=0
+    temp=True
     ev3.screen.print(choicelist[current_index])
-    while True:
+    while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
         for button in buttons:
@@ -124,5 +125,4 @@ def menu():
             if str(button) == "Button.CENTER":
                 ev3.screen.clear()
                 ev3.screen.print("you chose ",choicelist[current_index])
-
-menu()
+                temp=False
