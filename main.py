@@ -130,12 +130,43 @@ def main():
     print("\n\nStopped!")
 
 
+def stop_thread(thread):
+    """Stoppa en tråd omedelbart."""
+    import ctypes
+    if not thread.is_alive():
+        return
+
+    # Identifiera operativsystemet
+    if hasattr(ctypes, 'pthread_kill'):
+        # För Unix-baserade system
+        tid = thread.ident
+        ctypes.pthread_kill(tid, 9)
+    elif hasattr(ctypes, 'WinDLL'):
+        # För Windows-system
+        kernel32 = ctypes.WinDLL('kernel32')
+        handle = thread._Thread__handle
+        kernel32.TerminateThread(handle, 0)
+
+
 def testThreading():
     global RobotRun
+    global thread2
+    global elevationMotor
+    global clawMotor
+    global rotationMotor
 
     for i in range(10):
         ev3.speaker.beep()
         wait(1200)
+    
+
+    
+    ev3.speak("bröö") #xD
+    # elevationMotor.stop()
+    # clawMotor.stop()
+    # rotationMotor.stop()
+
+    # stop_thread(thread2)
 
     # stop_timer = threading.Timer(5, thread.cancel)
     # stop_timer.start()
@@ -145,7 +176,6 @@ def testThreading():
     # #     # ev3.speaker.beep()
     # #     wait(1000)
     # #     # thread2
-    DriveBase.Stop()
     RobotRun = False
     ev3.speaker.beep()
     print("trying to stop now.")
@@ -179,6 +209,8 @@ if __name__ == "__main__":
     # Start the threads
     thread1.start()
     thread2.start()
+
+
 
     # # Wait for both threads to finish
     # thread1.join()
