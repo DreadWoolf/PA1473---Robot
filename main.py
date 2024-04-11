@@ -159,6 +159,8 @@ def testThreading():
         ev3.speaker.beep()
         wait(1200)
     
+
+    
     ev3.speak("bröö") #xD
     # elevationMotor.stop()
     # clawMotor.stop()
