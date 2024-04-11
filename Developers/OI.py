@@ -168,3 +168,158 @@ ev3.speaker.set_volume(100)
 color = "A person who thinks all the time Has nothing to think about except thoughts So... he loses touch with reality And lives in a world of illusions By thoughts I mean specifically, Chatter in the skull Perpetual and compulsive repetition of words, of reckoning and calculating I'm not saying that thinking is bad Like everybody else It's useful in moderation A good servant, but a bad master And all civilized peoples Have increasingly become crazy and self destructive Because through excessive thinking The have lost touch with reality That to say... We confuse signs With the real world... This is the beginning of meditation Most of us would have Rather money than tangible wealth And a great occasion is somehow spoiled for us unless photographed And to read about it the next day in the newspaper Is oddly more fun for us than the original event This is a disaster... For as a result of confusing the real world of nature with mere signs We are destroying nature We are so tied up in our minds that we've lost our senses Time to wake up What is reality? Obviously... no one can say Because it isn't words It isn't material, that's just an idea Reality is... The point cannot be explained in words Im not trying to put you down It's an expression of you as you are One must live... We need to survive to go on... We must go on."
 ev3.speaker.say("The color is " + color)'''
 #-------------^^------voice---^^------------
+from pybricks import robotics
+from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
+from pybricks.parameters import Port, Stop, Direction, Color
+from pybricks.tools import wait, StopWatch
+from pybricks.robotics import DriveBase
+# Motor definitions
+elevationMotor = Motor(Port.B)  #8, 40
+rotationMotor = Motor (Port.C) #12, 36
+clawMotor = Motor(Port.A)
+import random
+ev3 = EV3Brick()
+def menu():
+    choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight"]
+    current_index=0
+    temp=True
+    zonecords = 0
+    czones = 0
+    ev3.screen.print(choicelist[current_index])
+    while temp:
+        buttons= ev3.buttons.pressed()
+        wait(250)
+        for button in buttons:
+            if str(button) == "Button.LEFT":
+                ev3.screen.clear()
+                current_index = (current_index + 1) % len(choicelist)
+                ev3.screen.print(choicelist[current_index])
+            
+            if str(button) == "Button.RIGHT":
+                ev3.screen.clear()
+                current_index = (current_index - 1) % len(choicelist)
+                ev3.screen.print(choicelist[current_index])
+            
+            if str(button) == "Button.CENTER":
+                ev3.screen.clear()
+                ev3.screen.print("you chose ",choicelist[current_index])
+                if choicelist[current_index] == "zone_hight":
+                    zonecords = zone_hight()
+                    print(zonecords)
+                if choicelist[current_index] == "set_origin":
+                    origin = set_origin()
+                    print(origin)
+                if choicelist[current_index] == "zonecolor_selection":
+                    czones=colorzones()
+                    print(czones)
+                if choicelist[current_index] == "start_code":
+                    if zonecords != 0 and czones != 0:
+                        return czones , zonecords
+
+def zone_hight():
+    zonenum = [1,2,3]
+    zonecords = {"1":0,
+                 "2":0,
+                 "3":0
+                 }
+    #rotationMotor.reset_angle(0)
+    #elevationMotor.reset_angle(0)
+    horangle = 0 
+    verangle = 0
+    temp=True
+    for num in zonenum:
+        temp=True
+        ev3.screen.clear()
+        ev3.screen.print("chose the location \n of zone: ",num)
+        while temp:
+            buttons = ev3.buttons.pressed()
+            wait(250)
+            for button in buttons:
+                button_str = str(button)
+                if button_str == "Button.UP":
+                    elevationMotor.run_angle(60,-10)
+                if button_str == "Button.DOWN":
+                    elevationMotor.run_angle(60,10)
+                elif button_str == "Button.CENTER":
+                    horangle = rotationMotor.angle() 
+                    verangle = elevationMotor.angle()
+                    zonecords[str(num)] = verangle
+                    if num == 3:
+                        return zonecords
+                    temp=False
+                if button_str == "Button.LEFT":
+                    rotationMotor.run_angle(60,-10)
+                if button_str == "Button.RIGHT":
+                    rotationMotor.run_angle(60,10)
+
+def set_origin():
+    origin=[]
+    temp=True
+    while temp:
+        buttons = ev3.buttons.pressed()
+        wait(250)
+        for button in buttons:
+            button_str = str(button)
+            if button_str == "Button.UP":
+                elevationMotor.run_angle(60,-10)
+            if button_str == "Button.DOWN":
+                elevationMotor.run_angle(60,10)
+            elif button_str == "Button.CENTER":
+                horangle = rotationMotor.angle() 
+                verangle = elevationMotor.angle()
+                origin = [horangle,verangle]
+                return origin
+            if button_str == "Button.LEFT":
+                rotationMotor.run_angle(60,-10)
+            if button_str == "Button.RIGHT":
+                rotationMotor.run_angle(60,10)
+
+def colorzones():
+    zoneSort = {
+    'red'       : 0,
+    'green'     : 1,
+    'blue'      : 2,
+    'yellow'   : 3
+    }    
+    counter = 0
+    colors = ["Red","Yellow", "Green","Blue"]
+    current_index=0
+    temp = True
+    ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
+    while temp:
+        buttons= ev3.buttons.pressed()
+        wait(250)
+        for button in buttons:
+            if len(colors) == 0:
+                ev3.screen.print("done!")
+                temp = False
+                return zoneSort
+            if str(button) == "Button.LEFT":
+                ev3.screen.clear()
+                current_index = (current_index + 1) % len(colors)
+                ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
+            
+            if str(button) == "Button.RIGHT":
+                ev3.screen.clear()
+                current_index = (current_index - 1) % len(colors)
+                ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
+            
+            if str(button) == "Button.CENTER":
+                counter += 1
+                ev3.screen.clear()
+                chosen = colors.pop(current_index % len(colors)) 
+                print("Colors:", colors)
+                print("popped:", chosen)
+                zoneSort[chosen.lower()] = str(counter)
+                #chosen_zone = zoneSort[chosen.lower()] 
+                #ev3.screen.print("you chose ",choicelist[current_index])
+                #temp=False
+
+            print(zoneSort)   
+
+
+
+#if __name__ == "__main__":
+print(menu())
+
