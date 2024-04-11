@@ -41,7 +41,7 @@ def main():
         if potentialCargo:
 
             sortZone = 0
-            wait(2)
+            wait(5)  #2
             sortZone, color = colorSort()
 
             if sortZone == 'Error' or sortZone == 'nothing':
@@ -102,7 +102,8 @@ def main():
         else:
 
             location += 1
-
+            
+            # May not work... maybe needs an 'or' or 'and' like gotozone <zoneamount.
             if location == lastZone: ## If we sorted to the zone we wanna go to.
                 location += 1
 
@@ -120,7 +121,7 @@ def main():
             ######################################
             # Check if we have cargo!
             potentialCargo = True
-        print("GoToZone = ", goToZone + 1)
+        print("GoToZone = ", goToZone)
 
     # Go back to start, if arm is higher than ground level.
     armMovement(angleTarget= -armStartAngle)
