@@ -86,6 +86,8 @@ def set_origin():
                 horangle = rotationMotor.angle() 
                 verangle = elevationMotor.angle()
                 origin = [horangle,verangle]
+                rotationMotor.reset_angle(0) #testing if it resets the angle on the whole robot  
+                elevationMotor.reset_angle(0) #testing if it resets the angle on the whole robot 
                 return origin
             if button_str == "Button.LEFT":
                 rotationMotor.run_angle(60,-10)
@@ -107,10 +109,12 @@ def colorzones():
         buttons= ev3.buttons.pressed()
         wait(250)
         for button in buttons:
+
             if len(colors) == 0:
                 ev3.screen.print("done!")
                 temp = False
                 return zoneSort
+            
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(colors)
@@ -131,9 +135,6 @@ def colorzones():
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
-
-            print(zoneSort)   
-
-
-if __name__ == "__main__":
-    menu()
+            print(zoneSort)
+            
+menu()

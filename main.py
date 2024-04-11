@@ -8,8 +8,6 @@ from colorAlgorithm import colorSort
 from menu import menu
 
 from threading import Thread
-# import threading
-
 
 
 # Create two threads for each task
@@ -43,7 +41,7 @@ def main():
         if potentialCargo:
 
             sortZone = 0
-            wait(5)  #2
+            wait(2)
             sortZone, color = colorSort()
 
             if sortZone == 'Error' or sortZone == 'nothing':
@@ -104,8 +102,7 @@ def main():
         else:
 
             location += 1
-            
-            # May not work... maybe needs an 'or' or 'and' like gotozone <zoneamount.
+
             if location == lastZone: ## If we sorted to the zone we wanna go to.
                 location += 1
 
@@ -123,29 +120,21 @@ def main():
             ######################################
             # Check if we have cargo!
             potentialCargo = True
-        print("GoToZone = ", goToZone)
+        print("GoToZone = ", goToZone + 1)
 
     # Go back to start, if arm is higher than ground level.
-    armMovement(angleTarget= -armStartAngle)
+    armMovement(angleTarget = -armStartAngle)
     print("\n\nStopped!")
 
 
 def testThreading():
     global RobotRun
-
-    for i in range(10):
-        ev3.speaker.beep()
-        wait(1200)
-
-    # stop_timer = threading.Timer(5, thread.cancel)
-    # stop_timer.start()
-    # wait(1000)
-    # menu()
-    # # for i in range(5):
-    # #     # ev3.speaker.beep()
-    # #     wait(1000)
-    # #     # thread2
-    DriveBase.Stop()
+    wait(1000)
+    menu()
+    # for i in range(5):
+    #     # ev3.speaker.beep()
+    #     wait(1000)
+    #     # thread2
     RobotRun = False
     ev3.speaker.beep()
     print("trying to stop now.")
@@ -181,8 +170,8 @@ if __name__ == "__main__":
     thread2.start()
 
     # # Wait for both threads to finish
-    # thread1.join()
-    # thread2.join()
+    thread1.join()
+    thread2.join()
 
     print("Both tasks have started.")
 

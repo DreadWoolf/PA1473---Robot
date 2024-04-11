@@ -107,6 +107,7 @@ def menu():
     choicelist = ["start_code","zonecolor_selection", "zone_hight", "set_origin"]
     current_index=0
     temp=True
+    
     ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
@@ -188,4 +189,3 @@ def set_origin():
                 rotationMotor.run_angle(60,-10)
             if button_str == "Button.RIGHT":
                 rotationMotor.run_angle(60,10)
-menu()
