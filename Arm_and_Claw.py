@@ -53,7 +53,8 @@ def clawMovement(open:bool, calibrate:bool = False):
     multiplyAngle = -(bigGear/smallGear)
 
     if calibrate:
-        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
+        # clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
+        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
         return
 
 

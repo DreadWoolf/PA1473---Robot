@@ -8,6 +8,8 @@ from colorAlgorithm import colorSort
 from menu import menu
 
 from threading import Thread
+# import threading
+
 
 
 # Create two threads for each task
@@ -41,7 +43,7 @@ def main():
         if potentialCargo:
 
             sortZone = 0
-            wait(2)
+            wait(5)  #2
             sortZone, color = colorSort()
 
             if sortZone == 'Error' or sortZone == 'nothing':
@@ -102,7 +104,8 @@ def main():
         else:
 
             location += 1
-
+            
+            # May not work... maybe needs an 'or' or 'and' like gotozone <zoneamount.
             if location == lastZone: ## If we sorted to the zone we wanna go to.
                 location += 1
 
@@ -120,21 +123,59 @@ def main():
             ######################################
             # Check if we have cargo!
             potentialCargo = True
-        print("GoToZone = ", goToZone + 1)
+        print("GoToZone = ", goToZone)
 
     # Go back to start, if arm is higher than ground level.
-    armMovement(angleTarget = -armStartAngle)
+    armMovement(angleTarget= -armStartAngle)
     print("\n\nStopped!")
+
+
+def stop_thread(thread):
+    """Stoppa en tråd omedelbart."""
+    import ctypes
+    if not thread.is_alive():
+        return
+
+    # Identifiera operativsystemet
+    if hasattr(ctypes, 'pthread_kill'):
+        # För Unix-baserade system
+        tid = thread.ident
+        ctypes.pthread_kill(tid, 9)
+    elif hasattr(ctypes, 'WinDLL'):
+        # För Windows-system
+        kernel32 = ctypes.WinDLL('kernel32')
+        handle = thread._Thread__handle
+        kernel32.TerminateThread(handle, 0)
 
 
 def testThreading():
     global RobotRun
-    wait(1000)
-    menu()
-    # for i in range(5):
-    #     # ev3.speaker.beep()
-    #     wait(1000)
-    #     # thread2
+    global thread2
+    global elevationMotor
+    global clawMotor
+    global rotationMotor
+
+    for i in range(10):
+        ev3.speaker.beep()
+        wait(1200)
+    
+
+    
+    ev3.speak("bröö") #xD
+    # elevationMotor.stop()
+    # clawMotor.stop()
+    # rotationMotor.stop()
+
+    # stop_thread(thread2)
+
+    # stop_timer = threading.Timer(5, thread.cancel)
+    # stop_timer.start()
+    # wait(1000)
+    # menu()
+    # # for i in range(5):
+    # #     # ev3.speaker.beep()
+    # #     wait(1000)
+    # #     # thread2
     RobotRun = False
     ev3.speaker.beep()
     print("trying to stop now.")
@@ -169,9 +210,11 @@ if __name__ == "__main__":
     thread1.start()
     thread2.start()
 
+
+
     # # Wait for both threads to finish
-    thread1.join()
-    thread2.join()
+    # thread1.join()
+    # thread2.join()
 
     print("Both tasks have started.")
 
