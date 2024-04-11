@@ -2,10 +2,11 @@
 from Parameters import *
 
 def menu():
-    choicelist = ["start_code","zonecolor_selection", "zone_hight", "set_origin"]
+    choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight"]
     current_index=0
     temp=True
-    
+    zonecords = 0
+    czones = 0
     ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
@@ -33,16 +34,19 @@ def menu():
                 if choicelist[current_index] == "zonecolor_selection":
                     czones=colorzones()
                     print(czones)
-
+                if choicelist[current_index] == "start_code":
+                    return czones , zonecords
 
 def zone_hight():
     zonenum = [1,2,3]
-    zonecords = {"1":[],
-                 "2":[],
-                 "3":[]
+    zonecords = {
+                 0:0,
+                 1:0,
+                 2:0,
+                 3:0
                  }
-    rotationMotor.reset_angle(0)
-    elevationMotor.reset_angle(0)
+    #rotationMotor.reset_angle(0)
+    #elevationMotor.reset_angle(0)
     horangle = 0 
     verangle = 0
     temp=True
@@ -62,7 +66,7 @@ def zone_hight():
                 elif button_str == "Button.CENTER":
                     horangle = rotationMotor.angle() 
                     verangle = elevationMotor.angle()
-                    zonecords[str(num)] =[horangle,verangle]
+                    zonecords[num] = verangle
                     if num == 3:
                         return zonecords
                     temp=False
@@ -70,6 +74,7 @@ def zone_hight():
                     rotationMotor.run_angle(60,-10)
                 if button_str == "Button.RIGHT":
                     rotationMotor.run_angle(60,10)
+
 def set_origin():
     origin=[]
     temp=True
@@ -91,12 +96,13 @@ def set_origin():
                 rotationMotor.run_angle(60,-10)
             if button_str == "Button.RIGHT":
                 rotationMotor.run_angle(60,10)
+
 def colorzones():
     zoneSort = {
-    'red'       : 0,
-    'green'     : 1,
-    'blue'      : 2,
-    'yellow'   : 3
+    'Red'       : 0,
+    'Green'     : 1,
+    'Blue'      : 2,
+    'Yellow'   : 3
     }    
     counter = 0
     colors = ["Red","Yellow", "Green","Blue"]
@@ -127,7 +133,7 @@ def colorzones():
                 chosen = colors.pop(current_index % len(colors)) 
                 print("Colors:", colors)
                 print("popped:", chosen)
-                zoneSort[chosen.lower()] = counter
+                zoneSort[chosen.lower()] = str(counter)
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
