@@ -134,4 +134,6 @@ def colorzones():
 
             print(zoneSort)   
 
-menu()
+
+if __name__ == "__main__":
+    menu()

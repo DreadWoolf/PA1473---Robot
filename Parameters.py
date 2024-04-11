@@ -25,6 +25,7 @@ rotationMotor = Motor (Port.C) #12, 36
 colorSense = ColorSensor(Port.S2)
 pressureSense = TouchSensor(Port.S1)
 
+robot = DriveBase(clawMotor, rotationMotor)
 
 RobotRegister = {
     'A' : 0,

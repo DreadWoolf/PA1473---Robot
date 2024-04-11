@@ -130,12 +130,17 @@ def main():
 
 def testThreading():
     global RobotRun
-    wait(1000)
-    menu()
-    # for i in range(5):
-    #     # ev3.speaker.beep()
-    #     wait(1000)
-    #     # thread2
+
+    for i in range(10):
+        ev3.speaker.beep()
+        wait(1200)
+    # wait(1000)
+    # menu()
+    # # for i in range(5):
+    # #     # ev3.speaker.beep()
+    # #     wait(1000)
+    # #     # thread2
+    DriveBase.Stop()
     RobotRun = False
     ev3.speaker.beep()
     print("trying to stop now.")
