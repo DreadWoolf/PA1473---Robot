@@ -5,7 +5,7 @@ from Parameters import *
 from Arm_and_Claw import Place, Pickup, armMovement, clawMovement
 from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
-from menu import menu
+# from menu import menu
 
 from threading import Thread
 # import threading
@@ -34,7 +34,6 @@ def main():
     location = 0 # Go to first 1.
     lastZone = 0
     goToZone = 0
-
     
     running = True
     while running: #run < times: # times = 2.
@@ -130,55 +129,61 @@ def main():
     print("\n\nStopped!")
 
 
-def stop_thread(thread):
-    """Stoppa en tråd omedelbart."""
-    import ctypes
-    if not thread.is_alive():
-        return
-
-    # Identifiera operativsystemet
-    if hasattr(ctypes, 'pthread_kill'):
-        # För Unix-baserade system
-        tid = thread.ident
-        ctypes.pthread_kill(tid, 9)
-    elif hasattr(ctypes, 'WinDLL'):
-        # För Windows-system
-        kernel32 = ctypes.WinDLL('kernel32')
-        handle = thread._Thread__handle
-        kernel32.TerminateThread(handle, 0)
-
 
 def testThreading():
     global RobotRun
-    global thread2
-    global elevationMotor
-    global clawMotor
-    global rotationMotor
 
-    for i in range(10):
-        ev3.speaker.beep()
-        wait(1200)
-    
+    stopProcess = False
 
-    
-    ev3.speak("bröö") #xD
-    # elevationMotor.stop()
-    # clawMotor.stop()
-    # rotationMotor.stop()
+    while True:
+        buttons = ev3.buttons.pressed()
+        wait(250)
+        for button in buttons:
+            if str(button) == "Button.CENTER":
+                ev3.speaker.beep()
+                wait(500)
+                stopProcess = True  # Sätt flaggan till True när knappen trycks
+                break  # Avbryt loopen när knappen trycks
 
-    # stop_thread(thread2)
+        while stopProcess:
+            # Stop the motors
+            elevationMotor.stop()
+            clawMotor.stop()
+            rotationMotor.stop()
+            for button in buttons:
+                if str(button) == "Button.CENTER":
+                    ev3.speaker.beep()
+                    wait(500)
+                    stopProcess = False  # Sätt flaggan till True när knappen trycks
+                    break  # Avbryt loopen när knappen trycks
+        # for but
 
-    # stop_timer = threading.Timer(5, thread.cancel)
-    # stop_timer.start()
-    # wait(1000)
-    # menu()
-    # # for i in range(5):
-    # #     # ev3.speaker.beep()
-    # #     wait(1000)
-    # #     # thread2
-    RobotRun = False
-    ev3.speaker.beep()
-    print("trying to stop now.")
+        # for i in range(10):
+        #     ev3.speaker.beep()
+        #     wait(1200)
+        
+
+        # ev3.motor.stop()   #testing
+        # ev3.speak("bröö") #xD
+        # elevationMotor.stop()
+        # clawMotor.stop()
+        # rotationMotor.stop()
+
+        # stop_thread(thread2)
+
+        # stop_timer = threading.Timer(5, thread.cancel)
+        # stop_timer.start()
+        # wait(1000)
+        # menu()
+        # # for i in range(5):
+        # #     # ev3.speaker.beep()
+        # #     wait(1000)
+        # #     # thread2
+
+
+        # RobotRun = False
+        # ev3.speaker.beep()
+        # print("trying to stop now.")
 
     # Motor.stop()
     return 0

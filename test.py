@@ -1,4 +1,4 @@
-from threading import Thread
+# from threading import Thread
 
 
 # randomdict = {
@@ -25,9 +25,12 @@ def task1():
     for i in range(5):
         print("Task 1 executing...")
         time.sleep(1)
+    
+            
+    
 
 def task2():
-    for i in range(5):
+    for i in range(10):
         print("Task 2 executing...")
         time.sleep(1)
 
@@ -40,8 +43,8 @@ if __name__ == "__main__":
     thread1.start()
     thread2.start()
 
-    # Wait for both threads to finish
-    thread1.join()
-    thread2.join()
+    # # Wait for both threads to finish
+    # thread1.join()
+    # thread2.join()
 
     print("Both tasks are completed.")
