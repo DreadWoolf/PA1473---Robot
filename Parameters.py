@@ -25,7 +25,7 @@ rotationMotor = Motor (Port.C) #12, 36
 colorSense = ColorSensor(Port.S2)
 pressureSense = TouchSensor(Port.S1)
 
-robot = DriveBase(clawMotor, rotationMotor)
+# robot = DriveBase(clawMotor, rotationMotor)
 
 RobotRegister = {
     'A' : 0,
@@ -57,7 +57,8 @@ errorMargin = RobotRegister[RobotIdentity]
 # }
 
 # Depending on the installation of the robot, either "Right" or "Left".
-oriontation = "Right"
+# From Robots perspective.
+oriontation = "Left"
 
 rightOriented = {
     0: 0,

@@ -8,6 +8,8 @@ from colorAlgorithm import colorSort
 from menu import menu
 
 from threading import Thread
+# import threading
+
 
 
 # Create two threads for each task
@@ -134,6 +136,9 @@ def testThreading():
     for i in range(10):
         ev3.speaker.beep()
         wait(1200)
+
+    # stop_timer = threading.Timer(5, thread.cancel)
+    # stop_timer.start()
     # wait(1000)
     # menu()
     # # for i in range(5):
@@ -176,8 +181,8 @@ if __name__ == "__main__":
     thread2.start()
 
     # # Wait for both threads to finish
-    thread1.join()
-    thread2.join()
+    # thread1.join()
+    # thread2.join()
 
     print("Both tasks have started.")
 
