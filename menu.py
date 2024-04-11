@@ -136,5 +136,7 @@ def colorzones():
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
             print(zoneSort)
-            
-menu()
+
+
+if __name__ =="__main__":
+    menu()
