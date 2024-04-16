@@ -1,6 +1,5 @@
 #!/usr/bin/env pybricks-micropython
-'''#!/usr/bin/env pybricks-micropython
-
+'''
 # Pybricks imports
 import os
 from pybricks import robotics
@@ -178,7 +177,10 @@ from pybricks.robotics import DriveBase
 elevationMotor = Motor(Port.B)  #8, 40
 rotationMotor = Motor (Port.C) #12, 36
 clawMotor = Motor(Port.A)
-import random
+bigGear = 40
+smallGear = 8
+multiplyAngle = -(bigGear/smallGear)
+
 ev3 = EV3Brick()
 def menu():
     choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight"]
@@ -195,12 +197,12 @@ def menu():
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(choicelist)
                 ev3.screen.print(choicelist[current_index])
-            
+
             if str(button) == "Button.RIGHT":
                 ev3.screen.clear()
                 current_index = (current_index - 1) % len(choicelist)
                 ev3.screen.print(choicelist[current_index])
-            
+
             if str(button) == "Button.CENTER":
                 ev3.screen.clear()
                 ev3.screen.print("you chose ",choicelist[current_index])
@@ -213,9 +215,11 @@ def menu():
                 if choicelist[current_index] == "zonecolor_selection":
                     czones=colorzones()
                     print(czones)
+
+            if str(button) == "Button.CENTER":
                 if choicelist[current_index] == "start_code":
-                    if zonecords != 0 and czones != 0:
-                        return czones , zonecords
+                    return czones , zonecords
+                
 
 def zone_hight():
     zonenum = [1,2,3]
@@ -254,7 +258,6 @@ def zone_hight():
                     rotationMotor.run_angle(60,10)
 
 def set_origin():
-    origin=[]
     temp=True
     while temp:
         buttons = ev3.buttons.pressed()
@@ -266,10 +269,9 @@ def set_origin():
             if button_str == "Button.DOWN":
                 elevationMotor.run_angle(60,10)
             elif button_str == "Button.CENTER":
-                horangle = rotationMotor.angle() 
-                verangle = elevationMotor.angle()
-                origin = [horangle,verangle]
-                return origin
+                #elevationMotor.reset_angle()
+                #rotationMotor.reset_angle()
+                return 0
             if button_str == "Button.LEFT":
                 rotationMotor.run_angle(60,-10)
             if button_str == "Button.RIGHT":
@@ -318,8 +320,20 @@ def colorzones():
 
             print(zoneSort)   
 
+colors , hightdict= menu()
+
+for value in hightdict.values():
+    target = (40 - abs(value)/multiplyAngle)* multiplyAngle 
+    print("target: ", target)
+    print("value", value)
+    elevationMotor.run_angle(30, value)
+    elevationMotor.run_angle(30, -value)
+    
+
+
+
+
+
 
 
 #if __name__ == "__main__":
-print(menu())
-
