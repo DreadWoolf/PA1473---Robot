@@ -100,12 +100,13 @@ def set_origin():
                 rotationMotor.run_angle(60,10)
 
 def colorzones():
-    zoneSort = {
-    'Red'       : 0,
-    'Green'     : 1,
-    'Blue'      : 2,
-    'Yellow'   : 3
-    }    
+    global zoneSort
+    # zoneSort = {
+    # 'Red'       : 0,
+    # 'Green'     : 1,
+    # 'Blue'      : 2,
+    # 'Yellow'   : 3
+    # }    
     counter = 0
     colors = ["Red","Yellow", "Green","Blue"]
     current_index=0

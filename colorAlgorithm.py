@@ -4,7 +4,7 @@
 from Parameters import colorSense, wait , zoneSort
 
 ## ladda in vilka färgar ska vart.
-zoneSort1 = zoneSort
+# zoneSort1 = zoneSort
 
 
 def newcolor():
@@ -93,10 +93,10 @@ def getColor():
 def colorSort():
     color = getColor()
     print(color)
-    if zoneSort1[color] == 0:
+    if zoneSort[color] == 0:
         return color, None  # nothing, the color is not in the list.
-    elif color in zoneSort1 and zoneSort1[color]!=0:    
-        return color, zoneSort1[color] # Return the color.
+    elif color in zoneSort and zoneSort[color]!=0:    
+        return color, zoneSort[color] # Return the color.
     else:
         return 'Error', None # Did not find any color.
     
