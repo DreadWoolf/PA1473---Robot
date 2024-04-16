@@ -72,7 +72,7 @@ def getColor():
     lmargin = 5
     # Define colors and their conditions
     colors = [
-        ("Red", lambda r, g, b ,re: (r > g + margin and r > g - margin) and (r > b + margin and r > b - margin ) and (r > (margin - lmargin)*dis) and  (50+lmargin>=re>=50-lmargin)),
+        ("Red", lambda r, g, b ,re: (r > g + margin or r > g - margin) and (r > b + margin or r > b - margin ) and (r > (margin - lmargin)*dis) and  (50+lmargin>=re>=50-lmargin)),
         ("Green", lambda r, g, b ,re: (g > r + margin and g > r - margin) and (g > b + margin and g > b - margin) and (g > (margin - lmargin)*dis) or  fcolor=="Color.GREEN"),
         ("Blue", lambda r, g, b, re: (b > r + margin and b > r - margin) and (b > g + margin and b > g - margin) and (b > (margin - lmargin)*dis)),
         ("Yellow", lambda r, g, b, re:(abs(g - (r/2)) <= margin) and (g > b + margin and g > b - margin) and (r > b + margin and r > b - margin ) or fcolor =="Color.YELLOW"),
@@ -85,24 +85,38 @@ def getColor():
     # Check each color condition
     for color_name, condition in colors:
         if condition(Tred, Tgreen, Tblue, Tref):
+            print(color_name)
             return color_name
         
     return "unknown item"  # Object doesn't match any color predominantly
 
 
+# def colorSort():
+#     color = getColor()
+#     print(color)
+#     if color == 'nothing':
+#     # if zoneSort[color] == 0:
+#         return color, None  # nothing, the color is not in the list.
+#     elif color in zoneSort:    
+#         return zoneSort[color], color
+#     # elif color in zoneSort and zoneSort[color]!=0:    
+#         # return color, zoneSort[color] # Return the color.
+#     else:
+#         return 'Error', None # Did not find any color.
+    
 def colorSort():
     color = getColor()
     print(color)
     if color == 'nothing':
     # if zoneSort[color] == 0:
-        return color, None  # nothing, the color is not in the list.
+        return 'Error', None  # nothing, the color is not in the list.
     elif color in zoneSort:    
         return zoneSort[color], color
     # elif color in zoneSort and zoneSort[color]!=0:    
         # return color, zoneSort[color] # Return the color.
     else:
-        return 'Error', None # Did not find any color.
-    
+        return 'nothing', None # Did not find any color.
+
 
 if __name__ == "__main__":
     while True:
