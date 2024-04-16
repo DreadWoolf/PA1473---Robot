@@ -42,7 +42,7 @@ def main():
     running = True
     while running: #run < times: # times = 2.
         # run += 1
-
+        print("Sortzone ", sortZone)
         if potentialCargo:
 
             sortZone = 0
@@ -50,7 +50,7 @@ def main():
             sortZone, color = colorSort()
 
             if sortZone == 'Error' or sortZone == 'nothing':
-                print("Sortzone ", sortZone)
+                
 
                 ## Will continue if found nothing, otherwise place the cargo.
                 if sortZone == "nothing":

@@ -34,6 +34,8 @@ def menu():
                 if choicelist[current_index] == "zonecolor_selection":
                     czones=colorzones()
                     print(czones)
+                    
+            if str(button) == "Button.CENTER":
                 if choicelist[current_index] == "start_code":
                     return czones , zonecords
 
@@ -101,10 +103,10 @@ def set_origin():
 
 def colorzones():
     zoneSort = {
-    'Red'       : 0,
-    'Green'     : 1,
-    'Blue'      : 2,
-    'Yellow'   : 3
+    'red'       : 0,
+    'green'     : 1,
+    'blue'      : 2,
+    'yellow'   : 3
     }    
     counter = 0
     colors = ["Red","Yellow", "Green","Blue"]
@@ -115,12 +117,10 @@ def colorzones():
         buttons= ev3.buttons.pressed()
         wait(250)
         for button in buttons:
-
             if len(colors) == 0:
                 ev3.screen.print("done!")
                 temp = False
                 return zoneSort
-            
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(colors)
@@ -137,11 +137,12 @@ def colorzones():
                 chosen = colors.pop(current_index % len(colors)) 
                 print("Colors:", colors)
                 print("popped:", chosen)
-                zoneSort[chosen.lower()] = str(counter)
+                zoneSort[chosen.lower()] = counter-1
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
-            print(zoneSort)
+
+            print(zoneSort)   
 
 
 if __name__ =="__main__":
