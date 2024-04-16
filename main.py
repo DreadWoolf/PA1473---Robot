@@ -5,7 +5,7 @@ from Parameters import *
 from Arm_and_Claw import Place, Pickup, armMovement, clawMovement
 from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
-import sys
+import sys as s
 # from menu import menu
 
 from threading import Thread
@@ -21,6 +21,8 @@ Robotrun = True
 stopRobot = False
 
 def main():
+    global Robotrun
+    Robotrun = True
     ev3.speaker.beep()
 
     times = 2  #10
@@ -28,7 +30,7 @@ def main():
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 50#39  # 40
+    armStartAngle = 40 #40 #39  # 40
     
     Calibrate(armStartAngle)
     
@@ -46,6 +48,8 @@ def main():
             sortZone = 0
             wait(5)  #2
             sortZone, color = colorSort()
+            print("Sortzone: ", sortZone)
+            print("Color: ", color)
 
             if sortZone == 'Error' or sortZone == 'nothing':
                 print("Sortzone ", sortZone)
@@ -64,10 +68,11 @@ def main():
                     ## Drop of again, if detected random color.
                     Place(angleTarget=-armStartAngle, openClawsFirst=False)
                     if stopRobot:
-                        print("yepp")
-                        sys.exit()
-                    lastZone = location
+                        print("stop")
+                        s.sys.exit()
+                    # lastZone = location
 
+                lastZone = location
             else:
                 wait(100)
                 ######################################
@@ -76,32 +81,29 @@ def main():
                 # Make sure this works...
                 if sortZone == lastZone:
                     ### Screen print 
-                    ev3.screen.print(str(color) + " to: " + str(sortZone))
-                else:
                     ev3.screen.print("Package at right location")
+                else:
+                    ev3.screen.print(str(color) + " to: " + str(sortZone))
                     
                 
                 if sortZone == 0:
                     rotateBase(angle= zoneLocation[sortZone]) # Go to zone '0'.
                     if stopRobot:
-                        print("yepp")
-                        sys.exit()
-
-
+                        print("stop")
+                        s.sys.exit()
                 else:
                     # This might not work as intended... (if we want to go to the next zone for example)
                     rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
                     if stopRobot:
-                        print("yepp")
-                        sys.exit()
+                        print("stop")
+                        s.sys.exit()
 
                 # Uppdate the lastZone.
+                lastZone = sortZone  
                 Place(angleTarget= -armStartAngle, openClawsFirst= False)
                 if stopRobot:
-                    print("yepp")
-                    sys.exit()
-
-                lastZone = sortZone  # 0
+                    print("stop")
+                    s.sys.exit()
             
             potentialCargo = False
 
@@ -110,6 +112,9 @@ def main():
             goToZone = 0
             lastZone = 0
             rotateBase(angle= 0)
+            if stopRobot:
+                print("stop")
+                s.sys.exit()
             if RobotRun:
                 print("\n\n Reset and sleep")
                 wait(periodTime)  # 4000
@@ -130,12 +135,12 @@ def main():
 
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
             if stopRobot:
-                print("yepp")
-                sys.exit()
+                print("stop")
+                s.sys.exit()
             Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
             if stopRobot:
-                print("yepp")
-                sys.exit()
+                print("stop")
+                s.sys.exit()
 
 
             lastZone = location
@@ -153,6 +158,9 @@ def main():
         #     break
     # Go back to start, if arm is higher than ground level.
     armMovement(angleTarget= -armStartAngle)
+    if stopRobot:
+        print("stop")
+        s.sys.exit()
     print("\n\nStopped!")
 
 
@@ -187,7 +195,8 @@ def testThreading():
                     ev3.speaker.beep()
                     wait(500)
                     stopProcess = False  # Sätt flaggan till True när knappen trycks
-                    thread2.start()
+                    # thread2.start()
+
                     # break  # Avbryt loopen när knappen trycks
         # for but
 
@@ -195,7 +204,7 @@ def testThreading():
         #     ev3.speaker.beep()
         #     wait(1200)
         
-
+ 
         # ev3.motor.stop()   #testing
         # ev3.speak("bröö") #xD
         # elevationMotor.stop()
@@ -226,17 +235,28 @@ def Calibrate(armStartAngle:int = 40):
     ev3.screen.print("Callibrate arm")
     if elevationMotor.angle() != armStartAngle:
         armMovement(armStartAngle, calibrate= True)
+        if stopRobot:
+            print("stop")
+            s.sys.exit()
 
     ev3.screen.print("Callibrate claw")
 
     clawMovement(None, calibrate= True)
+    if stopRobot:
+        print("stop")
+        s.sys.exit()
 
     ev3.screen.print("Callibrate rotation")
     rotateBase(angle= 0)
+    
     ev3.screen.clear()
     return 0
 
-
+def StopRobot(stopRobot):
+    if stopRobot:
+        print("stop")
+        s.sys.exit()
+    # return 0
 
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
