@@ -5,6 +5,7 @@ from Parameters import *
 from Arm_and_Claw import Place, Pickup, armMovement, clawMovement
 from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
+import sys
 # from menu import menu
 
 from threading import Thread
@@ -17,6 +18,7 @@ thread1 = Thread()
 thread2 = Thread()
 
 Robotrun = True
+stopRobot = False
 
 def main():
     ev3.speaker.beep()
@@ -61,7 +63,9 @@ def main():
 
                     ## Drop of again, if detected random color.
                     Place(angleTarget=-armStartAngle, openClawsFirst=False)
-
+                    if stopRobot:
+                        print("yepp")
+                        sys.exit()
                     lastZone = location
 
             else:
@@ -79,11 +83,24 @@ def main():
                 
                 if sortZone == 0:
                     rotateBase(angle= zoneLocation[sortZone]) # Go to zone '0'.
+                    if stopRobot:
+                        print("yepp")
+                        sys.exit()
+
+
                 else:
                     # This might not work as intended... (if we want to go to the next zone for example)
                     rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+                    if stopRobot:
+                        print("yepp")
+                        sys.exit()
+
                 # Uppdate the lastZone.
                 Place(angleTarget= -armStartAngle, openClawsFirst= False)
+                if stopRobot:
+                    print("yepp")
+                    sys.exit()
+
                 lastZone = sortZone  # 0
             
             potentialCargo = False
@@ -112,7 +129,14 @@ def main():
             
 
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
+            if stopRobot:
+                print("yepp")
+                sys.exit()
             Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
+            if stopRobot:
+                print("yepp")
+                sys.exit()
+
 
             lastZone = location
 
@@ -124,6 +148,9 @@ def main():
             potentialCargo = True
         print("GoToZone = ", goToZone)
 
+
+        # if Robotrun == False:
+        #     break
     # Go back to start, if arm is higher than ground level.
     armMovement(angleTarget= -armStartAngle)
     print("\n\nStopped!")
@@ -132,30 +159,36 @@ def main():
 
 def testThreading():
     global RobotRun
+    global stopRobot
+    
 
     stopProcess = False
 
     while True:
         buttons = ev3.buttons.pressed()
-        wait(250)
+        wait(250) # 250
         for button in buttons:
             if str(button) == "Button.CENTER":
                 ev3.speaker.beep()
-                wait(500)
+                wait(100)
                 stopProcess = True  # Sätt flaggan till True när knappen trycks
                 break  # Avbryt loopen när knappen trycks
 
         while stopProcess:
-            # Stop the motors
-            elevationMotor.stop()
-            clawMotor.stop()
-            rotationMotor.stop()
+            # Stop the motors and hold the position.
+            elevationMotor.hold()
+            clawMotor.hold()
+            rotationMotor.hold()
+            stopRobot = True
+            wait(1000)
+
             for button in buttons:
                 if str(button) == "Button.CENTER":
                     ev3.speaker.beep()
                     wait(500)
                     stopProcess = False  # Sätt flaggan till True när knappen trycks
-                    break  # Avbryt loopen när knappen trycks
+                    thread2.start()
+                    # break  # Avbryt loopen när knappen trycks
         # for but
 
         # for i in range(10):

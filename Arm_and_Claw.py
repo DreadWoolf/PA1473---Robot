@@ -54,7 +54,7 @@ def clawMovement(open:bool, calibrate:bool = False):
 
     if calibrate:
         # clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
-        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
+        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=50)
         return
 
 
@@ -62,7 +62,7 @@ def clawMovement(open:bool, calibrate:bool = False):
         # clawMotor.run_until_stalled(-40, then=Stop.BRAKE, duty_limit=None)
         clawMotor.run_angle(60 ,(60) * multiplyAngle)
     else:
-        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
+        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=50)
         # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
 
 if __name__ == "__main__":

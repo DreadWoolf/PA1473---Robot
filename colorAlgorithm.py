@@ -93,10 +93,13 @@ def getColor():
 def colorSort():
     color = getColor()
     print(color)
-    if zoneSort[color] == 0:
+    if color == 'nothing':
+    # if zoneSort[color] == 0:
         return color, None  # nothing, the color is not in the list.
-    elif color in zoneSort and zoneSort[color]!=0:    
-        return color, zoneSort[color] # Return the color.
+    elif color in zoneSort:    
+        return zoneSort[color], color
+    # elif color in zoneSort and zoneSort[color]!=0:    
+        # return color, zoneSort[color] # Return the color.
     else:
         return 'Error', None # Did not find any color.
     

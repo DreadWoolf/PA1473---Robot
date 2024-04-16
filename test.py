@@ -20,11 +20,14 @@
 
 from threading import Thread
 import time
+import sys
 
 def task1():
-    for i in range(5):
-        print("Task 1 executing...")
+    for i in range(8):
+        print("Task 1 executing...", i)
         time.sleep(1)
+        if i == 5:
+            sys.exit()
     
             
     
