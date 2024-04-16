@@ -51,7 +51,7 @@ zoneSort = {
     'Red'       : 0,
     'Green'     : 1,
     'Blue'      : 2,
-    'nothing'   : 3
+    'Yellow'   : 3
     }
 
 errorMargin = RobotRegister[RobotIdentity]
