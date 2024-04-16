@@ -300,7 +300,7 @@ ight1(hightdict['1'])
 
 ight2(hightdict['2'])
 
-ight3(hightdict['3'])'''
+ight3(hightdict['3'])
 
 # for key, value in sortedhightdict.items():
     
@@ -317,5 +317,5 @@ ight3(hightdict['3'])'''
     #elevationMotor.run_angle(30, value)
     #elevationMotor.run_angle(30, -value)
 
-#if __name__ == "__main__":
+#if __name__ == "__main__":'''
 #----------^^-----elevate---^^^------
