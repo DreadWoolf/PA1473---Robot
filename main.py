@@ -11,12 +11,12 @@ import sys as s
 from threading import Thread
 # import threading
 
-from menu import menu
-import Parameters
-czones , zonecords = menu()
-Parameters.zoneSort = czones
-Parameters.zoneHeight = zonecords
-print(Parameters.zoneSort)
+# from menu import menu
+# import Parameters as par
+# czones , zonecords = menu()
+# par.zoneSort = czones
+# par.zoneHeight = zonecords
+# print(par.zoneSort)
 
 
 # Create two threads for each task
@@ -36,7 +36,7 @@ def main():
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 40 #40 #39  # 40
+    armStartAngle = 42 #40 #39  # 40
     
     Calibrate(armStartAngle)
     
@@ -190,10 +190,10 @@ def testThreading():
 
         while stopProcess:
             # Stop the motors and hold the position.
+            stopRobot = True
             elevationMotor.hold()
             clawMotor.hold()
             rotationMotor.hold()
-            stopRobot = True
             wait(1000)
 
             for button in buttons:
