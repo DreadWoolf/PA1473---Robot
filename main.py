@@ -16,7 +16,6 @@ import Parameters
 czones , zonecords = menu()
 Parameters.zoneSort = czones
 Parameters.zoneHeight = zonecords
-print(Parameters.zoneSort)
 
 
 # Create two threads for each task
