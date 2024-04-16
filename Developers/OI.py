@@ -167,7 +167,7 @@ ev3.speaker.set_volume(100)
 color = "A person who thinks all the time Has nothing to think about except thoughts So... he loses touch with reality And lives in a world of illusions By thoughts I mean specifically, Chatter in the skull Perpetual and compulsive repetition of words, of reckoning and calculating I'm not saying that thinking is bad Like everybody else It's useful in moderation A good servant, but a bad master And all civilized peoples Have increasingly become crazy and self destructive Because through excessive thinking The have lost touch with reality That to say... We confuse signs With the real world... This is the beginning of meditation Most of us would have Rather money than tangible wealth And a great occasion is somehow spoiled for us unless photographed And to read about it the next day in the newspaper Is oddly more fun for us than the original event This is a disaster... For as a result of confusing the real world of nature with mere signs We are destroying nature We are so tied up in our minds that we've lost our senses Time to wake up What is reality? Obviously... no one can say Because it isn't words It isn't material, that's just an idea Reality is... The point cannot be explained in words Im not trying to put you down It's an expression of you as you are One must live... We need to survive to go on... We must go on."
 ev3.speaker.say("The color is " + color)'''
 #-------------^^------voice---^^------------
-from pybricks import robotics
+'''from pybricks import robotics
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
 from pybricks.parameters import Port, Stop, Direction, Color
@@ -275,65 +275,47 @@ def set_origin():
             if button_str == "Button.LEFT":
                 rotationMotor.run_angle(60,-10)
             if button_str == "Button.RIGHT":
-                rotationMotor.run_angle(60,10)
-
-def colorzones():
-    zoneSort = {
-    'red'       : 0,
-    'green'     : 1,
-    'blue'      : 2,
-    'yellow'   : 3
-    }    
-    counter = 0
-    colors = ["Red","Yellow", "Green","Blue"]
-    current_index=0
-    temp = True
-    ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
-    while temp:
-        buttons= ev3.buttons.pressed()
-        wait(250)
-        for button in buttons:
-            if len(colors) == 0:
-                ev3.screen.print("done!")
-                temp = False
-                return zoneSort
-            if str(button) == "Button.LEFT":
-                ev3.screen.clear()
-                current_index = (current_index + 1) % len(colors)
-                ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
-            
-            if str(button) == "Button.RIGHT":
-                ev3.screen.clear()
-                current_index = (current_index - 1) % len(colors)
-                ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
-            
-            if str(button) == "Button.CENTER":
-                counter += 1
-                ev3.screen.clear()
-                chosen = colors.pop(current_index % len(colors)) 
-                print("Colors:", colors)
-                print("popped:", chosen)
-                zoneSort[chosen.lower()] = str(counter)
-                #chosen_zone = zoneSort[chosen.lower()] 
-                #ev3.screen.print("you chose ",choicelist[current_index])
-                #temp=False
-
-            print(zoneSort)   
+                rotationMotor.run_angle(60,10) 
 
 colors , hightdict= menu()
+#sortedhightdict = dict(sorted(hightdict.items()))
+#print(sortedhightdict)
 
-for value in hightdict.values():
-    target = (40 - abs(value)/multiplyAngle)* multiplyAngle 
-    print("target: ", target)
-    print("value", value)
+def ight1(value):
+    print("ight 1:", value)
     elevationMotor.run_angle(30, value)
     elevationMotor.run_angle(30, -value)
+
+def ight2(value):
+    print("ight 2:", value)
+    elevationMotor.run_angle(30, value)
+    elevationMotor.run_angle(30, -value)
+
+def ight3(value):
+    print("ight 3:", value)
+    elevationMotor.run_angle(30, value)
+    elevationMotor.run_angle(30, -value)
+
+ight1(hightdict['1'])
+
+ight2(hightdict['2'])
+
+ight3(hightdict['3'])'''
+
+# for key, value in sortedhightdict.items():
     
-
-
-
-
-
-
+#     target = (40 - abs(value)/multiplyAngle)* multiplyAngle 
+#     print("target: ", target)
+#     print("value", value)
+#     if int(key) == 1:
+#         ight1(value)
+#     elif int(key) == 2:
+#         ight2(value)
+#     elif int(key) == 3:
+#         ight3(value)
+    
+    #elevationMotor.run_angle(30, value)
+    #elevationMotor.run_angle(30, -value)
 
 #if __name__ == "__main__":
+#----------^^-----elevate---^^^------
