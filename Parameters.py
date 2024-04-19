@@ -65,7 +65,7 @@ errorMargin = RobotRegister[RobotIdentity]
 
 # Depending on the installation of the robot, either "Right" or "Left".
 # From Robots perspective.
-oriontation = "Left"
+oriontation = "Right"
 
 rightOriented = {
     0: 0,
@@ -98,6 +98,14 @@ zoneHeight = {
     3: 0
 }
 
+
+Pause:bool = False
+
+
+def emergencyStop():
+
+
+    return 0
 
 
 

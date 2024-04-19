@@ -11,12 +11,12 @@ import sys as s
 from threading import Thread
 # import threading
 
-from menu import menu
-import Parameters as par
-czones , zonecords = menu()
-par.zoneSort = czones
-par.zoneHeight = zonecords
-print(par.zoneSort)
+# from menu import menu
+# import Parameters as par
+# czones , zonecords = menu()
+# par.zoneSort = czones
+# par.zoneHeight = zonecords
+# print(par.zoneSort)
 
 
 # Create two threads for each task
