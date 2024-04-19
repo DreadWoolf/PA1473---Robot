@@ -28,7 +28,7 @@ stopRobot = False
 
 def main():
     global Robotrun
-    Robotrun = True
+    # Robotrun = True
     ev3.speaker.beep()
 
     times = 2  #10
@@ -73,9 +73,6 @@ def main():
 
                     ## Drop of again, if detected random color.
                     Place(angleTarget=-armStartAngle, openClawsFirst=False)
-                    if stopRobot:
-                        print("stop")
-                        s.sys.exit()
                     # lastZone = location
 
                 lastZone = location
@@ -94,22 +91,16 @@ def main():
                 
                 if sortZone == 0:
                     rotateBase(angle= zoneLocation[sortZone]) # Go to zone '0'.
-                    if stopRobot:
-                        print("stop")
-                        s.sys.exit()
                 else:
                     # This might not work as intended... (if we want to go to the next zone for example)
                     rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
-                    if stopRobot:
-                        print("stop")
-                        s.sys.exit()
 
                 # Uppdate the lastZone.
                 lastZone = sortZone  
                 Place(angleTarget= -armStartAngle, openClawsFirst= False)
-                if stopRobot:
-                    print("stop")
-                    s.sys.exit()
+                # if stopRobot:
+                #     print("stop")
+                #     s.sys.exit()
             
             potentialCargo = False
 
@@ -118,9 +109,9 @@ def main():
             goToZone = 0
             lastZone = 0
             rotateBase(angle= 0)
-            if stopRobot:
-                print("stop")
-                s.sys.exit()
+            # if stopRobot:
+            #     print("stop")
+            #     s.sys.exit()
             if RobotRun:
                 print("\n\n Reset and sleep")
                 wait(periodTime)  # 4000
@@ -140,13 +131,13 @@ def main():
             
 
             rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
-            if stopRobot:
-                print("stop")
-                s.sys.exit()
+            # if stopRobot:
+            #     print("stop")
+            #     s.sys.exit()
             Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
-            if stopRobot:
-                print("stop")
-                s.sys.exit()
+            # if stopRobot:
+            #     print("stop")
+            #     s.sys.exit()
 
 
             lastZone = location
@@ -164,9 +155,9 @@ def main():
         #     break
     # Go back to start, if arm is higher than ground level.
     armMovement(angleTarget= -armStartAngle)
-    if stopRobot:
-        print("stop")
-        s.sys.exit()
+    # if stopRobot:
+    #     print("stop")
+    #     s.sys.exit()
     print("\n\nStopped!")
 
 
@@ -174,6 +165,7 @@ def main():
 def testThreading():
     global RobotRun
     global stopRobot
+    global Estop
     
 
     stopProcess = False
@@ -191,6 +183,7 @@ def testThreading():
         while stopProcess:
             # Stop the motors and hold the position.
             stopRobot = True
+            Estop = True
             elevationMotor.hold()
             clawMotor.hold()
             rotationMotor.hold()
@@ -201,6 +194,7 @@ def testThreading():
                     ev3.speaker.beep()
                     wait(500)
                     stopProcess = False  # Sätt flaggan till True när knappen trycks
+                    Estop = False
                     # thread2.start()
 
                     # break  # Avbryt loopen när knappen trycks
@@ -241,16 +235,16 @@ def Calibrate(armStartAngle:int = 40):
     ev3.screen.print("Callibrate arm")
     if elevationMotor.angle() != armStartAngle:
         armMovement(armStartAngle, calibrate= True)
-        if stopRobot:
-            print("stop")
-            s.sys.exit()
+        # if stopRobot:
+        #     print("stop")
+        #     s.sys.exit()
 
     ev3.screen.print("Callibrate claw")
 
     clawMovement(None, calibrate= True)
-    if stopRobot:
-        print("stop")
-        s.sys.exit()
+    # if stopRobot:
+    #     print("stop")
+    #     s.sys.exit()
 
     ev3.screen.print("Callibrate rotation")
     rotateBase(angle= 0)

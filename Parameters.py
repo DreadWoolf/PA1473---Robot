@@ -10,6 +10,7 @@ from pybricks.robotics import DriveBase
 
 
 import random
+import sys as s
 
 
 # Your code goes here
@@ -99,13 +100,14 @@ zoneHeight = {
 }
 
 
-Estop:bool = False
-restart:bool = False
+Estop = False
+restart = False
 
 
-def emergencyStop():
 
-    return 0
+
+
+
 
 
 

@@ -1,8 +1,28 @@
 #!/usr/bin/env pybricks-micropython
 
 # from Parameters import *
-from Parameters import elevationMotor, clawMotor, Stop, emergencyStop, Estop
+from Parameters import elevationMotor, clawMotor, Stop, Estop
+# from Emergencystop import emergencyStop
+from rotationMotor import rotateBase
+# from Arm_and_Claw import armMovement, clawMovement
 
+
+def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False):
+    global Estop
+    global restart
+
+    while(Estop):
+        elevationMotor.hold()
+        clawMotor.hold()
+        rotationMotor.hold()
+        wait(1000)
+        # if Estop == False:
+        if restart:
+            s.sys.exit()
+
+    rotateBase(zoneLocation[gotoZone],80, duringCallibration)
+    armMovement(angletarget, zoneHeight[gotoZone], 80, duringCallibration)
+    clawMovement(False, calibrate= True)
 
 def Pickup(angleTarget:int, openClawsFirst:bool = True, height:int = 0):
     # if height <= 0:
@@ -45,8 +65,11 @@ def armMovement(angleTarget: int, height:int = 0, operatingSpeed = 60, calibrate
     ######################################
     ######################################
     ######################################
-    elevationMotor.run_angle(operatingSpeed,(angleTarget - height) * multiplyAngle)
+    # elevationMotor.run_angle(operatingSpeed,(angleTarget - height) * multiplyAngle)
+    elevationMotor.run_target(operatingSpeed,(angleTarget - height) * multiplyAngle)
     # print("targeted arm angle " , elevationMotor.angle())
+    if Estop == True: emergencyStop()
+
 
 
 def clawMovement(open:bool, calibrate:bool = False):
@@ -57,7 +80,8 @@ def clawMovement(open:bool, calibrate:bool = False):
 
     if calibrate:
         # clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
-        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=50)
+        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
+        clawMotor.reset_angle(0)
         return
 
 
@@ -65,11 +89,10 @@ def clawMovement(open:bool, calibrate:bool = False):
         # clawMotor.run_until_stalled(-40, then=Stop.BRAKE, duty_limit=None)
         clawMotor.run_angle(60 ,(60) * multiplyAngle)
     else:
-        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=50)
+        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
         # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
 
-    if Estop == True:
-        emergencyStop()
+    if Estop == True: emergencyStop()
 
 
 if __name__ == "__main__":
