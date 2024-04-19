@@ -122,7 +122,6 @@ def zone_hight():
                     rotationMotor.run_angle(60,10)
 
 def set_origin():
-    origin=[]
     temp=True
     while temp:
         buttons = ev3.buttons.pressed()
@@ -134,16 +133,13 @@ def set_origin():
             if button_str == "Button.DOWN":
                 elevationMotor.run_angle(60,10)
             elif button_str == "Button.CENTER":
-                horangle = rotationMotor.angle() 
-                verangle = elevationMotor.angle()
-                origin = [horangle,verangle]
-                rotationMotor.reset_angle(0) #testing if it resets the angle on the whole robot  
-                elevationMotor.reset_angle(0) #testing if it resets the angle on the whole robot 
-                return origin
+                #elevationMotor.reset_angle()
+                #rotationMotor.reset_angle()
+                return 0
             if button_str == "Button.LEFT":
                 rotationMotor.run_angle(60,-10)
             if button_str == "Button.RIGHT":
-                rotationMotor.run_angle(60,10)
+                rotationMotor.run_angle(60,10) 
 
 def colorzones():
     global zoneSort
@@ -191,6 +187,7 @@ def colorzones():
             print(zoneSort)
 
 
-#if __name__ =="__main__":
-#    menu()
-menu()
+
+if __name__ =="__main__":
+    menu()
+#menu()
