@@ -135,6 +135,68 @@ def getColor():
     return "None of them"  # Object doesn't match any color predominantly
 
 
+def work_hours():
+    temp=True
+    ev3.screen.clear()
+    amount = 0
+    aoi = 0
+    ev3.screen.print("how many time\nstamps do you want: ", amount)
+    while temp == True:
+        buttons = ev3.buttons.pressed()
+        wait(250)
+        for button in buttons:
+            button_str=str(button)
+            if button_str == "Button.UP":
+                ev3.screen.clear()
+                amount += 1
+                ev3.screen.print("how many time\nstamps do you want: ", amount)
+            if button_str == "Button.DOWN":        
+                if amount >= 1:
+                    ev3.screen.clear()
+                    amount -= 1
+                    ev3.screen.print("how many time\nstamps do you want: ", amount)
+            if button_str == "Button.CENTER":
+                ev3.screen.clear()
+                aoi= amount 
+                ev3.screen.print("you chosse this amout\nof time stamps: ", amount)
+                wait(500)
+                temp= False
+    temp = True
+    year=[0,0,0,0]
+    ev3.screen.clear()
+    ev3.screen.print("you chosse this amout\nof time stamps: ")
+    counter = 0
+    for i in year:
+        counter += 1
+        while temp == True:
+            buttons = ev3.buttons.pressed()
+            wait(250)
+            for button in buttons:
+                button_str=str(button)
+
+                if button_str == "Button.UP":
+                    ev3.screen.clear()
+                    i+=1
+                    ev3.screen.print( counter ,"number of the year: " , i )
+                if button_str == "Button.DOWN":  
+                    ev3.screen.clear()
+                    i-=1
+                    ev3.screen.print( counter ,"number of the year: " , i )
+                if button_str == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print( counter ,"number of the year: " , i )
+                    year[counter-1] = i
+    year_str = ''.join(map(str, year))
+    int_year = int(year_str)
+    
+
+                
+
+
+
+
+
+
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
     main()

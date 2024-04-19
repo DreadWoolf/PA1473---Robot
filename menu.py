@@ -1,43 +1,89 @@
 #!/usr/bin/env pybricks-micropython
 from Parameters import *
 
+
 def menu():
+    global Estop
+    global restart
+    Echoicelist = ["restart","resume","manual"]
     choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight"]
     current_index=0
     temp=True
     zonecords = 0
     czones = 0
-    ev3.screen.print(choicelist[current_index])
+    if Estop:
+        ev3.screen.print(Echoicelist[current_index])
+    else:
+        ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
-        for button in buttons:
-            if str(button) == "Button.LEFT":
-                ev3.screen.clear()
-                current_index = (current_index + 1) % len(choicelist)
-                ev3.screen.print(choicelist[current_index])
-            
-            if str(button) == "Button.RIGHT":
-                ev3.screen.clear()
-                current_index = (current_index - 1) % len(choicelist)
-                ev3.screen.print(choicelist[current_index])
-            
-            if str(button) == "Button.CENTER":
-                ev3.screen.clear()
-                ev3.screen.print("you chose ",choicelist[current_index])
-                if choicelist[current_index] == "zone_hight":
-                    zonecords = zone_hight()
-                    print(zonecords)
-                if choicelist[current_index] == "set_origin":
-                    origin = set_origin()
-                    print(origin)
-                if choicelist[current_index] == "zonecolor_selection":
-                    czones=colorzones()
-                    print(czones)
-                if choicelist[current_index] == "start_code":
-                    return czones , zonecords
+        if Estop :
+            for button in buttons:
+                if str(button) == "Button.LEFT":
+                    ev3.screen.clear()
+                    current_index = (current_index + 1) % len(Echoicelist)
+                    ev3.screen.print(Echoicelist[current_index])
+                
+                if str(button) == "Button.RIGHT":
+                    ev3.screen.clear()
+                    current_index = (current_index - 1) % len(Echoicelist)
+                    ev3.screen.print(Echoicelist[current_index])
+                
+                if str(button) == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print("you chose ",Echoicelist[current_index])
+                    if Echoicelist[current_index] == "restart":
+                        restart = True
+                        return 0
+                    if Echoicelist[current_index] == "resume":
+                        Estop = False
+                        return 0
+                    if Echoicelist[current_index] == "manual":
+                        set_origin()
+                        return 0
+                            #get out of here
+                            #break
+                            #  wait(1000)
 
 
+                            #### needs to båe imporved#######################3
+                            ######################################3
+                            #########################3                    
+        else:
+            for button in buttons:
+                if str(button) == "Button.LEFT":
+                    ev3.screen.clear()
+                    current_index = (current_index + 1) % len(choicelist)
+                    ev3.screen.print(choicelist[current_index])
+                
+                if str(button) == "Button.RIGHT":
+                    ev3.screen.clear()
+                    current_index = (current_index - 1) % len(choicelist)
+                    ev3.screen.print(choicelist[current_index])
+                
+                if str(button) == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print("you chose ",choicelist[current_index])
+                
+                        # DO emergency shit!
+                        # if resume pressed Estop = False
+                    if choicelist[current_index] == "zone_hight":
+                        zonecords = zone_hight()
+                        print(zonecords)
+                    if choicelist[current_index] == "set_origin":
+                        origin = set_origin()
+                        print(origin)
+                    if choicelist[current_index] == "zonecolor_selection":
+                        czones=colorzones()
+                        print(czones)
+                    if choicelist[current_index] == "start_code":
+                        return czones , zonecords
+                    # if choicelist[current_index] == "EMERGENCY" and Estop:
+                    #     return 0
+
+#stop till False
+#reset till True
 
 
 def zone_hight():
@@ -79,7 +125,6 @@ def zone_hight():
                     rotationMotor.run_angle(60,10)
 
 def set_origin():
-    origin=[]
     temp=True
     while temp:
         buttons = ev3.buttons.pressed()
@@ -91,16 +136,13 @@ def set_origin():
             if button_str == "Button.DOWN":
                 elevationMotor.run_angle(60,10)
             elif button_str == "Button.CENTER":
-                horangle = rotationMotor.angle() 
-                verangle = elevationMotor.angle()
-                origin = [horangle,verangle]
-                rotationMotor.reset_angle(0) #testing if it resets the angle on the whole robot  
-                elevationMotor.reset_angle(0) #testing if it resets the angle on the whole robot 
-                return origin
+                #elevationMotor.reset_angle()
+                #rotationMotor.reset_angle()
+                return 0
             if button_str == "Button.LEFT":
                 rotationMotor.run_angle(60,-10)
             if button_str == "Button.RIGHT":
-                rotationMotor.run_angle(60,10)
+                rotationMotor.run_angle(60,10) 
 
 def colorzones():
     global zoneSort
@@ -148,5 +190,7 @@ def colorzones():
             print(zoneSort)
 
 
+
 if __name__ =="__main__":
     menu()
+#menu()
