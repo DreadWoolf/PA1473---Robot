@@ -11,7 +11,10 @@ def menu():
     temp=True
     zonecords = 0
     czones = 0
-    ev3.screen.print(choicelist[current_index])
+    if Estop:
+        ev3.screen.print(Echoicelist[current_index])
+    else:
+        ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
