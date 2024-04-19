@@ -72,7 +72,7 @@ def main():
                     wait(1000)
 
                     ## Drop of again, if detected random color.
-                    Place(angleTarget=-armStartAngle, openClawsFirst=False)
+                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False)
                     # lastZone = location
 
                 lastZone = location
@@ -90,14 +90,16 @@ def main():
                     
                 
                 if sortZone == 0:
-                    rotateBase(angle= zoneLocation[sortZone]) # Go to zone '0'.
+                    rotateBase(angle= zoneLocation[sortZone], goToZone= sortZone, armtarget= armStartAngle) # Go to zone '0'.
                 else:
                     # This might not work as intended... (if we want to go to the next zone for example)
-                    rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+                    # rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+                    rotateBase(angle = zoneLocation[sortZone], goToZone= sortZone, armtarget=armStartAngle)
 
                 # Uppdate the lastZone.
                 lastZone = sortZone  
-                Place(angleTarget= -armStartAngle, openClawsFirst= False)
+                # Place(angleTarget= -armStartAngle, openClawsFirst= False)
+                Place(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= False)
                 # if stopRobot:
                 #     print("stop")
                 #     s.sys.exit()
@@ -108,7 +110,7 @@ def main():
             location = 0
             goToZone = 0
             lastZone = 0
-            rotateBase(angle= 0)
+            rotateBase(angle= 0, goToZone=goToZone, armtarget= armStartAngle)
             # if stopRobot:
             #     print("stop")
             #     s.sys.exit()
@@ -130,11 +132,14 @@ def main():
             goToZone = location
             
 
-            rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
+            # rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
+            rotateBase(zoneLocation[goToZone], goToZone, armStartAngle)
+
             # if stopRobot:
             #     print("stop")
             #     s.sys.exit()
-            Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
+            # Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
+            Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True)
             # if stopRobot:
             #     print("stop")
             #     s.sys.exit()
@@ -154,7 +159,8 @@ def main():
         # if Robotrun == False:
         #     break
     # Go back to start, if arm is higher than ground level.
-    armMovement(angleTarget= -armStartAngle)
+    # armMovement(angleTarget= -armStartAngle)
+    armMovement(goToZone= goToZone,angleTarget= -armStartAngle)
     # if stopRobot:
     #     print("stop")
     #     s.sys.exit()
@@ -182,8 +188,13 @@ def testThreading():
 
         while stopProcess:
             # Stop the motors and hold the position.
-            stopRobot = True
+            # stopRobot = True
             Estop = True
+            
+            print("Estop: ", Estop)
+            # elevationMotor.stop()
+            # clawMotor.stop()
+            # rotationMotor.stop()
             elevationMotor.hold()
             clawMotor.hold()
             rotationMotor.hold()
@@ -231,23 +242,30 @@ def testThreading():
     return 0
 
 def Calibrate(armStartAngle:int = 40):
+    # armMovement(0, armStartAngle, calibrate= True)
+
+    # armMovement(0,1,calibrate=False)
+    elevationMotor.stop()
+    clawMotor.stop()
+    rotationMotor.stop()
+    wait(2000)
 
     ev3.screen.print("Callibrate arm")
     if elevationMotor.angle() != armStartAngle:
-        armMovement(armStartAngle, calibrate= True)
+        armMovement(0, armStartAngle, calibrate= True)
         # if stopRobot:
         #     print("stop")
         #     s.sys.exit()
 
     ev3.screen.print("Callibrate claw")
 
-    clawMovement(None, calibrate= True)
+    clawMovement(0 , armStartAngle, None, calibrate= True)
     # if stopRobot:
     #     print("stop")
     #     s.sys.exit()
 
     ev3.screen.print("Callibrate rotation")
-    rotateBase(angle= 0)
+    rotateBase(angle= 0, goToZone= 0, armtarget= armStartAngle)
     
     ev3.screen.clear()
     return 0
