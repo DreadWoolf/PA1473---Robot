@@ -2,7 +2,9 @@
 from Parameters import *
 
 def menu():
-    choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight"]
+    global Estop
+    Echoicelist = ["restart","resume","manual"]
+    choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight","EMERGENCY"]
     current_index=0
     temp=True
     zonecords = 0
@@ -25,19 +27,45 @@ def menu():
             if str(button) == "Button.CENTER":
                 ev3.screen.clear()
                 ev3.screen.print("you chose ",choicelist[current_index])
-                if choicelist[current_index] == "zone_hight":
-                    zonecords = zone_hight()
-                    print(zonecords)
-                if choicelist[current_index] == "set_origin":
-                    origin = set_origin()
-                    print(origin)
-                if choicelist[current_index] == "zonecolor_selection":
-                    czones=colorzones()
-                    print(czones)
-                if choicelist[current_index] == "start_code":
-                    return czones , zonecords
+                if Estop:
+                    # DO emergency shit!
+                    # if resume pressed Estop = False
+                    if choicelist[current_index] == "restart":
+                        restart = True
+                        return 0
+                    if choicelist[current_index] == "resume":
+                        Estop = False
+                        return 0
+                    if choicelist[current_index] == "manual":
+                        set_origin()
+                        return 0
+                        #get out of here
+                        #break
+                        #wait(1000)
 
 
+                        #### needs to båe imporved#######################3
+                        ######################################3
+                        #########################3
+
+                    print()
+                else:
+                    if choicelist[current_index] == "zone_hight":
+                        zonecords = zone_hight()
+                        print(zonecords)
+                    if choicelist[current_index] == "set_origin":
+                        origin = set_origin()
+                        print(origin)
+                    if choicelist[current_index] == "zonecolor_selection":
+                        czones=colorzones()
+                        print(czones)
+                    if choicelist[current_index] == "start_code":
+                        return czones , zonecords
+                # if choicelist[current_index] == "EMERGENCY" and Estop:
+                #     return 0
+
+#stop till False
+#reset till True
 
 
 def zone_hight():
@@ -148,5 +176,6 @@ def colorzones():
             print(zoneSort)
 
 
-if __name__ =="__main__":
-    menu()
+#if __name__ =="__main__":
+#    menu()
+menu()
