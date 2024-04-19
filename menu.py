@@ -1,10 +1,12 @@
 #!/usr/bin/env pybricks-micropython
 from Parameters import *
 
+
 def menu():
     global Estop
+    global restart
     Echoicelist = ["restart","resume","manual"]
-    choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight","EMERGENCY"]
+    choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight"]
     current_index=0
     temp=True
     zonecords = 0
@@ -13,43 +15,56 @@ def menu():
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
-        for button in buttons:
-            if str(button) == "Button.LEFT":
-                ev3.screen.clear()
-                current_index = (current_index + 1) % len(choicelist)
-                ev3.screen.print(choicelist[current_index])
-            
-            if str(button) == "Button.RIGHT":
-                ev3.screen.clear()
-                current_index = (current_index - 1) % len(choicelist)
-                ev3.screen.print(choicelist[current_index])
-            
-            if str(button) == "Button.CENTER":
-                ev3.screen.clear()
-                ev3.screen.print("you chose ",choicelist[current_index])
-                if Estop:
-                    # DO emergency shit!
-                    # if resume pressed Estop = False
-                    if choicelist[current_index] == "restart":
+        if Estop :
+            for button in buttons:
+                if str(button) == "Button.LEFT":
+                    ev3.screen.clear()
+                    current_index = (current_index + 1) % len(Echoicelist)
+                    ev3.screen.print(Echoicelist[current_index])
+                
+                if str(button) == "Button.RIGHT":
+                    ev3.screen.clear()
+                    current_index = (current_index - 1) % len(Echoicelist)
+                    ev3.screen.print(Echoicelist[current_index])
+                
+                if str(button) == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print("you chose ",Echoicelist[current_index])
+                    if Echoicelist[current_index] == "restart":
                         restart = True
                         return 0
-                    if choicelist[current_index] == "resume":
+                    if Echoicelist[current_index] == "resume":
                         Estop = False
                         return 0
-                    if choicelist[current_index] == "manual":
+                    if Echoicelist[current_index] == "manual":
                         set_origin()
                         return 0
-                        #get out of here
-                        #break
-                        #wait(1000)
+                            #get out of here
+                            #break
+                            #  wait(1000)
 
 
-                        #### needs to båe imporved#######################3
-                        ######################################3
-                        #########################3
-
-                    print()
-                else:
+                            #### needs to båe imporved#######################3
+                            ######################################3
+                            #########################3                    
+        else:
+            for button in buttons:
+                if str(button) == "Button.LEFT":
+                    ev3.screen.clear()
+                    current_index = (current_index + 1) % len(choicelist)
+                    ev3.screen.print(choicelist[current_index])
+                
+                if str(button) == "Button.RIGHT":
+                    ev3.screen.clear()
+                    current_index = (current_index - 1) % len(choicelist)
+                    ev3.screen.print(choicelist[current_index])
+                
+                if str(button) == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print("you chose ",choicelist[current_index])
+                
+                        # DO emergency shit!
+                        # if resume pressed Estop = False
                     if choicelist[current_index] == "zone_hight":
                         zonecords = zone_hight()
                         print(zonecords)
@@ -61,8 +76,8 @@ def menu():
                         print(czones)
                     if choicelist[current_index] == "start_code":
                         return czones , zonecords
-                # if choicelist[current_index] == "EMERGENCY" and Estop:
-                #     return 0
+                    # if choicelist[current_index] == "EMERGENCY" and Estop:
+                    #     return 0
 
 #stop till False
 #reset till True
