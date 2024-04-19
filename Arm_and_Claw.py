@@ -1,7 +1,7 @@
 #!/usr/bin/env pybricks-micropython
 
 # from Parameters import *
-from Parameters import elevationMotor, clawMotor, Stop
+from Parameters import elevationMotor, clawMotor, Stop, emergencyStop, Estop
 
 
 def Pickup(angleTarget:int, openClawsFirst:bool = True, height:int = 0):
@@ -28,6 +28,8 @@ def armMovement(angleTarget: int, height:int = 0, operatingSpeed = 60, calibrate
     bigGear = 40
     smallGear = 8
     multiplyAngle = -(bigGear/smallGear)
+    global Estop
+
 
     if calibrate:
         # print("start arm angle " , elevationMotor.angle())
@@ -48,6 +50,7 @@ def armMovement(angleTarget: int, height:int = 0, operatingSpeed = 60, calibrate
 
 
 def clawMovement(open:bool, calibrate:bool = False):
+    global Estop
     smallGear = 12  #Tooths for gear moving clockwise. 
     bigGear = 16   #Tooths for gear moving counter clockwise. 
     multiplyAngle = -(bigGear/smallGear)
@@ -64,6 +67,10 @@ def clawMovement(open:bool, calibrate:bool = False):
     else:
         clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=50)
         # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
+
+    if Estop == True:
+        emergencyStop()
+
 
 if __name__ == "__main__":
     angletrget = 40

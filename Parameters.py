@@ -99,11 +99,11 @@ zoneHeight = {
 }
 
 
-Pause:bool = False
+Estop:bool = False
+restart:bool = False
 
 
 def emergencyStop():
-
 
     return 0
 
