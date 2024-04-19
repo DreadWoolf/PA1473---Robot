@@ -37,9 +37,6 @@ def menu():
                 if choicelist[current_index] == "start_code":
                     return czones , zonecords
 
-
-
-
 def zone_hight():
     zonenum = [1,2,3]
     zonecords = {
