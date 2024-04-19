@@ -1,4 +1,5 @@
-from Parameters import rotationMotor, pressureSense
+from Parameters import rotationMotor, pressureSense, Estop
+# from Arm_and_Claw import emergencyStop
 
 def LocationZero(speed = 60):
     while not pressureSense.pressed():
@@ -20,4 +21,7 @@ def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit 
     else:
         # rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
         rotationMotor.run_target(operatingSpeed,(angle) * multiplyAngle)
+    
+    if Estop == True: emergencyStop()
+
         

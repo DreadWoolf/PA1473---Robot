@@ -2,8 +2,8 @@
 
 # Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
-from Arm_and_Claw import Place, Pickup, armMovement, clawMovement
-from rotationMotor import rotateBase
+from Arm_and_Claw import Place, Pickup, armMovement, clawMovement, rotateBase
+# from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
 import sys as s
 # from menu import menu
@@ -36,7 +36,7 @@ def main():
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 28 #38 #40 #39  # 40
+    armStartAngle = 40#28 #38 #40 #39  # 40
     
     Calibrate(armStartAngle)
     
@@ -192,7 +192,7 @@ def testThreading():
             for button in buttons:
                 if str(button) == "Button.CENTER":
                     ev3.speaker.beep()
-                    wait(500)
+                    wait(1000)
                     stopProcess = False  # Sätt flaggan till True när knappen trycks
                     Estop = False
                     # thread2.start()

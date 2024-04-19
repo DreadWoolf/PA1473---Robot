@@ -1,7 +1,7 @@
 #!/usr/bin/env pybricks-micropython
 
-# from Parameters import *
-from Parameters import elevationMotor, clawMotor, Stop, Estop
+from Parameters import *
+# from Parameters import elevationMotor, clawMotor, Stop, Estop
 # from Emergencystop import emergencyStop
 from rotationMotor import rotateBase
 # from Arm_and_Claw import armMovement, clawMovement
@@ -92,6 +92,32 @@ def clawMovement(open:bool, calibrate:bool = False):
         clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
         # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
 
+    if Estop == True: emergencyStop()
+
+
+
+
+def LocationZero(speed = 60):
+    while not pressureSense.pressed():
+        rotationMotor.run(speed)
+    
+    rotationMotor.reset_angle(0)
+
+
+def rotateBase(angle, operatingSpeed = 60, speed_limit = 60, acceleration_limit = 120, callibrate = False):
+    smallGear = 12  #Tooths for gear moving clockwise. 
+    bigGear = 36   #Tooths for gear moving counter clockwise. 
+    multiplyAngle = -(bigGear/smallGear)
+
+    # print("angle = ", angle)
+
+    if angle == 0 or callibrate == True:
+        LocationZero()
+        # print("\nGoing back")
+    else:
+        # rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
+        rotationMotor.run_target(operatingSpeed,(angle) * multiplyAngle)
+    
     if Estop == True: emergencyStop()
 
 

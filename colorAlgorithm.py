@@ -85,8 +85,6 @@ def ngetcolor():
         
     return "unknown item"  # Object doesn't match any color predominantly
 
-while True:
-    ngetcolor()
 
 
 
@@ -119,17 +117,10 @@ def getColor():
     lmargin = 5
     # Define colors and their conditions
     colors = [
-<<<<<<< HEAD
         ("Green", lambda r, g, b ,re: (g > r + margin and g > r - margin) and (g > b + margin and g > b - margin) and (g > (margin - lmargin)*dis) or  fcolor=="Color.GREEN"),
         ("Blue", lambda r, g, b, re: (b > r + margin and b > r - margin) and (b > g + margin and b > g - margin) and (b > (margin - lmargin)*dis)),
         ("Yellow", lambda r, g, b, re:(abs(g - (r/2)) <= margin) and (g > b + margin and g > b - margin) and (r > b + margin and r > b - margin ) or fcolor =="Color.YELLOW"),
         ("Red", lambda r, g, b ,re: (r > g + margin and r > g - margin) and (r > b + margin and r > b - margin ) and (r > (margin - lmargin)*dis) and  (55+lmargin>=re>=45-lmargin)), # runt 50
-=======
-        ("Red", lambda r, g, b ,re: (r > g + margin and r > g - margin) and (r > b + margin and r > b - margin ) and (r > (margin - lmargin)*dis) and  (55+lmargin>=re>=45-lmargin)), # runt 50
-        ("Green", lambda r, g, b ,re: (g > r + margin and g > r - margin) and (g > b + margin and g > b - margin) and (g > (margin - lmargin)*dis) or  fcolor=="Color.GREEN"),
-        ("Blue", lambda r, g, b, re: (b > r + margin and b > r - margin) and (b > g + margin and b > g - margin) and (b > (margin - lmargin)*dis)),
-        ("Yellow", lambda r, g, b, re:(abs(g - (r/2)) <= margin) and (g > b + margin and g > b - margin) and (r > b + margin and r > b - margin ) or fcolor =="Color.YELLOW"),
->>>>>>> 80fac8e235d95962c665141eab8aaccee50a400c
         ("Green", lambda r, g, b, re: abs(g - b) <= margin and (g > r + margin or g > r - margin) and (b > r + margin or b > r - margin) and g > (margin-lmargin)*dis and b > (margin-lmargin)*dis ),  # Condition for Greenb
         ("nothing", lambda r, g, b, re: ((margin)>=r>=0) and ((margin)>=g>=0) and ((margin)>=b>=0))
         # Add more colors here
@@ -160,7 +151,7 @@ def getColor():
 #         return 'Error', None # Did not find any color.
     
 def colorSort():
-    color = getColor()
+    color = ngetcolor()
     print(color)
     if color == 'nothing':
         print(color)
@@ -177,7 +168,10 @@ def colorSort():
 
 if __name__ == "__main__":
     while True:
-        something, color = (colorSort())
-        print(something)
-        print(color)
-        wait(3000)
+        ngetcolor()
+
+    # while True:
+    #     something, color = (colorSort())
+    #     print(something)
+    #     print(color)
+    #     wait(3000)

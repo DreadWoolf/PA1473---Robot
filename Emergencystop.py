@@ -18,6 +18,6 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False):
         if restart:
             s.sys.exit()
 
-    rotateBase(zoneLocation[gotoZone],80, duringCallibration)
+    rotateBase(zoneLocation[gotoZone], 80, duringCallibration)
     armMovement(angletarget, zoneHeight[gotoZone], 80, duringCallibration)
     clawMovement(False, calibrate= True)
