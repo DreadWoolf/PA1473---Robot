@@ -11,6 +11,8 @@ from pybricks.robotics import DriveBase
 
 import random
 import sys as s
+from threading import Thread, Event
+
 
 
 # Your code goes here

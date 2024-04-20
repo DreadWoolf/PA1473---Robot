@@ -71,6 +71,14 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 60,
         elevationMotor.run_angle(operatingSpeed,(angleTarget - height) * multiplyAngle)
         # elevationMotor.run_target(operatingSpeed,(angleTarget - height) * multiplyAngle)
     # print("targeted arm angle " , elevationMotor.angle())
+
+    # Check if the event is set
+    if Event.is_set():
+        # Process the updated global variable
+        print("Thread 2: Global variable (Estop):", Estop)
+        # Clear the event
+        Event.clear()
+
     if Estop == True:
         emergencyStop(goToZone, angleTarget, calibrate)
 
@@ -95,7 +103,8 @@ def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False):
             clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
             # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
 
-    if Estop == True:
+    if Estop == True or Event.is_set():
+        Event.clear()
         emergencyStop(goToZone, angleTarget, calibrate)
 
 

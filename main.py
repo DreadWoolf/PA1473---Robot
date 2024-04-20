@@ -8,7 +8,7 @@ from colorAlgorithm import colorSort
 import sys as s
 # from menu import menu
 
-from threading import Thread
+# from threading import Thread, Event
 # import threading
 
 # from menu import menu
@@ -190,6 +190,10 @@ def testThreading():
             # Stop the motors and hold the position.
             # stopRobot = True
             Estop = True
+            ########################
+            #    This how you do it? #
+            #########################
+            Event.set()
             
             print("Estop: ", Estop)
             # elevationMotor.stop()
