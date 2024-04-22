@@ -11,9 +11,11 @@ from pybricks.robotics import DriveBase
 
 import random
 import sys as s
-from threading import Thread, Event
+import threading as th
+# from threading import Thread #, Event
 
-
+# Lock for synchronization
+# lock = th._thread.allocate_lock()
 
 # Your code goes here
 # Robot definitions
@@ -102,8 +104,8 @@ zoneHeight = {
 }
 
 
-Estop = False
-restart = False
+Estop = [False]
+restart = [False]
 
 
 
