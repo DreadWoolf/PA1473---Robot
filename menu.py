@@ -153,7 +153,7 @@ def colorzones():
     # 'Yellow'   : 3
     # }    
     counter = 0
-    colors = ["Red","Yellow", "Green","Blue"]
+    colors = ["red","yellow", "green","blue", "pick1", "pick2"]
     current_index=0
     temp = True
     ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])

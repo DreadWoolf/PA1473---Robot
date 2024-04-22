@@ -13,6 +13,7 @@ import random
 import sys as s
 import threading as th
 # from threading import Thread #, Event
+#from threading import Thread, Event
 
 # Lock for synchronization
 # lock = th._thread.allocate_lock()
@@ -53,11 +54,14 @@ RobotIdentity = 'G'
 # }
 
 zoneSort = {
-    'Red'       : 0,
-    'Green'     : 1,
-    'Blue'      : 2,
-    'Yellow'   : 3
+    'pick1'       : 0,
+    'green'     : 1,
+    'blue'      : 2,
+    'yellow'   : 3,
+    'red':4,
+    'pick2':5
     }
+
 
 errorMargin = RobotRegister[RobotIdentity]
 
