@@ -6,7 +6,7 @@ from Arm_and_Claw import Place, Pickup, armMovement, clawMovement, rotateBase
 # from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
 import sys as s
-# from menu import menu
+from OImenu import menu
 
 # from threading import Thread, Event
 # import threading
@@ -33,13 +33,18 @@ def main():
     global Robotrun
     # Robotrun = True
     ev3.speaker.beep()
+    #Zonesort, zoneHeight = menu()
+
+    zoneSort['pick1'] = 2
+    zoneSort['blue'] = 0
+
 
     times = 2  #10
     zoneAmount = 3
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 40#28 #38 #40 #39  # 40
+    armStartAngle = 37#28 #38 #40 #39  # 40
     
     Calibrate(armStartAngle)
     
@@ -47,6 +52,7 @@ def main():
     location = 0 # Go to first 1.
     lastZone = 0
     goToZone = 0
+    speed = 250
     
     running = True
     while running: #run < times: # times = 2.
@@ -93,11 +99,11 @@ def main():
                     
                 
                 if sortZone == 0:
-                    rotateBase(angle= zoneLocation[sortZone], goToZone= sortZone, armtarget= armStartAngle) # Go to zone '0'.
+                    rotateBase(angle= zoneLocation[sortZone], goToZone= sortZone,operatingSpeed= speed, armtarget= armStartAngle) # Go to zone '0'.
                 else:
                     # This might not work as intended... (if we want to go to the next zone for example)
                     # rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
-                    rotateBase(angle = zoneLocation[sortZone], goToZone= sortZone, armtarget=armStartAngle)
+                    rotateBase(angle = zoneLocation[sortZone], goToZone= sortZone, operatingSpeed= speed, armtarget=armStartAngle)
 
                 # Uppdate the lastZone.
                 lastZone = sortZone  
@@ -109,54 +115,46 @@ def main():
             
             potentialCargo = False
 
-        elif location >= zoneAmount:  # + 1
-            location = 0
-            goToZone = 0
-            lastZone = 0
-            rotateBase(angle= 0, goToZone=goToZone, armtarget= armStartAngle)
-            # if stopRobot:
-            #     print("stop")
-            #     s.sys.exit()
-            if RobotRun:
-                print("\n\n Reset and sleep")
-                wait(periodTime)  # 4000
-                ev3.speaker.beep()
-                run += 1
-            else:
-                running = False
         else:
-
-            location += 1
-            
-            # May not work... maybe needs an 'or' or 'and' like gotozone <zoneamount.
-            if location == lastZone: ## If we sorted to the zone we wanna go to.
-                location += 1
-
-            goToZone = location
-            
-
-            # rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
-            rotateBase(zoneLocation[goToZone], goToZone, armStartAngle)
-
-            # if stopRobot:
-            #     print("stop")
-            #     s.sys.exit()
-            # Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
+            # goToZone = location
+            pickupzone = zoneSort["pick1"]
+            rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
             Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True)
-            # if stopRobot:
-            #     print("stop")
-            #     s.sys.exit()
-
-
-            lastZone = location
-
-            # picked up package true or false.
-            ######################################
-            ######################################
-            ######################################
-            # Check if we have cargo!
             potentialCargo = True
-        print("GoToZone = ", goToZone)
+            
+
+
+        #     location += 1
+            
+        #     # May not work... maybe needs an 'or' or 'and' like gotozone <zoneamount.
+        #     if location == lastZone: ## If we sorted to the zone we wanna go to.
+        #         location += 1
+
+        #     goToZone = location
+            
+
+        #     # rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
+        #     rotateBase(zoneLocation[goToZone], goToZone, armStartAngle)
+
+        #     # if stopRobot:
+        #     #     print("stop")
+        #     #     s.sys.exit()
+        #     # Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
+        #     Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True)
+        #     # if stopRobot:
+        #     #     print("stop")
+        #     #     s.sys.exit()
+
+
+        #     lastZone = location
+
+        #     # picked up package true or false.
+        #     ######################################
+        #     ######################################
+        #     ######################################
+        #     # Check if we have cargo!
+        #     potentialCargo = True
+        # print("GoToZone = ", goToZone)
 
 
         # if Robotrun == False:
@@ -171,7 +169,7 @@ def main():
 def testThreading():
     global RobotRun
     global stopRobot
-    global Estop
+    # global Estop
     
     
     stopProcess = False
@@ -193,11 +191,7 @@ def testThreading():
         while stopProcess:
             buttons = ev3.buttons.pressed()
 
-            
-            # print("Estop: ", Estop[0])
-            # elevationMotor.stop()
-            # clawMotor.stop()
-            # rotationMotor.stop()
+            menu()
 
             for button in buttons:
                 if str(button) == "Button.CENTER":
@@ -213,7 +207,7 @@ def testThreading():
 # def btnCheck():
     
 
-def Calibrate(armStartAngle:int = 40):
+def Calibrate(armStartAngle:int = 40, speed = 60):
     # armMovement(0, armStartAngle, calibrate= True)
 
     # armMovement(0,1,calibrate=False)
@@ -237,7 +231,7 @@ def Calibrate(armStartAngle:int = 40):
     #     s.sys.exit()
 
     ev3.screen.print("Callibrate rotation")
-    rotateBase(angle= 0, goToZone= 0, armtarget= armStartAngle)
+    rotateBase(angle= 0, goToZone= 0, operatingSpeed= speed, armtarget= armStartAngle)
     
     ev3.screen.clear()
     return 0
