@@ -64,7 +64,7 @@ def main():
                 print("Sortzone ", sortZone)
 
                 ## Will continue if found nothing, otherwise place the cargo.
-                if sortZone == "nothing":
+                if sortZone == "Error":
                     
                     ev3.speaker.beep()
                     wait(4)

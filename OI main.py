@@ -21,12 +21,12 @@ import sys as s
 zoneSort, zoneHeight= menu()
 
 # Create two threads for each task
-thread1 = th.Thread()
-thread2 = th.Thread()
+# thread1 = th.Thread()
+# thread2 = th.Thread()
 # Event = th.Thread.Event()
 
-Robotrun = True
-stopRobot = False
+#Robotrun = True
+#stopRobot = False
 
 # Event for synchronization
 # event = th.Event()
@@ -172,48 +172,48 @@ def main():
 
 
 
-def testThreading():
-    global RobotRun
-    global stopRobot
-    global Estop
+# def testThreading():
+#     global RobotRun
+#     global stopRobot
+#     global Estop
     
     
-    stopProcess = False
+#     stopProcess = False
 
-    while True:
-        buttons = ev3.buttons.pressed()
-        wait(250) # 250
-        for button in buttons:
-            if str(button) == "Button.CENTER":
-                ev3.speaker.beep()
-                wait(100)
-                stopProcess = True  # Sätt flaggan till True när knappen trycks
-                break  # Avbryt loopen när knappen trycks
+#     while True:
+#         buttons = ev3.buttons.pressed()
+#         wait(250) # 250
+#         for button in buttons:
+#             if str(button) == "Button.CENTER":
+#                 ev3.speaker.beep()
+#                 wait(100)
+#                 stopProcess = True  # Sätt flaggan till True när knappen trycks
+#                 break  # Avbryt loopen när knappen trycks
 
-        while stopProcess:
-            buttons = ev3.buttons.pressed()
+#         while stopProcess:
+#             buttons = ev3.buttons.pressed()
 
-            Estop[0] = True
+#             Estop[0] = True
             
-            print("Estop: ", Estop[0])
-            # elevationMotor.stop()
-            # clawMotor.stop()
-            # rotationMotor.stop()
-            elevationMotor.hold()
-            clawMotor.hold()
-            rotationMotor.hold()
-            wait(2000)
+#             print("Estop: ", Estop[0])
+#             # elevationMotor.stop()
+#             # clawMotor.stop()
+#             # rotationMotor.stop()
+#             elevationMotor.hold()
+#             clawMotor.hold()
+#             rotationMotor.hold()
+#             wait(2000)
 
-            for button in buttons:
-                if str(button) == "Button.CENTER":
-                    ev3.speaker.beep()
-                    wait(1000)
-                    stopProcess = False  # Sätt flaggan till True när knappen trycks
-                    Estop[0] = False
-                    # thread2.start()
+#             for button in buttons:
+#                 if str(button) == "Button.CENTER":
+#                     ev3.speaker.beep()
+#                     wait(1000)
+#                     stopProcess = False  # Sätt flaggan till True när knappen trycks
+#                     Estop[0] = False
+#                     # thread2.start()
 
-                    # break  # Avbryt loopen när knappen trycks
-    return 0
+#                     # break  # Avbryt loopen när knappen trycks
+#     return 0
 
 # def btnCheck():
     
@@ -256,12 +256,12 @@ def StopRobot(stopRobot):
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
     # Create two threads for each task
-    thread1 = th.Thread(target=testThreading)
-    thread2 = th.Thread(target=main)
+#    thread1 = th.Thread(target=testThreading)
+#    thread2 = th.Thread(target=main)
 
     # Start the threads
-    thread1.start()
-    thread2.start()
+#    thread1.start()
+#    thread2.start()
 
 
 
