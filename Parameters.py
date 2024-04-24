@@ -38,7 +38,7 @@ RobotRegister = {
     'B' : 19,  ## Accurate
     'C' : 0,
     'D' : 0,  
-    'E' : 10,
+    'E' : 8,
     'F' : 0,
     'G' : 18
 }
@@ -56,8 +56,8 @@ RobotIdentity = 'E'
 zoneSort = {
     'pick1'     :   0,
     'Green'     :   1,
-    'Blue'      :   2,
-    'Yellow'    :   3,
+    'Yellow'    :   2,
+    'Blue'      :   3,
     # 'red':4,
     'pick2'     :   5
     }

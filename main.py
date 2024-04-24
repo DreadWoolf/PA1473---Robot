@@ -87,26 +87,27 @@ def main():
                     print(cca)
                     rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
                     Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
-                else:  
-                    ev3.speaker.beep()
-                    wait(4)
-                    ev3.speaker.beep()
+            else:  
+                ev3.speaker.beep()
+                wait(4)
+                ev3.speaker.beep()
 
-                    ### print error on robot.
-                    ev3.screen.print('Error "color" 404')
-                    wait(1000)
+                ### print error on robot.
+                ev3.screen.print('Error "color" 404')
+                wait(1000)
 
-                    rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
+                rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
 
-                    ## Drop of again, if detected random color.
-                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
-                    # lastZone = location
+                ## Drop of again, if detected random color.
+                Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
+                # lastZone = location
             
             potentialCargo = False
                 # lastZone = location
         else: 
             # goToZone = location
             pickupzone = zoneSort["pick1"]
+            armMovement(goToZone, angleTarget= armStartAngle) # make sure we are up.
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
             Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True, potentialCargo= potentialCargo)
             potentialCargo = True
