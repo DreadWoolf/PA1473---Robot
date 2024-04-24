@@ -112,22 +112,6 @@ def main():
                 #     s.sys.exit()
             
             potentialCargo = False
-
-        elif location >= zoneAmount:  # + 1
-            location = 0
-            goToZone = 0
-            lastZone = 0
-            rotateBase(angle= 0, goToZone=goToZone, armtarget= armStartAngle)
-            # if stopRobot:
-            #     print("stop")
-            #     s.sys.exit()
-            if RobotRun:
-                print("\n\n Reset and sleep")
-                wait(periodTime)  # 4000
-                ev3.speaker.beep()
-                run += 1
-            else:
-                running = False
         else:
 
             location += 1
@@ -150,7 +134,7 @@ def main():
             
 
             # rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
-            rotateBase(pickupzone, goToZone, armStartAngle)
+            # rotateBase(pickupzone, goToZone, armStartAngle)
 
             # if stopRobot:
             #     print("stop")
