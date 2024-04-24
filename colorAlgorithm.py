@@ -48,7 +48,6 @@ def newcolor():
     
 
 def ngetColor():
-    ref = colorSense.reflection()
     aos = 5
     hred,hgreen,hblue = 0,0,0
     for scan in range(aos):
@@ -70,8 +69,6 @@ def ngetColor():
     # Check each color condition
     for color_name, condition in colors:
         if condition(hred, hgreen, hblue):
-            print(hred, hgreen, hblue)
-            print(ref)
             print(color_name)
             print(hred,hgreen,hblue)
             return color_name 
@@ -123,8 +120,9 @@ def getColor():
     for color_name, condition in colors:
         if condition(Tred, Tgreen, Tblue, Tref):
             print(Tred, Tgreen, Tblue)
+            print(color_name)
             return color_name
-    
+        
     return "unknown item"  # Object doesn't match any color predominantly
 
 
