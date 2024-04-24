@@ -6,8 +6,23 @@ from Arm_and_Claw import Place, Pickup, armMovement
 from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
 
+from pybricks.ev3devices import Motor
+from pybricks.parameters import Port
+
+#
 def main():
     ev3.speaker.beep()
+    #Initialize the motor controlling the claw
+    claw_motor = Motor(Port.A)
+
+# Function to get current angle of the claw
+    def get_claw_angle():
+        return claw_motor.angle()
+
+# Example usage
+    current_angle = get_claw_angle()
+    print("Current angle of the claw:", current_angle)
+
 
     times = 2
     zoneAmount = 3

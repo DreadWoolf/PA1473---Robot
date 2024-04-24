@@ -37,6 +37,14 @@ def main():
 
     zoneSort['pick1'] = 2
     zoneSort['blue'] = 0
+    zoneSort['unSuported'] = 3
+
+
+
+    ### Try to get the fucking arm to go down.
+    # elevationMotor.dc(50)
+    # wait(5)
+    # elevationMotor.stop()
 
 
     times = 2  #10
@@ -44,7 +52,7 @@ def main():
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 42#28 #38 #40 #39  # 40
+    armStartAngle = 40 #28 #38 #40 #39  # 40
     
     Calibrate(armStartAngle)
     
@@ -69,9 +77,17 @@ def main():
             if sortZone == 'Error' or sortZone == 'nothing':
                 print("Sortzone ", sortZone)
 
+                
+
                 ## Will continue if found nothing, otherwise place the cargo.
-                if sortZone == "Error":
-                    
+                # if sortZone == "Error":
+                cca = clawMotor.angle()
+                if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
+                    tmp = zoneSort['unSuported']
+                    print(cca)
+                    rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
+                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
+                else:  
                     ev3.speaker.beep()
                     wait(4)
                     ev3.speaker.beep()
@@ -80,47 +96,62 @@ def main():
                     ev3.screen.print('Error "color" 404')
                     wait(1000)
 
+                    rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
+
                     ## Drop of again, if detected random color.
                     Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
                     # lastZone = location
-
-                lastZone = location
-            else:
-                wait(100)
-                ######################################
-                ######################################
-                ######################################
-                # Make sure this works...
-                if sortZone == lastZone:
-                    ### Screen print 
-                    ev3.screen.print("Package at right location")
-                else:
-                    ev3.screen.print(str(color) + " to: " + str(sortZone))
-                    
-                
-                if sortZone == 0:
-                    rotateBase(angle= zoneLocation[sortZone], goToZone= sortZone,operatingSpeed= speed, armtarget= armStartAngle) # Go to zone '0'.
-                else:
-                    # This might not work as intended... (if we want to go to the next zone for example)
-                    # rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
-                    rotateBase(angle = zoneLocation[sortZone], goToZone= sortZone, operatingSpeed= speed, armtarget=armStartAngle)
-
-                # Uppdate the lastZone.
-                lastZone = sortZone  
-                # Place(angleTarget= -armStartAngle, openClawsFirst= False)
-                Place(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= False, potentialCargo= potentialCargo)
-                # if stopRobot:
-                #     print("stop")
-                #     s.sys.exit()
             
             potentialCargo = False
-
-        else:
+                # lastZone = location
+        else: 
             # goToZone = location
             pickupzone = zoneSort["pick1"]
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
             Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True, potentialCargo= potentialCargo)
             potentialCargo = True
+            
+    # running = True
+    # while running: #run < times: # times = 2.
+    #     # run += 1
+
+    #     if potentialCargo:
+
+    #         sortZone = 0
+    #         wait(5)  #2
+    #         sortZone, color = colorSort()
+    #         print("Sortzone: ", sortZone)
+    #         print("Color: ", color)
+
+    #         if sortZone == 'Error' or sortZone == 'nothing':
+    #             print("Sortzone ", sortZone)
+    #         else:
+    #             ev3.screen.print(str(color) + " to: " + str(sortZone))
+                    
+                
+    #             if sortZone == 0:
+    #                 rotateBase(angle= zoneLocation[sortZone], goToZone= sortZone,operatingSpeed= speed, armtarget= armStartAngle) # Go to zone '0'.
+    #             else:
+    #                 # This might not work as intended... (if we want to go to the next zone for example)
+    #                 # rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
+    #                 rotateBase(angle = zoneLocation[sortZone], goToZone= sortZone, operatingSpeed= speed, armtarget=armStartAngle)
+
+    #             # Uppdate the lastZone.
+    #             lastZone = sortZone  
+    #             # Place(angleTarget= -armStartAngle, openClawsFirst= False)
+    #             Place(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= False, potentialCargo= potentialCargo)
+    #             # if stopRobot:
+    #             #     print("stop")
+    #             #     s.sys.exit()
+            
+    #         potentialCargo = False
+
+    #     else:
+    #         # goToZone = location
+    #         pickupzone = zoneSort["pick1"]
+    #         rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+    #         Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True, potentialCargo= potentialCargo)
+    #         potentialCargo = True
             
 
 

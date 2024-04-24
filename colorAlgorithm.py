@@ -140,28 +140,25 @@ def getColor():
 #         return 'Error', None # Did not find any color.
     
 def colorSort():
-    cca = clawMotor.angle()
-    if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
-        print(cca)
-        return 'nothing', None
-    else:
-        print(cca)
-        color = ngetColor()
+        # return 'nothing', None
+    # else:
+    # print(cca)
+    color = ngetColor()
+    print(color)
+    if color == 'nothing':
         print(color)
-        if color == 'nothing':
-            print(color)
-            return 'nothing', None  # nothing, the color is not in the list.
-        elif color in zoneSort:    
-            return zoneSort[color], color
-        # elif color in zoneSort and zoneSort[color]!=0:    
-            # return color, zoneSort[color] # Return the color.
-        else:
-            print(color)
-            return 'Error', None # Did not find any color.
+        return 'nothing', None  # nothing, the color is not in the list.
+    elif color in zoneSort:    
+        return zoneSort[color], color
+    # elif color in zoneSort and zoneSort[color]!=0:    
+        # return color, zoneSort[color] # Return the color.
+    else:
+        print(color)
+        return 'Error', None # Did not find any color.
 
 if __name__ == "__main__":
-    while True:
-        something, color = (colorSort())
-        print(something)
-        print(color)
-        wait(3000)
+    #while True:
+    something, color = (colorSort())
+    print(something)
+    print(color)
+    wait(3000)

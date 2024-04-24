@@ -115,16 +115,16 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 120
     bigGear = 40
     smallGear = 8
     multiplyAngle = -(bigGear/smallGear)
-    global Estop
+    # global Estop
 
     # print("Estop  ... ", Estop)
 
     if calibrate:
         # print("start arm angle " , elevationMotor.angle())
-        elevationMotor.run_target(speed = 40, target_angle = angleTarget * multiplyAngle)
+        elevationMotor.run_target(speed = 60, target_angle = angleTarget * multiplyAngle)
         # return
     elif potentialCargo:
-        elevationMotor.run_until_stalled(operatingSpeed, then=Stop.BREAK, duty_limit=50)
+        elevationMotor.run_until_stalled(operatingSpeed, then=Stop.HOLD, duty_limit=20)
         # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
     else:
         ######################################
@@ -157,7 +157,7 @@ def test(goToZone, angleTarget, calibrate, potentialCargo = False):
 
 
 def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False, operatingspeed = 100):
-    global Estop
+    # global Estop
     smallGear = 12  #Tooths for gear moving clockwise. 
     bigGear = 16   #Tooths for gear moving counter clockwise. 
     multiplyAngle = -(bigGear/smallGear)

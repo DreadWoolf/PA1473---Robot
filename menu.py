@@ -80,13 +80,13 @@ def Emenu():
                 ev3.screen.print("you chose ",Echoicelist[current_index])
                 if Echoicelist[current_index] == "restart":
                     restart = True
-                    return 0
+
                 if Echoicelist[current_index] == "resume":
                     Estop = False
-                    return 0
+
                 if Echoicelist[current_index] == "manual":
                     set_origin()
-                    return 0
+
                             #get out of here
                             #break
                             #  wait(1000)
@@ -150,9 +150,12 @@ def set_origin():
                 elevationMotor.run_angle(60,-10)
             if button_str == "Button.DOWN":
                 elevationMotor.run_angle(60,10)
-            elif button_str == "Button.CENTER":
-                #elevationMotor.reset_angle()
-                #rotationMotor.reset_angle()
+            elif button_str == "Button.CENTER": 
+                verangle = elevationMotor.angle()
+                bigGear = 40
+                smallGear = 8
+                multiplyAngle = -(bigGear/smallGear)
+                elevationMotor.reset_angle(40 * multiplyAngle)
                 return 0
             if button_str == "Button.LEFT":
                 rotationMotor.run_angle(60,-10)
