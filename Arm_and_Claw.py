@@ -75,7 +75,7 @@ def sort(gotoZone:int, angletarget:int, duringCallibration = False, potentialCar
             # lastZone = location
 
 
-def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, height:int = 0):
+def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, height:int = 0, potentialCargo= False):
     # if height <= 0:
     while not Estop[0]:
         clawMovement(goToZone, angleTarget, open = openClawsFirst) # If openFirst = True will open here.
@@ -101,7 +101,7 @@ def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, potentialCargo
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst)) # If not open first will grip here.
         if Estop[0]: break
         wait(2)
-        armMovement(goToZone, angleTarget, angleTarget= -angleTarget, potentialCargo = potentialCargo)
+        armMovement(goToZone, angleTarget= -angleTarget, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
         clawMovement(goToZone, angleTarget, open= (openClawsFirst)) # If not open first will grip here.
@@ -123,6 +123,9 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 120
         # print("start arm angle " , elevationMotor.angle())
         elevationMotor.run_target(speed = 40, target_angle = angleTarget * multiplyAngle)
         # return
+    elif potentialCargo:
+        elevationMotor.run_until_stalled(operatingSpeed, then=Stop.BREAK, duty_limit=50)
+        # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
     else:
         ######################################
         ######################################
@@ -133,7 +136,7 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 120
         ######################################
         ######################################
         ######################################
-        # elevationMotor.run_angle(operatingSpeed,(angleTarget - height) * multiplyAngle)
+        
         elevationMotor.run_target(operatingSpeed,(angleTarget - height) * multiplyAngle)
     # print("targeted arm angle " , elevationMotor.angle())
 
@@ -160,14 +163,14 @@ def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False, opera
     multiplyAngle = -(bigGear/smallGear)
 
     if calibrate:
-        clawMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=40)
+        clawMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=50)
         if not Estop[0]:
             clawMotor.reset_angle(0)
     else:
         if open:  # Open.
             clawMotor.run_angle(operatingspeed ,(60) * multiplyAngle)
         else:
-            clawMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=40)
+            clawMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=50)
 
     test(goToZone, angleTarget, calibrate, potentialCargo = False)
 
