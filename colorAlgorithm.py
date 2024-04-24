@@ -61,13 +61,8 @@ def ngetColor():
     # print(abs(hred-hblue))
     colors = [
     ("Blue", lambda r, g, b: b > max(r, g)),
-<<<<<<< HEAD
     ("Yellow", lambda r, g, b: r > max(g, b) and g > b and 50 >= abs(r - (g+b))),
     ("Red", lambda r, g, b: r > max(g, b)),
-=======
-    ("Red", lambda r, g, b: r > max(g, b) and not 5>= abs((r/2)-g)) ,
-    ("Yellow", lambda r, g, b: r > max(g, b) and g > b ),
->>>>>>> de4e9dd7d49a97edac2d3acad52ad735868bf8ef
     ("Green", lambda r, g, b: g > max(r, b)),
     ("nothing", lambda r, g, b: max(r, g, b) == 0)
     ]
@@ -165,13 +160,6 @@ def colorSort():
         else:
             print(color)
             return 'Error', None # Did not find any color.
-while True:
-    ngetColor()
-<<<<<<< HEAD
-=======
-
-
->>>>>>> de4e9dd7d49a97edac2d3acad52ad735868bf8ef
 
 if __name__ == "__main__":
     while True:
