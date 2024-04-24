@@ -31,6 +31,7 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
     # if potentialCargo == True:
     
     if clawMotor.angle() > 0 + 5 and clawMotor.angle() < 0 - 5:
+        print("Holding something")
         clawMovement(gotoZone, angleTarget= angletarget, open= False, calibrate= True)
         ## Cargo.
         sort(gotoZone, angletarget, duringCallibration = False, potentialCargo = False)
@@ -42,14 +43,14 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
         # clawMotor.angle()
     else:
         armMovement(gotoZone, zoneHeight[gotoZone], angletarget, calibrate = duringCallibration)
-            
+        rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
+                
     # if 
-    rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
 
 
 def sort(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
     sortZone = 0
-    armMovement(gotoZone, zoneHeight[gotoZone], 0, calibrate = duringCallibration)
+    armMovement(gotoZone, zoneHeight[gotoZone], 40, calibrate = duringCallibration)
     wait(5)  #2
     sortZone, color = colorSort()
     print("Sortzone: ", sortZone)
@@ -97,13 +98,13 @@ def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, potentialCargo
         armMovement(goToZone, angleTarget= angleTarget, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
-        clawMovement(goToZone, angleTarget, open= (not openClawsFirst), potentialCargo = potentialCargo) # If not open first will grip here.
+        clawMovement(goToZone, angleTarget, open= (not openClawsFirst)) # If not open first will grip here.
         if Estop[0]: break
         wait(2)
         armMovement(goToZone, angleTarget, angleTarget= -angleTarget, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
-        clawMovement(goToZone, angleTarget, open= (openClawsFirst), potentialCargo = potentialCargo) # If not open first will grip here.
+        clawMovement(goToZone, angleTarget, open= (openClawsFirst)) # If not open first will grip here.
         break
 
 
