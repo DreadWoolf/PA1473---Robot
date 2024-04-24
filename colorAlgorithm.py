@@ -48,6 +48,7 @@ def newcolor():
     
 
 def ngetColor():
+    ref = colorSense.reflection()
     aos = 5
     hred,hgreen,hblue = 0,0,0
     for scan in range(aos):
@@ -60,8 +61,8 @@ def ngetColor():
     # print(abs(hred-hblue))
     colors = [
     ("Blue", lambda r, g, b: b > max(r, g)),
-    ("Yellow", lambda r, g, b: r > b and g > b and r > g),
-    ("Red", lambda r, g, b: r > max(g, b)),
+    ("Red", lambda r, g, b: r > max(g, b) and not 5>= abs((r/2)-g)) ,
+    ("Yellow", lambda r, g, b: r > max(g, b) and g > b ),
     ("Green", lambda r, g, b: g > max(r, b)),
     ("nothing", lambda r, g, b: max(r, g, b) == 0)
     ]
@@ -69,6 +70,8 @@ def ngetColor():
     # Check each color condition
     for color_name, condition in colors:
         if condition(hred, hgreen, hblue):
+            print(hred, hgreen, hblue)
+            print(ref)
             print(color_name)
             return color_name 
     return "unknown item"  # Object doesn't match any color predominantly
@@ -119,9 +122,8 @@ def getColor():
     for color_name, condition in colors:
         if condition(Tred, Tgreen, Tblue, Tref):
             print(Tred, Tgreen, Tblue)
-            print(color_name)
             return color_name
-        
+    
     return "unknown item"  # Object doesn't match any color predominantly
 
 
@@ -157,6 +159,9 @@ def colorSort():
         else:
             print(color)
             return 'Error', None # Did not find any color.
+while True:
+    ngetColor()
+
 
 
 if __name__ == "__main__":
