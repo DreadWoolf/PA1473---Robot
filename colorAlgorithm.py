@@ -57,8 +57,8 @@ def ngetColor():
         hgreen += green
         hblue += blue
         wait(50)
-    print(hred,hgreen,hblue)
-    print(abs(hred-hblue))
+    # print(hred,hgreen,hblue)
+    # print(abs(hred-hblue))
     colors = [
     ("Blue", lambda r, g, b: b > max(r, g)),
     ("Yellow", lambda r, g, b: r > b and g > b and r > g),

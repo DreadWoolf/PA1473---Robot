@@ -3,7 +3,7 @@
 from Parameters import *
 # from Parameters import elevationMotor, clawMotor, Stop, Estop
 # from Emergencystop import emergencyStop
-from rotationMotor import rotateBase
+# from rotationMotor import rotateBase
 
 
 def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False):
@@ -29,9 +29,9 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False):
 
 
 
-    rotateBase(zoneLocation[gotoZone],angletarget, duringCallibration)
-    armMovement(angletarget, zoneHeight[gotoZone], angletarget, duringCallibration)
-    clawMovement(gotoZone, angletarget= angletarget, open= False, calibrate= True)
+    rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
+    armMovement(gotoZone, zoneHeight[gotoZone], angletarget, calibrate = duringCallibration)
+    clawMovement(gotoZone, angleTarget= angletarget, open= False, calibrate= True)
 
 def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, height:int = 0):
     # if height <= 0:
@@ -103,7 +103,7 @@ def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False):
 
     if calibrate:
         # clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
-        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
+        clawMotor.run_until_stalled(60, then=Stop.HOLD, duty_limit=30)
         if not Estop:
             clawMotor.reset_angle(0)
     else:
@@ -111,7 +111,8 @@ def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False):
             # clawMotor.run_until_stalled(-40, then=Stop.BRAKE, duty_limit=None)
             clawMotor.run_angle(60 ,(60) * multiplyAngle)
         else:
-            clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
+            # clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=30)
+            clawMotor.run_until_stalled(60, then=Stop.HOLD, duty_limit=30)
             # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
 
     test(goToZone, angleTarget, calibrate)
@@ -132,7 +133,7 @@ def LocationZero(speed = 60):
     rotationMotor.reset_angle(0)
 
 
-def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 60, acceleration_limit = 120, calibrate = False):
+def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 120, acceleration_limit = 120, calibrate = False, potentialCargo = False):
     global Estop
     smallGear = 12  #Tooths for gear moving clockwise. 
     bigGear = 36   #Tooths for gear moving counter clockwise. 

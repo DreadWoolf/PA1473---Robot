@@ -183,6 +183,10 @@ def testThreading():
             if str(button) == "Button.CENTER":
                 ev3.speaker.beep()
                 wait(100)
+                elevationMotor.hold()
+                clawMotor.hold()
+                rotationMotor.hold()
+                wait(2000)
                 stopProcess = True  # Sätt flaggan till True när knappen trycks
                 break  # Avbryt loopen när knappen trycks
 
@@ -198,7 +202,7 @@ def testThreading():
             elevationMotor.hold()
             clawMotor.hold()
             rotationMotor.hold()
-            wait(2000)
+            wait(250)
 
             for button in buttons:
                 if str(button) == "Button.CENTER":
