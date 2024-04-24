@@ -8,7 +8,7 @@ from pybricks.parameters import Port, Stop, Direction, Color
 from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
 
-import datetime
+# import datetime
 import random
 import sys as s
 import threading as th
@@ -58,7 +58,7 @@ zoneSort = {
     'green'     : 1,
     'blue'      : 2,
     'yellow'   : 3,
-    'red':4,
+    # 'red':4,
     'pick2':5
     }
 

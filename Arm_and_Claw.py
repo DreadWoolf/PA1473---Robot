@@ -1,20 +1,21 @@
 #!/usr/bin/env pybricks-micropython
 
 from Parameters import *
+from colorAlgorithm import colorSort
 # from Parameters import elevationMotor, clawMotor, Stop, Estop
 # from Emergencystop import emergencyStop
-from rotationMotor import rotateBase
+# from rotationMotor import rotateBase
 
 
-def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False):
+def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
     global Estop
     global restart
-    print("test")
+    print("Emergency stop works")
+    print("angle", clawMotor.angle())
     while(Estop[0] == True):
         elevationMotor.hold()
         clawMotor.hold()
         rotationMotor.hold()
-        print("Emergency stop works")
         wait(1000)
         # if Estop == False:
         # if restart:
@@ -27,39 +28,96 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False):
     #   Make checks for current position    #
     #########################################
 
+    # if potentialCargo == True:
+    
+    if clawMotor.angle() > 0 + 5 and clawMotor.angle() < 0 - 5:
+        print("Holding something")
+        clawMovement(gotoZone, angleTarget= angletarget, open= False, calibrate= True)
+        ## Cargo.
+        sort(gotoZone, angletarget, duringCallibration = False, potentialCargo = False)
+        ev3.speaker.beep()
+        wait(5)
+        ev3.speaker.beep()
+        wait(5)
+        ev3.speaker.beep()
+        # clawMotor.angle()
+    else:
+        armMovement(gotoZone, zoneHeight[gotoZone], angletarget, calibrate = duringCallibration)
+        rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
+                
+    # if 
 
 
-    rotateBase(zoneLocation[gotoZone],angletarget, duringCallibration)
-    armMovement(angletarget, zoneHeight[gotoZone], angletarget, duringCallibration)
-    clawMovement(gotoZone, angletarget= angletarget, open= False, calibrate= True)
+def sort(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
+    sortZone = 0
+    armMovement(gotoZone, zoneHeight[gotoZone], 40, calibrate = duringCallibration)
+    wait(5)  #2
+    sortZone, color = colorSort()
+    print("Sortzone: ", sortZone)
+    print("Color: ", color)
+
+    if sortZone == 'Error' or sortZone == 'nothing':
+        print("Sortzone ", sortZone)
+
+        ## Will continue if found nothing, otherwise place the cargo.
+        if sortZone == "nothing":
+            
+            ev3.speaker.beep()
+            wait(4)
+            ev3.speaker.beep()
+
+            ### print error on robot.
+            ev3.screen.print('Error "color" 404')
+            wait(1000)
+
+            ## Drop of again, if detected random color.
+            Place(goToZone= gotoZone, angleTarget=-angletarget, openClawsFirst=False)
+            # lastZone = location
+
 
 def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, height:int = 0):
     # if height <= 0:
-    clawMovement(goToZone, angleTarget, open = openClawsFirst) # If openFirst = True will open here.
-    armMovement(goToZone, angleTarget= angleTarget)
-    clawMovement(goToZone, angleTarget, open= (not openClawsFirst)) # If not open first will grip here.
-    armMovement(goToZone, angleTarget= -angleTarget)
+    while not Estop[0]:
+        clawMovement(goToZone, angleTarget, open = openClawsFirst) # If openFirst = True will open here.
+        wait(2)
+        if Estop[0]: break
+        armMovement(goToZone, angleTarget= angleTarget)
+        wait(2)
+        if Estop[0]: break
+        clawMovement(goToZone, angleTarget, open= (not openClawsFirst)) # If not open first will grip here.
+        if Estop[0]: break
+        wait(2)
+        armMovement(goToZone, angleTarget= -angleTarget)
+        break
 
 
-def Place(goToZone, angleTarget:int, openClawsFirst:bool = False):
+def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, potentialCargo = True):
     
     # If openFirst = True will open first.
-    armMovement(goToZone, angleTarget= angleTarget)
-    clawMovement(goToZone, angleTarget, open= (not openClawsFirst)) # If not open first will grip here.
-    armMovement(goToZone, angleTarget, angleTarget= -angleTarget)
-    clawMovement(goToZone, angleTarget, open= (openClawsFirst)) # If not open first will grip here.
+    while not Estop[0]:
+        armMovement(goToZone, angleTarget= angleTarget, potentialCargo = potentialCargo)
+        if Estop[0]: break
+        wait(2)
+        clawMovement(goToZone, angleTarget, open= (not openClawsFirst)) # If not open first will grip here.
+        if Estop[0]: break
+        wait(2)
+        armMovement(goToZone, angleTarget, angleTarget= -angleTarget, potentialCargo = potentialCargo)
+        if Estop[0]: break
+        wait(2)
+        clawMovement(goToZone, angleTarget, open= (openClawsFirst)) # If not open first will grip here.
+        break
 
 
 
 
-def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 60, calibrate:bool = False):
+def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 60, calibrate:bool = False, potentialCargo = False):
     # Thooths on the gears of the arm.
     bigGear = 40
     smallGear = 8
     multiplyAngle = -(bigGear/smallGear)
     global Estop
 
-    print("Estop  ... ", Estop)
+    # print("Estop  ... ", Estop)
 
     if calibrate:
         # print("start arm angle " , elevationMotor.angle())
@@ -88,10 +146,10 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 60,
     test(goToZone, angleTarget, calibrate)
     
 
-def test(goToZone, angleTarget, calibrate):
+def test(goToZone, angleTarget, calibrate, potentialCargo = False):
     print("Estop is: ", Estop[0])
     if Estop[0] == True:
-        emergencyStop(goToZone, angleTarget, calibrate)
+        emergencyStop(goToZone, angleTarget, calibrate, potentialCargo)
     return
 
 
@@ -102,19 +160,16 @@ def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False):
     multiplyAngle = -(bigGear/smallGear)
 
     if calibrate:
-        # clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=None)
-        clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
-        if not Estop:
+        clawMotor.run_until_stalled(60, then=Stop.HOLD, duty_limit=30)
+        if not Estop[0]:
             clawMotor.reset_angle(0)
     else:
         if open:  # Open.
-            # clawMotor.run_until_stalled(-40, then=Stop.BRAKE, duty_limit=None)
             clawMotor.run_angle(60 ,(60) * multiplyAngle)
         else:
-            clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
-            # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
+            clawMotor.run_until_stalled(60, then=Stop.HOLD, duty_limit=30)
 
-    test(goToZone, angleTarget, calibrate)
+    test(goToZone, angleTarget, calibrate, potentialCargo = False)
 
     # if Estop[0] == True:
     #     emergencyStop(goToZone, angleTarget, calibrate)
@@ -126,13 +181,13 @@ def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False):
 
 
 def LocationZero(speed = 60):
-    while not pressureSense.pressed():
+    while Estop[0] == False and not pressureSense.pressed():
         rotationMotor.run(speed)
     
     rotationMotor.reset_angle(0)
 
 
-def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 60, acceleration_limit = 120, calibrate = False):
+def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 120, acceleration_limit = 120, calibrate = False, potentialCargo = False):
     global Estop
     smallGear = 12  #Tooths for gear moving clockwise. 
     bigGear = 36   #Tooths for gear moving counter clockwise. 

@@ -3,20 +3,20 @@ from Parameters import *
 
 
 def menu():
-    #global Estop
-    #global restart
-    Estop = False
-    restart = False
+    # Estop = False
+    #restart = False
     Echoicelist = ["restart","resume","manual"]
     choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight"]
     current_index=0
     temp=True
     zonecords = 0
     czones = 0
-    if Estop:
-        ev3.screen.print(Echoicelist[current_index])
+    if Estop[0] == True:
+        choose = Echoicelist
     else:
-        ev3.screen.print(choicelist[current_index])
+        choose = choicelist
+
+    ev3.screen.print(choose[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
@@ -24,24 +24,24 @@ def menu():
             for button in buttons:
                 if str(button) == "Button.LEFT":
                     ev3.screen.clear()
-                    current_index = (current_index + 1) % len(Echoicelist)
-                    ev3.screen.print(Echoicelist[current_index])
+                    current_index = (current_index + 1) % len(choose)
+                    ev3.screen.print(choose[current_index])
                 
                 if str(button) == "Button.RIGHT":
                     ev3.screen.clear()
-                    current_index = (current_index - 1) % len(Echoicelist)
-                    ev3.screen.print(Echoicelist[current_index])
+                    current_index = (current_index - 1) % len(choose)
+                    ev3.screen.print(choose[current_index])
                 
                 if str(button) == "Button.CENTER":
                     ev3.screen.clear()
-                    ev3.screen.print("you chose ",Echoicelist[current_index])
-                    if Echoicelist[current_index] == "restart":
+                    ev3.screen.print("you chose ",choose[current_index])
+                    if choose[current_index] == "restart":
                         restart = True
                         return 0
-                    if Echoicelist[current_index] == "resume":
-                        Estop = False
+                    if choose[current_index] == "resume":
+                        Estop[0] = False
                         return 0
-                    if Echoicelist[current_index] == "manual":
+                    if choose[current_index] == "manual":
                         set_origin()
                         return 0
                             #get out of here
@@ -138,7 +138,7 @@ def set_origin():
             if button_str == "Button.DOWN":
                 elevationMotor.run_angle(60,10)
             elif button_str == "Button.CENTER":
-                #elevationMotor.reset_angle()
+                # elevationMotor.reset_angle()
                 #rotationMotor.reset_angle()
                 return 0
             if button_str == "Button.LEFT":

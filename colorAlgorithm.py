@@ -1,7 +1,6 @@
 #!/usr/bin/env pybricks-micropython
 
-
-from Parameters import colorSense, wait , zoneSort
+from Parameters import colorSense, wait , zoneSort , clawMotor
 
 ## ladda in vilka färgar ska vart.
 # zoneSort1 = zoneSort
@@ -57,8 +56,8 @@ def ngetColor():
         hgreen += green
         hblue += blue
         wait(50)
-    print(hred,hgreen,hblue)
-    print(abs(hred-hblue))
+    # print(hred,hgreen,hblue)
+    # print(abs(hred-hblue))
     colors = [
     ("Blue", lambda r, g, b: b > max(r, g)),
     ("Yellow", lambda r, g, b: r > b and g > b and r > g),
@@ -140,19 +139,24 @@ def getColor():
 #         return 'Error', None # Did not find any color.
     
 def colorSort():
-    color = ngetColor()
-    print(color)
-    if color == 'nothing':
-        print(color)
-    # if zoneSort[color] == 0:
-        return 'Error', None  # nothing, the color is not in the list.
-    elif color in zoneSort:    
-        return zoneSort[color], color
-    # elif color in zoneSort and zoneSort[color]!=0:    
-        # return color, zoneSort[color] # Return the color.
+    cca = clawMotor.angle()
+    if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
+        print(cca)
+        return 'nothing', None
     else:
+        print(cca)
+        color = ngetColor()
         print(color)
-        return 'nothing', None # Did not find any color.
+        if color == 'nothing':
+            print(color)
+            return 'nothing', None  # nothing, the color is not in the list.
+        elif color in zoneSort:    
+            return zoneSort[color], color
+        # elif color in zoneSort and zoneSort[color]!=0:    
+            # return color, zoneSort[color] # Return the color.
+        else:
+            print(color)
+            return 'Error', None # Did not find any color.
 
 
 if __name__ == "__main__":

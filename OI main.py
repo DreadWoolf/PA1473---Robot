@@ -2,6 +2,7 @@
 
 # Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
+from menu import menu
 from Arm_and_Claw import Place, Pickup, armMovement, clawMovement, rotateBase
 # from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
@@ -18,20 +19,23 @@ import sys as s
 # par.zoneHeight = zonecords
 # print(par.zoneSort)
 
+
 # Create two threads for each task
-thread1 = th.Thread()
-thread2 = th.Thread()
+# thread1 = th.Thread()
+# thread2 = th.Thread()
 # Event = th.Thread.Event()
 
-Robotrun = True
-stopRobot = False
+#Robotrun = True
+#stopRobot = False
 
 # Event for synchronization
 # event = th.Event()
 
 def main():
-    global Robotrun
+    #global Robotrun
     # Robotrun = True
+    ev3.speaker.beep()
+    #zoneSort, zoneHeight= menu()
     ev3.speaker.beep()
 
     times = 2  #10
@@ -64,7 +68,7 @@ def main():
                 print("Sortzone ", sortZone)
 
                 ## Will continue if found nothing, otherwise place the cargo.
-                if sortZone == "Error":
+                if sortZone == "nothing":
                     
                     ev3.speaker.beep()
                     wait(4)
@@ -133,10 +137,20 @@ def main():
                 location += 1
 
             goToZone = location
+            pickupzone = zoneSort["pick1"]
+            rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= 120)
+
+            # for key in zoneSort:
+            #     if key == "pick_up":
+            #         tmp = zoneSort[key]  # will get the zone (tmp is tmp GotoZone)
+            #         rotateBase(zoneLocation[tmp], tmp, armStartAngle, operatingSpeed= 120)
+
+                    
+
             
 
             # rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
-            rotateBase(zoneLocation[goToZone], goToZone, armStartAngle)
+            rotateBase(pickupzone, goToZone, armStartAngle)
 
             # if stopRobot:
             #     print("stop")
@@ -168,47 +182,48 @@ def main():
 
 
 
-def testThreading():
-    global RobotRun
-    global stopRobot
-    global Estop
+# def testThreading():
+#     global RobotRun
+#     global stopRobot
+#     global Estop
     
     
-    stopProcess = False
+#     stopProcess = False
 
-    while True:
-        buttons = ev3.buttons.pressed()
-        wait(250) # 250
-        for button in buttons:
-            if str(button) == "Button.CENTER":
-                ev3.speaker.beep()
-                Estop[0] = True
-                elevationMotor.hold()
-                clawMotor.hold()
-                rotationMotor.hold()
-                wait(1000)
-                stopProcess = True  # Sätt flaggan till True när knappen trycks
-                break  # Avbryt loopen när knappen trycks
+#     while True:
+#         buttons = ev3.buttons.pressed()
+#         wait(250) # 250
+#         for button in buttons:
+#             if str(button) == "Button.CENTER":
+#                 ev3.speaker.beep()
+#                 wait(100)
+#                 stopProcess = True  # Sätt flaggan till True när knappen trycks
+#                 break  # Avbryt loopen när knappen trycks
 
-        while stopProcess:
-            buttons = ev3.buttons.pressed()
+#         while stopProcess:
+#             buttons = ev3.buttons.pressed()
 
+#             Estop[0] = True
             
-            # print("Estop: ", Estop[0])
-            # elevationMotor.stop()
-            # clawMotor.stop()
-            # rotationMotor.stop()
+#             print("Estop: ", Estop[0])
+#             # elevationMotor.stop()
+#             # clawMotor.stop()
+#             # rotationMotor.stop()
+#             elevationMotor.hold()
+#             clawMotor.hold()
+#             rotationMotor.hold()
+#             wait(2000)
 
-            for button in buttons:
-                if str(button) == "Button.CENTER":
-                    ev3.speaker.beep()
-                    wait(1000)
-                    stopProcess = False  # Sätt flaggan till True när knappen trycks
-                    Estop[0] = False
-                    # thread2.start()
+#             for button in buttons:
+#                 if str(button) == "Button.CENTER":
+#                     ev3.speaker.beep()
+#                     wait(1000)
+#                     stopProcess = False  # Sätt flaggan till True när knappen trycks
+#                     Estop[0] = False
+#                     # thread2.start()
 
-                    # break  # Avbryt loopen när knappen trycks
-    return 0
+#                     # break  # Avbryt loopen när knappen trycks
+#     return 0
 
 # def btnCheck():
     
@@ -217,10 +232,10 @@ def Calibrate(armStartAngle:int = 40):
     # armMovement(0, armStartAngle, calibrate= True)
 
     # armMovement(0,1,calibrate=False)
-    # elevationMotor.stop()
-    # clawMotor.stop()
-    # rotationMotor.stop()
-    # wait(2000)
+    elevationMotor.stop()
+    clawMotor.stop()
+    rotationMotor.stop()
+    wait(2000)
 
     ev3.screen.print("Callibrate arm")
     if elevationMotor.angle() != armStartAngle:
@@ -251,12 +266,12 @@ def StopRobot(stopRobot):
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
     # Create two threads for each task
-    thread1 = th.Thread(target=testThreading)
-    thread2 = th.Thread(target=main)
+#    thread1 = th.Thread(target=testThreading)
+#    thread2 = th.Thread(target=main)
 
     # Start the threads
-    thread1.start()
-    thread2.start()
+#    thread1.start()
+#    thread2.start()
 
 
 
@@ -266,4 +281,4 @@ if __name__ == "__main__":
 
     print("Both tasks have started.")
 
-    # main()
+    main()
