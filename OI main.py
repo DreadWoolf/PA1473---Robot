@@ -18,7 +18,7 @@ import sys as s
 # par.zoneSort = czones
 # par.zoneHeight = zonecords
 # print(par.zoneSort)
-zoneSort, zoneHeight= menu()
+
 
 # Create two threads for each task
 # thread1 = th.Thread()
@@ -32,8 +32,10 @@ zoneSort, zoneHeight= menu()
 # event = th.Event()
 
 def main():
-    global Robotrun
+    #global Robotrun
     # Robotrun = True
+    ev3.speaker.beep()
+    #zoneSort, zoneHeight= menu()
     ev3.speaker.beep()
 
     times = 2  #10
@@ -135,7 +137,15 @@ def main():
                 location += 1
 
             goToZone = location
-            pickupzone = zoneLocation.get("pick1")
+            pickupzone = zoneSort["pick1"]
+            rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= 120)
+
+            # for key in zoneSort:
+            #     if key == "pick_up":
+            #         tmp = zoneSort[key]  # will get the zone (tmp is tmp GotoZone)
+            #         rotateBase(zoneLocation[tmp], tmp, armStartAngle, operatingSpeed= 120)
+
+                    
 
             
 
@@ -271,4 +281,4 @@ if __name__ == "__main__":
 
     print("Both tasks have started.")
 
-    # main()
+    main()
