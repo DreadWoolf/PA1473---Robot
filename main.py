@@ -182,27 +182,22 @@ def testThreading():
         for button in buttons:
             if str(button) == "Button.CENTER":
                 ev3.speaker.beep()
-                wait(100)
+                Estop[0] = True
                 elevationMotor.hold()
                 clawMotor.hold()
                 rotationMotor.hold()
-                wait(2000)
+                wait(1000)
                 stopProcess = True  # Sätt flaggan till True när knappen trycks
                 break  # Avbryt loopen när knappen trycks
 
         while stopProcess:
             buttons = ev3.buttons.pressed()
 
-            Estop[0] = True
             
-            print("Estop: ", Estop[0])
+            # print("Estop: ", Estop[0])
             # elevationMotor.stop()
             # clawMotor.stop()
             # rotationMotor.stop()
-            elevationMotor.hold()
-            clawMotor.hold()
-            rotationMotor.hold()
-            wait(250)
 
             for button in buttons:
                 if str(button) == "Button.CENTER":
@@ -222,10 +217,10 @@ def Calibrate(armStartAngle:int = 40):
     # armMovement(0, armStartAngle, calibrate= True)
 
     # armMovement(0,1,calibrate=False)
-    elevationMotor.stop()
-    clawMotor.stop()
-    rotationMotor.stop()
-    wait(2000)
+    # elevationMotor.stop()
+    # clawMotor.stop()
+    # rotationMotor.stop()
+    # wait(2000)
 
     ev3.screen.print("Callibrate arm")
     if elevationMotor.angle() != armStartAngle:
