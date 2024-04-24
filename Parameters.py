@@ -38,12 +38,12 @@ RobotRegister = {
     'B' : 19,  ## Accurate
     'C' : 0,
     'D' : 0,  
-    'E' : 0,
+    'E' : 10,
     'F' : 0,
     'G' : 18
 }
 
-RobotIdentity = 'G'
+RobotIdentity = 'E'
  
 
 # zoneSort = {
@@ -54,12 +54,12 @@ RobotIdentity = 'G'
 # }
 
 zoneSort = {
-    'pick1'       : 0,
-    'green'     : 1,
-    'blue'      : 2,
-    'yellow'   : 3,
+    'pick1'     :   0,
+    'green'     :   1,
+    'blue'      :   2,
+    'yellow'    :   3,
     # 'red':4,
-    'pick2':5
+    'pick2'     :   5
     }
 
 

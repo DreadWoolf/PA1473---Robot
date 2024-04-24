@@ -30,7 +30,8 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
 
     # if potentialCargo == True:
     
-    if clawMotor.angle() > 0 + 5 and clawMotor.angle() < 0 - 5:
+    if clawMotor.angle() > 0 + 8 and clawMotor.angle() < 0 - 8:
+        print("Holding something")
         clawMovement(gotoZone, angleTarget= angletarget, open= False, calibrate= True)
         ## Cargo.
         sort(gotoZone, angletarget, duringCallibration = False, potentialCargo = False)
@@ -42,14 +43,14 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
         # clawMotor.angle()
     else:
         armMovement(gotoZone, zoneHeight[gotoZone], angletarget, calibrate = duringCallibration)
-            
+        rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
+                
     # if 
-    rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
 
 
 def sort(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
     sortZone = 0
-    armMovement(gotoZone, zoneHeight[gotoZone], 0, calibrate = duringCallibration)
+    armMovement(gotoZone, zoneHeight[gotoZone], 40, calibrate = duringCallibration)
     wait(5)  #2
     sortZone, color = colorSort()
     print("Sortzone: ", sortZone)
@@ -97,19 +98,19 @@ def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, potentialCargo
         armMovement(goToZone, angleTarget= angleTarget, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
-        clawMovement(goToZone, angleTarget, open= (not openClawsFirst), potentialCargo = potentialCargo) # If not open first will grip here.
+        clawMovement(goToZone, angleTarget, open= (not openClawsFirst)) # If not open first will grip here.
         if Estop[0]: break
         wait(2)
         armMovement(goToZone, angleTarget, angleTarget= -angleTarget, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
-        clawMovement(goToZone, angleTarget, open= (openClawsFirst), potentialCargo = potentialCargo) # If not open first will grip here.
+        clawMovement(goToZone, angleTarget, open= (openClawsFirst)) # If not open first will grip here.
         break
 
 
 
 
-def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 60, calibrate:bool = False, potentialCargo = False):
+def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 120, calibrate:bool = False, potentialCargo = False):
     # Thooths on the gears of the arm.
     bigGear = 40
     smallGear = 8
@@ -146,27 +147,27 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 60,
     
 
 def test(goToZone, angleTarget, calibrate, potentialCargo = False):
-    print("Estop is: ", Estop[0])
+    # print("Estop is: ", Estop[0])
     if Estop[0] == True:
         emergencyStop(goToZone, angleTarget, calibrate, potentialCargo)
     return
 
 
-def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False):
+def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False, operatingspeed = 100):
     global Estop
     smallGear = 12  #Tooths for gear moving clockwise. 
     bigGear = 16   #Tooths for gear moving counter clockwise. 
     multiplyAngle = -(bigGear/smallGear)
 
     if calibrate:
-        clawMotor.run_until_stalled(60, then=Stop.HOLD, duty_limit=30)
+        clawMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=40)
         if not Estop[0]:
             clawMotor.reset_angle(0)
     else:
         if open:  # Open.
-            clawMotor.run_angle(60 ,(60) * multiplyAngle)
+            clawMotor.run_angle(operatingspeed ,(60) * multiplyAngle)
         else:
-            clawMotor.run_until_stalled(60, then=Stop.HOLD, duty_limit=30)
+            clawMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=40)
 
     test(goToZone, angleTarget, calibrate, potentialCargo = False)
 
@@ -187,7 +188,7 @@ def LocationZero(speed = 60):
 
 
 def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 120, acceleration_limit = 120, calibrate = False, potentialCargo = False):
-    global Estop
+    # global Estop
     smallGear = 12  #Tooths for gear moving clockwise. 
     bigGear = 36   #Tooths for gear moving counter clockwise. 
     multiplyAngle = -(bigGear/smallGear)
@@ -195,8 +196,7 @@ def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 12
     # print("angle = ", angle)
 
     if angle == 0 or calibrate == True:
-        LocationZero()
-        # print("\nGoing back")
+        LocationZero(operatingSpeed)
     else:
         # rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
         rotationMotor.run_target(operatingSpeed,(angle) * multiplyAngle)
