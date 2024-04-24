@@ -6,14 +6,14 @@ from Arm_and_Claw import Place, Pickup, armMovement, clawMovement, rotateBase
 # from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
 import sys as s
-from OImenu import menu
+# from OImenu import menu
 
 # from threading import Thread, Event
 # import threading
 
-# from menu import menu
+from menu import menu, Emenu
 # import Parameters as par
-# czones , zonecords = menu()
+czones , zonecords = menu()
 # par.zoneSort = czones
 # par.zoneHeight = zonecords
 # print(par.zoneSort)
@@ -44,7 +44,7 @@ def main():
     potentialCargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 37#28 #38 #40 #39  # 40
+    armStartAngle = 42#28 #38 #40 #39  # 40
     
     Calibrate(armStartAngle)
     
@@ -81,7 +81,7 @@ def main():
                     wait(1000)
 
                     ## Drop of again, if detected random color.
-                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False)
+                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
                     # lastZone = location
 
                 lastZone = location
@@ -108,7 +108,7 @@ def main():
                 # Uppdate the lastZone.
                 lastZone = sortZone  
                 # Place(angleTarget= -armStartAngle, openClawsFirst= False)
-                Place(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= False)
+                Place(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= False, potentialCargo= potentialCargo)
                 # if stopRobot:
                 #     print("stop")
                 #     s.sys.exit()
@@ -119,7 +119,7 @@ def main():
             # goToZone = location
             pickupzone = zoneSort["pick1"]
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-            Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True)
+            Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True, potentialCargo= potentialCargo)
             potentialCargo = True
             
 
@@ -191,7 +191,7 @@ def testThreading():
         while stopProcess:
             buttons = ev3.buttons.pressed()
 
-            menu()
+            Emenu()
 
             for button in buttons:
                 if str(button) == "Button.CENTER":

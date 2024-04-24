@@ -55,9 +55,9 @@ RobotIdentity = 'E'
 
 zoneSort = {
     'pick1'     :   0,
-    'green'     :   1,
-    'blue'      :   2,
-    'yellow'    :   3,
+    'Green'     :   1,
+    'Blue'      :   2,
+    'Yellow'    :   3,
     # 'red':4,
     'pick2'     :   5
     }
