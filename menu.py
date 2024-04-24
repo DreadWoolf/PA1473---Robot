@@ -101,7 +101,7 @@ def Emenu():
 
 
 def zone_hight():
-    zonenum = [1,2,3]
+    zonenum = [1,2,3,4]
     zonecords = {
                  0:0,
                  1:0,
@@ -130,7 +130,7 @@ def zone_hight():
                     horangle = rotationMotor.angle() 
                     verangle = elevationMotor.angle()
                     zonecords[num] = verangle
-                    if num == 3:
+                    if num == 4:
                         return zonecords
                     temp=False
                 if button_str == "Button.LEFT":
@@ -210,7 +210,7 @@ def colorzones():
                 chosen = colors.pop(current_index % len(colors)) 
                 print("Colors:", colors)
                 print("popped:", chosen)
-                zoneSort[chosen.lower()] = str(counter)
+                zoneSort[chosen] = str(counter)
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
