@@ -3,8 +3,10 @@ from Parameters import *
 
 
 def menu():
-    global Estop
-    global restart
+    #global Estop
+    #global restart
+    Estop = False
+    restart = False
     Echoicelist = ["restart","resume","manual"]
     choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight"]
     current_index=0
@@ -165,7 +167,12 @@ def colorzones():
             if len(colors) == 0:
                 ev3.screen.print("done!")
                 temp = False
-                return zoneSort
+                keys_to_keep = list(zoneSort.keys())[:-2]
+                sorted_items = sorted(zoneSort.items(), key=lambda x: x[1])
+                sorted_items = sorted_items[:-2]
+                new_dict = dict(sorted_items)
+                print("THE NEW DICK: "+ str(new_dict))                
+                return new_dict
             
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
@@ -188,6 +195,7 @@ def colorzones():
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
             print(zoneSort)
+            
 
 
 
