@@ -4,26 +4,33 @@ from Parameters import *
 # from Parameters import elevationMotor, clawMotor, Stop, Estop
 # from Emergencystop import emergencyStop
 from rotationMotor import rotateBase
-# from main import Estop
-# from Arm_and_Claw import armMovement, clawMovement
 
 
 def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False):
     global Estop
     global restart
     print("test")
-    while(Estop):
+    while(Estop[0] == True):
         elevationMotor.hold()
         clawMotor.hold()
         rotationMotor.hold()
         print("Emergency stop works")
         wait(1000)
         # if Estop == False:
-        if restart:
-            s.sys.exit()
+        # if restart:
+        #     s.sys.exit()
+    print("gotozone ", gotoZone)
+    print("angletarget ", angletarget)
+    print("callibrate ", duringCallibration)
+    
+    #########################################
+    #   Make checks for current position    #
+    #########################################
 
-    rotateBase(zoneLocation[gotoZone],80, duringCallibration)
-    armMovement(angletarget, zoneHeight[gotoZone], 80, duringCallibration)
+
+
+    rotateBase(zoneLocation[gotoZone],angletarget, duringCallibration)
+    armMovement(angletarget, zoneHeight[gotoZone], angletarget, duringCallibration)
     clawMovement(gotoZone, angletarget= angletarget, open= False, calibrate= True)
 
 def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, height:int = 0):
@@ -68,20 +75,24 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 60,
         ######################################
         ######################################
         ######################################
-        elevationMotor.run_angle(operatingSpeed,(angleTarget - height) * multiplyAngle)
-        # elevationMotor.run_target(operatingSpeed,(angleTarget - height) * multiplyAngle)
+        # elevationMotor.run_angle(operatingSpeed,(angleTarget - height) * multiplyAngle)
+        elevationMotor.run_target(operatingSpeed,(angleTarget - height) * multiplyAngle)
     # print("targeted arm angle " , elevationMotor.angle())
 
     # Check if the event is set
-    if Event.is_set():
-        # Process the updated global variable
-        print("Thread 2: Global variable (Estop):", Estop)
-        # Clear the event
-        Event.clear()
+    # if Event.is_set():
+    #     # Process the updated global variable
+    #     print("Thread 2: Global variable (Estop):", Estop)
+    #     # Clear the event
+    #     Event.clear()
+    test(goToZone, angleTarget, calibrate)
+    
 
-    if Estop == True:
+def test(goToZone, angleTarget, calibrate):
+    print("Estop is: ", Estop[0])
+    if Estop[0] == True:
         emergencyStop(goToZone, angleTarget, calibrate)
-
+    return
 
 
 def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False):
@@ -103,9 +114,13 @@ def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False):
             clawMotor.run_until_stalled(60, then=Stop.BRAKE, duty_limit=80)
             # clawMotor.run_angle(60 ,(-60) * multiplyAngle)
 
-    if Estop == True or Event.is_set():
-        Event.clear()
-        emergencyStop(goToZone, angleTarget, calibrate)
+    test(goToZone, angleTarget, calibrate)
+
+    # if Estop[0] == True:
+    #     emergencyStop(goToZone, angleTarget, calibrate)
+    # if semaphore.acquire() or Estop == True:
+    #     # Event.clear()
+    #     emergencyStop(goToZone, angleTarget, calibrate)
 
 
 
@@ -129,12 +144,18 @@ def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 60
         LocationZero()
         # print("\nGoing back")
     else:
-        rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
-        # rotationMotor.run_target(operatingSpeed,(angle) * multiplyAngle)
+        # rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
+        rotationMotor.run_target(operatingSpeed,(angle) * multiplyAngle)
     
-    if Estop == True:
-        emergencyStop(goToZone, armtarget, calibrate)
-        print("Estop, ", Estop)
+    # test(goToZone, armtarget, calibrate)
+
+    test(goToZone, armtarget, calibrate)
+    # if Estop[0] == True:
+    #     emergencyStop(goToZone, armtarget, calibrate)
+    # if semaphore.acquire() or Estop == True:
+    # # if Estop == True:
+    #     emergencyStop(goToZone, armtarget, calibrate)
+    #     print("Estop, ", Estop)
 
 
 if __name__ == "__main__":
