@@ -58,7 +58,7 @@ zoneSort = {
     'green'     : 1,
     'blue'      : 2,
     'yellow'   : 3,
-    'red':4,
+    # 'red':4,
     'pick2':5
     }
 
