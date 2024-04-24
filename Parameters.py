@@ -8,7 +8,7 @@ from pybricks.parameters import Port, Stop, Direction, Color
 from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
 
-
+import datetime
 import random
 import sys as s
 from threading import Thread, Event

@@ -8,6 +8,7 @@ from pybricks.parameters import Port, Stop, Direction, Color
 from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
 
+import datetime
 
 
 
@@ -151,7 +152,11 @@ def work_hours():
                 amount += 1
                 ev3.screen.print("how many time\nstamps do you want: ", amount)
             if button_str == "Button.DOWN":        
-                if amount >= 1:
+                if amount < 1:
+                    ev3.screen.clear()
+                    amount = 0
+                    ev3.screen.print("how many time\nstamps do you want: ", amount)
+                else:
                     ev3.screen.clear()
                     amount -= 1
                     ev3.screen.print("how many time\nstamps do you want: ", amount)
@@ -161,43 +166,187 @@ def work_hours():
                 ev3.screen.print("you chosse this amout\nof time stamps: ", amount)
                 wait(500)
                 temp= False
-    temp = True
-    year=[0,0,0,0]
-    ev3.screen.clear()
-    ev3.screen.print("you chosse this amout\nof time stamps: ")
-    counter = 0
-    for i in year:
-        counter += 1
+    dates = {}
+    for t in range(aoi):
+        temp = True
+        year=[0,0,0,0]
+        ev3.screen.clear()
+        ev3.screen.print("chosse what year: ")
+        counter = 0
+        for i in year:
+            counter += 1
+            while temp == True:
+                buttons = ev3.buttons.pressed()
+                wait(250)
+                for button in buttons:
+                    button_str=str(button)
+
+                    if button_str == "Button.UP":
+                        ev3.screen.clear()
+                        i+=1
+                        ev3.screen.print( counter ,"number of the year: " , i )
+                    if button_str == "Button.DOWN":  
+                        ev3.screen.clear()
+                        i-=1
+                        ev3.screen.print( counter ,"number of the year: " , i )
+                    if button_str == "Button.CENTER":
+                        ev3.screen.clear()
+                        ev3.screen.print( counter ,"number of the year: " , i )
+                        year[counter-1] = i
+        if year[0]==0:
+            year[0]=2
+        year_str = ''.join(map(str, year))
+        int_year = int(year_str)
+        temp = True
+        month=0
+        ev3.screen.clear()
+        ev3.screen.print("chosse what month: ")
         while temp == True:
             buttons = ev3.buttons.pressed()
             wait(250)
             for button in buttons:
                 button_str=str(button)
-
                 if button_str == "Button.UP":
                     ev3.screen.clear()
                     i+=1
-                    ev3.screen.print( counter ,"number of the year: " , i )
+                    ev3.screen.print("the month: " , i )
+                if button_str == "Button.DOWN":  
+                    if i<1:
+                        ev3.screen.clear()
+                        i=0
+                        ev3.screen.print( "the month: " , i )
+                    else:
+                        ev3.screen.clear()
+                        i-=1
+                        ev3.screen.print( "the month: " , i )
+                if button_str == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print( "the month: " , i )
+                    month=i
+                    if month == 0 :
+                        month = 1
+        temp = True
+        day=0
+        ev3.screen.clear()
+        ev3.screen.print("chosse what day: ")
+        while temp == True:
+            buttons = ev3.buttons.pressed()
+            wait(250)
+            for button in buttons:
+                button_str=str(button)
+                if button_str == "Button.UP":
+                    ev3.screen.clear()
+                    i+=1
+                    ev3.screen.print("the day: " , i )
+                if button_str == "Button.DOWN":  
+                    if i<1:
+                        ev3.screen.clear()
+                        i=0
+                        ev3.screen.print( "the day: " , i )
+                    else:
+                        ev3.screen.clear()
+                        i-=1
+                        ev3.screen.print( "the day: " , i )
+                if button_str == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print( "the day: " , i )
+                    day=i
+                    if day ==0:
+                        day = 1
+        temp = True
+        start_hour=0
+        ev3.screen.clear()
+        ev3.screen.print("chosse what hour: ")
+        while temp == True:
+            buttons = ev3.buttons.pressed()
+            wait(250)
+            for button in buttons:
+                button_str=str(button)
+                if button_str == "Button.UP":
+                    ev3.screen.clear()
+                    i+=1
+                    ev3.screen.print( counter ,"number of \nthe start hour: " , i )
                 if button_str == "Button.DOWN":  
                     ev3.screen.clear()
                     i-=1
-                    ev3.screen.print( counter ,"number of the year: " , i )
+                    ev3.screen.print( counter ,"number of \nthe start hour: " , i )
                 if button_str == "Button.CENTER":
                     ev3.screen.clear()
-                    ev3.screen.print( counter ,"number of the year: " , i )
-                    year[counter-1] = i
-    year_str = ''.join(map(str, year))
-    int_year = int(year_str)
-    
+                    ev3.screen.print( counter ,"number of \nthe start hour: " , i )
+                    start_hour = i
+        temp = True
+        start_min=0
+        ev3.screen.clear()
+        ev3.screen.print("chosse what min: ")
+        while temp == True:
+            buttons = ev3.buttons.pressed()
+            wait(250)
+            for button in buttons:
+                button_str=str(button)
+                if button_str == "Button.UP":
+                    ev3.screen.clear()
+                    i+=1
+                    ev3.screen.print( counter ,"number of \nthe start min: " , i )
+                if button_str == "Button.DOWN":  
+                    ev3.screen.clear()
+                    i-=1
+                    ev3.screen.print( counter ,"number of \nthe start min: " , i )
+                if button_str == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print( counter ,"number of \nthe start min: " , i )
+                    start_min = i
+        temp = True
+        end_hour=0
+        ev3.screen.clear()
+        ev3.screen.print("chosse what end hour: ")
+        while temp == True:
+            buttons = ev3.buttons.pressed()
+            wait(250)
+            for button in buttons:
+                button_str=str(button)
+                if button_str == "Button.UP":
+                    ev3.screen.clear()
+                    i+=1
+                    ev3.screen.print( counter ,"number of \nthe end hour: " , i )
+                if button_str == "Button.DOWN":  
+                    ev3.screen.clear()
+                    i-=1
+                    ev3.screen.print( counter ,"number of \nthe end hour: " , i )
+                if button_str == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print( counter ,"number of \nthe start hour: " , i )
+                    end_hour = i
+        temp = True
+        end_min=0
+        ev3.screen.clear()
+        ev3.screen.print("chosse what min: ")
+        while temp == True:
+            buttons = ev3.buttons.pressed()
+            wait(250)
+            for button in buttons:
+                button_str=str(button)
+                if button_str == "Button.UP":
+                    ev3.screen.clear()
+                    i+=1
+                    ev3.screen.print( counter ,"number of \nthe start min: " , i )
+                if button_str == "Button.DOWN":  
+                    ev3.screen.clear()
+                    i-=1
+                    ev3.screen.print( counter ,"number of \nthe start min: " , i )
+                if button_str == "Button.CENTER":
+                    ev3.screen.clear()
+                    ev3.screen.print( counter ,"number of \nthe start min: " , i )
+                    end_min = i
+        startdate = datetime.datetime(int_year,month,day,start_hour,start_min)
+        enddate=datetime.datetime(int_year,month,day,end_hour,end_min)
+        now= datetime.datetime.now()
+        if startdate>enddate and enddate>now and startdate>=now:
+            dates[t]=[startdate,enddate]
+    print(dates)
 
-                
+work_hours()
 
-
-
-
-
-
-## Checks if this is the running script, and not imported from somewhere!
-if __name__ == "__main__":
-    main()
+# ## Checks if this is the running script, and not imported from somewhere!
+# if __name__ == "__main__":
+#     main()
 
