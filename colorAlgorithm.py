@@ -60,7 +60,7 @@ def ngetColor():
     # print(abs(hred-hblue))
     colors = [
     ("Blue", lambda r, g, b: b > max(r, g)),
-    ("Yellow", lambda r, g, b: r > b and g > b and r > g),
+    ("Yellow", lambda r, g, b: r > max(g, b) and g > b and 50 >= abs(r - (g+b))),
     ("Red", lambda r, g, b: r > max(g, b)),
     ("Green", lambda r, g, b: g > max(r, b)),
     ("nothing", lambda r, g, b: max(r, g, b) == 0)
@@ -70,6 +70,7 @@ def ngetColor():
     for color_name, condition in colors:
         if condition(hred, hgreen, hblue):
             print(color_name)
+            print(hred,hgreen,hblue)
             return color_name 
     return "unknown item"  # Object doesn't match any color predominantly
 
@@ -157,7 +158,8 @@ def colorSort():
         else:
             print(color)
             return 'Error', None # Did not find any color.
-
+while True:
+    ngetColor()
 
 if __name__ == "__main__":
     while True:
