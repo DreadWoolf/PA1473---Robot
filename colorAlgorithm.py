@@ -140,21 +140,28 @@ def getColor():
 #         return 'Error', None # Did not find any color.
     
 def colorSort(zoneSort):
-        # return 'nothing', None
-    # else:
-    # print(cca)
-    color = ngetColor()
-    print(color)
-    if color == 'nothing':
+            # return 'nothing', None
+        # else:
+        # print(cca)
+    try:
+        color = ngetColor()
         print(color)
-        return 'nothing', None  # nothing, the color is not in the list.
-    elif color in zoneSort:    
-        return zoneSort[color], color
-    # elif color in zoneSort and zoneSort[color]!=0:    
-        # return color, zoneSort[color] # Return the color.
-    else:
-        print(color)
-        return 'Error', None # Did not find any color.
+        if color == 'nothing':
+            print(color)
+            return 'nothing', None  # nothing, the color is not in the list.
+        elif color in zoneSort:    
+            return zoneSort[color], color
+        # elif color in zoneSort and zoneSort[color]!=0:    
+            # return color, zoneSort[color] # Return the color.
+        else:
+            print(color)
+            return 'Error', None # Did not find any color.
+    except KeyError:
+            try:
+                trash = 'coms'
+                return zoneSort[trash], None
+            except NameError:
+                return 'Error', None
 
 if __name__ == "__main__":
     #while True:

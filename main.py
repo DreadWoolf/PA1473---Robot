@@ -15,6 +15,10 @@ from menu import menu, Emenu
 # import Parameters as par
 #czones , zonecords = menu()
 zoneSort, zoneHeight = menu()
+for key in zoneSort:
+    if key == 'coms':
+        garbage = 'coms'
+        
 # par.zoneSort = czones
 # par.zoneHeight = zonecords
 # print(par.zoneSort)
@@ -26,7 +30,6 @@ thread2 = th.Thread()
 
 Robotrun = True
 stopRobot = False
-
 
 def main():
     global Robotrun
@@ -56,7 +59,6 @@ def main():
     lastZone = 0
     goToZone = 0
     speed = 400
-    
     running = True
     while running:
         
@@ -80,10 +82,15 @@ def main():
                 # if sortZone == "Error":
                 cca = clawMotor.angle()
                 if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
-                    tmp = zoneSort['unSuported']
-                    print(cca)
-                    rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
-                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                    try:
+                        tmp = zoneSort[garbage]
+                        # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
+                        print(cca)
+                        rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
+                        Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                    except NameError:
+                        print("idk what to do!")
+                        Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
             else:
                 
                 wait(5)
@@ -99,7 +106,7 @@ def main():
         else: 
             # goToZone = location
             pickupzone = zoneSort["pick1"]
-            armMovement(goToZone, angleTarget= armStartAngle, operatingSpeed= speed/2) # make sure we are up.
+            armMovement(goToZone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
             Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
