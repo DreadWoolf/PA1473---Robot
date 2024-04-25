@@ -1,6 +1,6 @@
 #!/usr/bin/env pybricks-micropython
 
-from Parameters import colorSense, wait , zoneSort , clawMotor
+from Parameters import colorSense, wait 
 
 ## ladda in vilka färgar ska vart.
 # zoneSort1 = zoneSort
@@ -139,7 +139,7 @@ def getColor():
 #     else:
 #         return 'Error', None # Did not find any color.
     
-def colorSort():
+def colorSort(zoneSort):
         # return 'nothing', None
     # else:
     # print(cca)
