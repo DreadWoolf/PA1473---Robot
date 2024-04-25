@@ -30,20 +30,20 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
 
     # if potentialCargo == True:
     
-    if clawMotor.angle() > 0 + 8 and clawMotor.angle() < 0 - 8:
-        print("Holding something")
-        clawMovement(gotoZone, angleTarget= angletarget, open= False, calibrate= True)
-        ## Cargo.
-        sort(gotoZone, angletarget, duringCallibration = False, potentialCargo = False)
-        ev3.speaker.beep()
-        wait(5)
-        ev3.speaker.beep()
-        wait(5)
-        ev3.speaker.beep()
-        # clawMotor.angle()
-    else:
-        armMovement(gotoZone, zoneHeight[gotoZone], angletarget, calibrate = duringCallibration)
-        rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
+    # if clawMotor.angle() > 0 + 8 and clawMotor.angle() < 0 - 8:
+    #     print("Holding something")
+    #     clawMovement(gotoZone, angleTarget= angletarget, open= False, calibrate= True)
+    #     ## Cargo.
+    #     # sort(gotoZone, angletarget, duringCallibration = False, potentialCargo = False)
+    #     ev3.speaker.beep()
+    #     wait(5)
+    #     ev3.speaker.beep()
+    #     wait(5)
+    #     ev3.speaker.beep()
+    #     # clawMotor.angle()
+    # else:
+    #     armMovement(gotoZone, zoneHeight[gotoZone], angletarget, calibrate = duringCallibration)
+    #     rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
                 
     # if 
 
@@ -88,6 +88,7 @@ def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, height:int = 0
         if Estop[0]: break
         wait(2)
         armMovement(goToZone, angleTarget= -angleTarget)
+        wait(2)
         break
 
 
@@ -101,10 +102,15 @@ def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, potentialCargo
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst)) # If not open first will grip here.
         if Estop[0]: break
         wait(2)
-        armMovement(goToZone, angleTarget= -angleTarget, potentialCargo = potentialCargo)
+
+        armMovement(goToZone, angleTarget= -angleTarget, potentialCargo = not potentialCargo)
+        # ev3.speaker.beep()
+        # wait(500)
+        # ev3.speaker.beep()
         if Estop[0]: break
         wait(2)
         clawMovement(goToZone, angleTarget, open= (openClawsFirst)) # If not open first will grip here.
+        wait(2)
         break
 
 
@@ -123,7 +129,7 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingSpeed = 120
         # print("start arm angle " , elevationMotor.angle())
         elevationMotor.run_target(speed = 60, target_angle = angleTarget * multiplyAngle)
         # return
-    elif potentialCargo:
+    elif potentialCargo and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5:
         elevationMotor.run_until_stalled(operatingSpeed, then=Stop.HOLD, duty_limit=20)
         # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
     else:
@@ -216,16 +222,33 @@ def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 12
 
 
 if __name__ == "__main__":
-    angletrget = 40
+    armStartAngle = 50
+    goToZone = 0
+    potentialcargo = True
+    bigGear = 40
+    smallGear = 8
+    multiplyAngle = -(bigGear/smallGear)
+
     print("Calibrate")
-    armMovement(angletrget, calibrate=True)
-    clawMovement(True, calibrate=True)  # Calibrate
+        # rotationMotor.run_angle(operatingSpeed,(angle) * multiplyAngle)
+
+    elevationMotor.run_angle(60, armStartAngle * multiplyAngle)
+    elevationMotor.reset_angle(40 * multiplyAngle)
     
-    print("Pickup")
-    Pickup(-angletrget)
-    print("Place")
-    Place(-angletrget)
+    armMovement(0, armStartAngle, calibrate=True)
+    clawMovement(0, armStartAngle, open= (False)) # If not open first will grip here.
+    clawMovement(0, armStartAngle, open= (True)) # If not open first will grip here.
+
+    # clawMovement(True, calibrate=True)  # Calibrate
+    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialcargo)
+
+    # Pickup(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialcargo)
+
+    # print("Pickup")
+    # Pickup(-angletrget)
+    # print("Place")
+    # Place(-angletrget)
     
-    print("Stopping")
-    armMovement(-angletrget)
+    # print("Stopping")
+    # armMovement(-angletrget)
 

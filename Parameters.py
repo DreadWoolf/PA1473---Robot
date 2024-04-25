@@ -38,7 +38,7 @@ RobotRegister = {
     'B' : 19,  ## Accurate
     'C' : 0,
     'D' : 0,  
-    'E' : 8,
+    'E' : 5,
     'F' : 0,
     'G' : 18
 }
@@ -78,9 +78,9 @@ oriontation = "Right"
 
 rightOriented = {
     0: 0,
-    1: 45 + errorMargin,
-    2: 90 + errorMargin + 2,
-    3: 180 + errorMargin + 3
+    1: 45 + errorMargin - 2, # 0
+    2: 90 + errorMargin, #+ 2,
+    3: 180 + errorMargin + 5#3
 }
 
 leftOriented = {

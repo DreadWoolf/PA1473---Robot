@@ -35,25 +35,25 @@ def menu():
                     # DO emergency shit!
                     # if resume pressed Estop = False
                 if choicelist[current_index] == "zone_hight":
+                    ev3.speaker.beep()
                     zonecords = zone_hight()
                     print(zonecords)
                 if choicelist[current_index] == "set_origin":
+                    ev3.speaker.beep()
                     origin = set_origin()
                     print(origin)
                 if choicelist[current_index] == "zonecolor_selection":
+                    ev3.speaker.beep()
                     czones=colorzones()
                     print(czones)
                 if choicelist[current_index] == "start_code":
+                    ev3.speaker.beep()
                     return czones , zonecords
                 # if choicelist[current_index] == "EMERGENCY" and Estop:
                 #     return 0
 
 def Emenu():
-    #global Estop
-    #global restart
-    Estop = False
-    restart = False
-    Echoicelist = ["restart","resume","manual"]
+    Echoicelist = ["resume", "restart","manual"]
     current_index=0
     temp=True
     zonecords = 0
@@ -76,13 +76,15 @@ def Emenu():
                 ev3.screen.print(Echoicelist[current_index])
             
             if str(button) == "Button.CENTER":
+                ev3.speaker.beep()
                 ev3.screen.clear()
                 ev3.screen.print("you chose ",Echoicelist[current_index])
                 if Echoicelist[current_index] == "restart":
                     restart = True
-
+                    return
                 if Echoicelist[current_index] == "resume":
-                    Estop = False
+                    Estop[0] = False
+                    return
 
                 if Echoicelist[current_index] == "manual":
                     set_origin()
@@ -127,6 +129,7 @@ def zone_hight():
                 if button_str == "Button.DOWN":
                     elevationMotor.run_angle(60,10)
                 elif button_str == "Button.CENTER":
+                    ev3.speaker.beep()
                     horangle = rotationMotor.angle() 
                     verangle = elevationMotor.angle()
                     zonecords[num] = verangle
@@ -140,31 +143,43 @@ def zone_hight():
 
 def set_origin():
     temp=True
+
     while temp:
         buttons = ev3.buttons.pressed()
         wait(250)
+        speed = 10
         for button in buttons:
             combos = [str(obj) for obj in buttons]
             button_str = str(button)
             if button_str == "Button.UP":
-                elevationMotor.run_angle(60,-10)
+                speed += 5
+                elevationMotor.run_angle(60 + speed,-10)
             if button_str == "Button.DOWN":
-                elevationMotor.run_angle(60,10)
+                speed += 5
+                elevationMotor.run_angle(60 + speed,10)
             elif button_str == "Button.CENTER": 
+                ev3.speaker.beep()
                 verangle = elevationMotor.angle()
                 bigGear = 40
                 smallGear = 8
                 multiplyAngle = -(bigGear/smallGear)
-                elevationMotor.reset_angle(40 * multiplyAngle)
-                return 0
+                if Estop[0] == False:
+                    elevationMotor.reset_angle(40 * multiplyAngle)
+                    ev3.screen.print("angle reseted")
+                    return 0
+                else:    
+                    ev3.screen.print("angle not reseted haha")
+                    return 0
             if button_str == "Button.LEFT":
-                rotationMotor.run_angle(60,-10)
+                speed += 5
+                rotationMotor.run_angle(60 + speed,-10)
             if button_str == "Button.RIGHT":
-                rotationMotor.run_angle(60,10) 
+                speed += 5
+                rotationMotor.run_angle(60 + speed,10) 
             if combos == ["Button.RIGHT", "Button.LEFT"] or combos == ["Button.LEFT", "Button.RIGHT"] :
                 clawMotor.run_angle(10,-10)
             if combos == ["Button.UP", "Button.DOWN"] or combos == ["Button.DOWN", "Button.UP"] :
-                clawMotor.run_until_stalled(40, then=Stop.BRAKE, duty_limit=None) 
+                clawMotor.run_angle(60,-10) 
 
 def colorzones():
     global zoneSort
@@ -186,6 +201,7 @@ def colorzones():
 
             if len(colors) == 0:
                 ev3.screen.print("done!")
+                ev3.speaker.beep()
                 temp = False
                 keys_to_keep = list(zoneSort.keys())[:-2]
                 sorted_items = sorted(zoneSort.items(), key=lambda x: x[1])

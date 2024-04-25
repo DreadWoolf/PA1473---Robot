@@ -36,9 +36,10 @@ def main():
     #Zonesort, zoneHeight = menu()
 
     zoneSort['pick1'] = 2
-    zoneSort['blue'] = 0
+    zoneSort['Blue'] = 0
     zoneSort['unSuported'] = 3
 
+    print(zoneSort)
 
 
     ### Try to get the fucking arm to go down.
@@ -49,7 +50,7 @@ def main():
 
     times = 2  #10
     zoneAmount = 3
-    potentialCargo = False
+    cargo = False
     periodTime = 4000 # 4s (4000)
 
     armStartAngle = 40 #28 #38 #40 #39  # 40
@@ -60,19 +61,44 @@ def main():
     location = 0 # Go to first 1.
     lastZone = 0
     goToZone = 0
-    speed = 250
+    speed = 400
     
     running = True
-    while running: #run < times: # times = 2.
-        # run += 1
+    while running:
+        
 
-        if potentialCargo:
+        # if potentialCargo:
+
+        #     sortZone = 0
+        #     wait(5)  #2
+        #     sortZone, color = colorSort()
+        #     print("Sortzone: ", sortZone)
+        #     print("Color: ", color)
+        #     clawAngle = clawMotor.angle()
+        #     print("claw angle: ", clawAngle)
+
+        #     if sortZone == 'Error' or sortZone == 'nothing':
+        #         print("Sortzone ", sortZone)
+
+                
+
+        #         ## Will continue if found nothing, otherwise place the cargo.
+        #         # if sortZone == "Error":
+        #         cca = clawMotor.angle()
+        #         if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
+        #             tmp = zoneSort['unSuported']
+        #             print(cca)
+        #             rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
+        #             Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
+        if cargo and Estop[0] == False: #
 
             sortZone = 0
             wait(5)  #2
             sortZone, color = colorSort()
             print("Sortzone: ", sortZone)
             print("Color: ", color)
+            clawAngle = clawMotor.angle()
+            print("claw angle: ", clawAngle)
 
             if sortZone == 'Error' or sortZone == 'nothing':
                 print("Sortzone ", sortZone)
@@ -86,32 +112,34 @@ def main():
                     tmp = zoneSort['unSuported']
                     print(cca)
                     rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
-                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
-            else:  
-                ev3.speaker.beep()
-                wait(4)
-                ev3.speaker.beep()
-
-                ### print error on robot.
-                ev3.screen.print('Error "color" 404')
-                wait(1000)
+                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= cargo)
+            else:
+                
+                wait(5)
 
                 rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
 
                 ## Drop of again, if detected random color.
-                Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
+                Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= cargo)
                 # lastZone = location
             
-            potentialCargo = False
+            cargo = False
                 # lastZone = location
         else: 
             # goToZone = location
             pickupzone = zoneSort["pick1"]
             armMovement(goToZone, angleTarget= armStartAngle) # make sure we are up.
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-            Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True, potentialCargo= potentialCargo)
-            potentialCargo = True
-            
+            Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True, potentialCargo= cargo)
+            # cargo = True
+
+        clawAngle = clawMotor.angle()
+        if clawAngle <= -10:
+            cargo = True
+        elif clawAngle >= 0 - 4:
+            cargo = False
+            clawMotor.reset_angle(0)
+            print("Reseted claw angle!")
     # running = True
     # while running: #run < times: # times = 2.
     #     # run += 1
@@ -205,6 +233,7 @@ def testThreading():
     
     
     stopProcess = False
+    wait(100)
 
     while True:
         buttons = ev3.buttons.pressed()
@@ -221,17 +250,19 @@ def testThreading():
                 break  # Avbryt loopen när knappen trycks
 
         while stopProcess:
-            buttons = ev3.buttons.pressed()
+            # buttons = ev3.buttons.pressed()
 
             Emenu()
+            # if Estop[0] == False:
+            stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
 
-            for button in buttons:
-                if str(button) == "Button.CENTER":
-                    ev3.speaker.beep()
-                    wait(1000)
-                    stopProcess = False  # Sätt flaggan till True när knappen trycks
-                    Estop[0] = False
-                    # thread2.start()
+            # for button in buttons:
+            #     if str(button) == "Button.CENTER":
+            #         ev3.speaker.beep()
+            #         wait(1000)
+            #         stopProcess = False  # Sätt flaggan till True när knappen trycks
+            #         Estop[0] = False
+            #         # thread2.start()
 
                     # break  # Avbryt loopen när knappen trycks
     return 0
