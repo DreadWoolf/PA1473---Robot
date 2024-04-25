@@ -26,8 +26,6 @@ thread2 = th.Thread()
 Robotrun = True
 stopRobot = False
 
-# Event for synchronization
-# event = th.Event()
 
 def main():
     global Robotrun
@@ -67,30 +65,8 @@ def main():
     while running:
         
 
-        # if potentialCargo:
-
-        #     sortZone = 0
-        #     wait(5)  #2
-        #     sortZone, color = colorSort()
-        #     print("Sortzone: ", sortZone)
-        #     print("Color: ", color)
-        #     clawAngle = clawMotor.angle()
-        #     print("claw angle: ", clawAngle)
-
-        #     if sortZone == 'Error' or sortZone == 'nothing':
-        #         print("Sortzone ", sortZone)
-
-                
-
-        #         ## Will continue if found nothing, otherwise place the cargo.
-        #         # if sortZone == "Error":
-        #         cca = clawMotor.angle()
-        #         if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
-        #             tmp = zoneSort['unSuported']
-        #             print(cca)
-        #             rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
-        #             Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialCargo)
         if cargo and Estop[0] == False: #
+            # armMovement(goToZone, angleTarget= armStartAngle) # make sure we are up.
 
             sortZone = 0
             wait(5)  #2
@@ -253,6 +229,7 @@ def testThreading():
             # buttons = ev3.buttons.pressed()
 
             Emenu()
+            wait(2)
             # if Estop[0] == False:
             stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
 
