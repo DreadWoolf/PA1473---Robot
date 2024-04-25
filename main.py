@@ -14,6 +14,7 @@ import sys as s
 from menu import menu, Emenu
 # import Parameters as par
 #czones , zonecords = menu()
+zoneSort, zoneHeight = menu()
 # par.zoneSort = czones
 # par.zoneHeight = zonecords
 # print(par.zoneSort)
@@ -31,7 +32,7 @@ def main():
     global Robotrun
     # Robotrun = True
     ev3.speaker.beep()
-    Zonesort, zoneHeight = menu()
+    
 
     #zoneSort['pick1'] = 2
     #zoneSort['Blue'] = 0
@@ -64,7 +65,7 @@ def main():
 
             sortZone = 0
             wait(5)  #2
-            sortZone, color = colorSort()
+            sortZone, color = colorSort(zoneSort)
             print("Sortzone: ", sortZone)
             print("Color: ", color)
             clawAngle = clawMotor.angle()
