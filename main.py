@@ -41,11 +41,6 @@ def main():
     print(zoneSort)
 
 
-    ### Try to get the fucking arm to go down.
-    # elevationMotor.dc(50)
-    # wait(5)
-    # elevationMotor.stop()
-
 
     times = 2  #10
     zoneAmount = 3
@@ -67,7 +62,6 @@ def main():
         
 
         if cargo and Estop[0] == False: #
-            # armMovement(goToZone, angleTarget= armStartAngle) # make sure we are up.
 
             sortZone = 0
             wait(5)  #2
@@ -89,7 +83,7 @@ def main():
                     tmp = zoneSort['unSuported']
                     print(cca)
                     rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
-                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= cargo)
+                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
             else:
                 
                 wait(5)
@@ -97,7 +91,7 @@ def main():
                 rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
 
                 ## Drop of again, if detected random color.
-                Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= cargo)
+                Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                 # lastZone = location
             
             cargo = False
@@ -105,10 +99,9 @@ def main():
         else: 
             # goToZone = location
             pickupzone = zoneSort["pick1"]
-            armMovement(goToZone, angleTarget= armStartAngle) # make sure we are up.
+            armMovement(goToZone, angleTarget= armStartAngle, operatingSpeed= speed/2) # make sure we are up.
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-            Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True, potentialCargo= cargo)
-            # cargo = True
+            Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
         clawAngle = clawMotor.angle()
         if clawAngle <= -10:
@@ -117,82 +110,7 @@ def main():
             cargo = False
             clawMotor.reset_angle(0)
             print("Reseted claw angle!")
-    # running = True
-    # while running: #run < times: # times = 2.
-    #     # run += 1
-
-    #     if potentialCargo:
-
-    #         sortZone = 0
-    #         wait(5)  #2
-    #         sortZone, color = colorSort()
-    #         print("Sortzone: ", sortZone)
-    #         print("Color: ", color)
-
-    #         if sortZone == 'Error' or sortZone == 'nothing':
-    #             print("Sortzone ", sortZone)
-    #         else:
-    #             ev3.screen.print(str(color) + " to: " + str(sortZone))
-                    
-                
-    #             if sortZone == 0:
-    #                 rotateBase(angle= zoneLocation[sortZone], goToZone= sortZone,operatingSpeed= speed, armtarget= armStartAngle) # Go to zone '0'.
-    #             else:
-    #                 # This might not work as intended... (if we want to go to the next zone for example)
-    #                 # rotateBase(angle = zoneLocation[sortZone] - zoneLocation[lastZone])
-    #                 rotateBase(angle = zoneLocation[sortZone], goToZone= sortZone, operatingSpeed= speed, armtarget=armStartAngle)
-
-    #             # Uppdate the lastZone.
-    #             lastZone = sortZone  
-    #             # Place(angleTarget= -armStartAngle, openClawsFirst= False)
-    #             Place(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= False, potentialCargo= potentialCargo)
-    #             # if stopRobot:
-    #             #     print("stop")
-    #             #     s.sys.exit()
-            
-    #         potentialCargo = False
-
-    #     else:
-    #         # goToZone = location
-    #         pickupzone = zoneSort["pick1"]
-    #         rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-    #         Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True, potentialCargo= potentialCargo)
-    #         potentialCargo = True
-            
-
-
-        #     location += 1
-            
-        #     # May not work... maybe needs an 'or' or 'and' like gotozone <zoneamount.
-        #     if location == lastZone: ## If we sorted to the zone we wanna go to.
-        #         location += 1
-
-        #     goToZone = location
-            
-
-        #     # rotateBase(angle = zoneLocation[goToZone] - zoneLocation[lastZone])
-        #     rotateBase(zoneLocation[goToZone], goToZone, armStartAngle)
-
-        #     # if stopRobot:
-        #     #     print("stop")
-        #     #     s.sys.exit()
-        #     # Pickup(angleTarget= -armStartAngle, openClawsFirst= True)
-        #     Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True)
-        #     # if stopRobot:
-        #     #     print("stop")
-        #     #     s.sys.exit()
-
-
-        #     lastZone = location
-
-        #     # picked up package true or false.
-        #     ######################################
-        #     ######################################
-        #     ######################################
-        #     # Check if we have cargo!
-        #     potentialCargo = True
-        # print("GoToZone = ", goToZone)
-
+    
 
         # if Robotrun == False:
         #     break
@@ -206,7 +124,6 @@ def main():
 def testThreading():
     global RobotRun
     global stopRobot
-    # global Estop
     
     
     stopProcess = False
@@ -231,7 +148,7 @@ def testThreading():
 
             Emenu()
             wait(2)
-            # if Estop[0] == False:
+
             stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
 
             # for button in buttons:
@@ -249,7 +166,6 @@ def testThreading():
     
 
 def Calibrate(armStartAngle:int = 40, speed = 60):
-    # armMovement(0, armStartAngle, calibrate= True)
 
     # armMovement(0,1,calibrate=False)
     # elevationMotor.stop()
