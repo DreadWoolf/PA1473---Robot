@@ -23,6 +23,13 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
     print("gotozone ", gotoZone)
     print("angletarget ", angletarget)
     print("callibrate ", duringCallibration)
+
+    clawAngle = clawMotor.angle()
+    if clawAngle <= -10:
+        ## Might not work since it is pick up... (but place wouldn't either)
+        # Pickup(gotoZone,angletarget, openClawsFirst=False, potentialCargo= True)
+        armMovement(gotoZone, angletarget, potentialCargo=True)
+            
     
     #########################################
     #   Make checks for current position    #
@@ -96,6 +103,9 @@ def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, potentialCargo
     
     # If openFirst = True will open first.
     while not Estop[0]:
+        # armMovement(goToZone, angleTarget= -angleTarget) # make sure we are up.
+        # if Estop[0]: break
+        wait(2)
         armMovement(goToZone, angleTarget= angleTarget, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
@@ -162,7 +172,7 @@ def test(goToZone, angleTarget, calibrate, potentialCargo = False):
     return
 
 
-def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False, operatingspeed = 100):
+def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False, operatingspeed = 120): #100 before
     # global Estop
     smallGear = 12  #Tooths for gear moving clockwise. 
     bigGear = 16   #Tooths for gear moving counter clockwise. 
@@ -234,10 +244,12 @@ if __name__ == "__main__":
 
     elevationMotor.run_angle(60, armStartAngle * multiplyAngle)
     elevationMotor.reset_angle(40 * multiplyAngle)
+
+    print("do stuff")
     
-    armMovement(0, armStartAngle, calibrate=True)
-    clawMovement(0, armStartAngle, open= (False)) # If not open first will grip here.
-    clawMovement(0, armStartAngle, open= (True)) # If not open first will grip here.
+    # armMovement(0, armStartAngle, calibrate=True)
+    # clawMovement(0, armStartAngle, open= (False)) # If not open first will grip here.
+    # clawMovement(0, armStartAngle, open= (True)) # If not open first will grip here.
 
     # clawMovement(True, calibrate=True)  # Calibrate
     Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialcargo)

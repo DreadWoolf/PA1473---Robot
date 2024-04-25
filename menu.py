@@ -81,9 +81,13 @@ def Emenu():
                 ev3.screen.print("you chose ",Echoicelist[current_index])
                 if Echoicelist[current_index] == "restart":
                     restart = True
+                    wait(5)
+                    ev3.screen.clear()
                     return
                 if Echoicelist[current_index] == "resume":
                     Estop[0] = False
+                    wait(5)
+                    ev3.screen.clear()
                     return
 
                 if Echoicelist[current_index] == "manual":
@@ -166,10 +170,10 @@ def set_origin():
                 if Estop[0] == False:
                     elevationMotor.reset_angle(40 * multiplyAngle)
                     ev3.screen.print("angle reseted")
-                    return 0
+                    return 0  # To go back to menu.
                 else:    
-                    ev3.screen.print("angle not reseted haha")
-                    return 0
+                    ev3.screen.print("Finished")
+                    return 0 #Back to Emenu.
             if button_str == "Button.LEFT":
                 speed += 5
                 rotationMotor.run_angle(60 + speed,-10)
