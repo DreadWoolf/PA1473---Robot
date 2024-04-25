@@ -134,8 +134,8 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingspeed = 100
     # global Estop
 
     # print("Estop  ... ", Estop)
-    #height = zoneHeight[goToZone]
-    print(zoneHeight)
+    # height = zoneHeight[goToZone]
+    # print(zoneHeight)
     # print("Fucking Height is: ", height)
     # print("angletarget is: ", angleTarget)
     # test = (abs(angleTarget) - height)
@@ -149,7 +149,7 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingspeed = 100
         # print("start arm angle " , elevationMotor.angle())
         elevationMotor.run_target(operatingspeed, target_angle = angleTarget * multiplyAngle)
         # return
-    elif potentialCargo and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5:
+    elif potentialCargo:# and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5:
         elevationMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=20)
         # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
     else:
@@ -162,9 +162,20 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingspeed = 100
         ######################################
         ######################################
         ######################################
+
+        height = zoneHeight[goToZone]
+        print(zoneHeight)
+        print("Fucking Height is: ", height)
+        print("angletarget is: ", angleTarget)
+        test = (abs(angleTarget) - height)
+        print("Test is: ", test)
+        testpositive = abs(test)
+        tmp = (testpositive) 
+        print("tmp is: ", tmp)
+        print("angle for motor: ", tmp * multiplyAngle)
         
-        elevationMotor.run_target(operatingspeed,(angleTarget - height) * multiplyAngle)
-        # elevationMotor.run_target(operatingspeed,(tmp) * multiplyAngle)
+        # elevationMotor.run_target(operatingspeed,(angleTarget - height) * multiplyAngle)
+        elevationMotor.run_target(operatingspeed,(tmp) * multiplyAngle)
     # print("targeted arm angle " , elevationMotor.angle())
 
     # Check if the event is set
