@@ -3,17 +3,20 @@ from pybricks.hubs import TechnicHub
 from pybricks.pupdevices import Motor
 from pybricks.parameters import Port
 from pybricks.tools import wait
+from pybricks.hubs import EV3Brick
+
 
 # Change this later
 # from Parameters import *
+ev3 = EV3Brick()
 
 # Initialize the hub.
 hub = TechnicHub(broadcast_channel=1)
-observe = TechnicHub(observe_channels=[1])
+observe = TechnicHub(observe_channels=2)
 
-# Initialize the motors.
-left_motor = Motor(Port.A)
-right_motor = Motor(Port.B)
+# # Initialize the motors.
+# left_motor = Motor(Port.A)
+# right_motor = Motor(Port.B)
 
 
 data = True
@@ -36,7 +39,7 @@ while True:
         hub.ble.broadcast(data)
         data = True
 
-    listeningData = hub.ble.observe(1)
+    listeningData = hub.ble.observe(2)
     if listeningData:
         ev3.speaker.beep()
     
