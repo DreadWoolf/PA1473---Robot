@@ -59,7 +59,8 @@ zoneSort = {
     'Yellow'    :   2,
     'Blue'      :   3,
     # 'red':4,
-    'pick2'     :   5
+    'pick2'     :   4,
+    'coms'      :   5,
     }
 
 
@@ -99,11 +100,10 @@ else:
     exit()
 
 
-
 zoneHeight = {
     0: 0,
     1: 0,
-    2: 0,
+    2: 20,
     3: 0
 }
 

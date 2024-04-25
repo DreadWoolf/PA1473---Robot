@@ -44,7 +44,7 @@ def menu():
                     print(origin)
                 if choicelist[current_index] == "zonecolor_selection":
                     ev3.speaker.beep()
-                    czones=colorzones()
+                    czones = colorzones()
                     print(czones)
                 if choicelist[current_index] =="work_times":
                     ev3.speaker.beep()
@@ -179,6 +179,7 @@ def work_times():
 
 
 def Emenu():
+    ev3.speaker.say("Emergency!")
     Echoicelist = ["resume", "restart","manual"]
     current_index=0
     temp=True
@@ -189,7 +190,7 @@ def Emenu():
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
-
+        #ev3.speaker.say("Emergency!")
         for button in buttons:
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
@@ -218,6 +219,7 @@ def Emenu():
 
                 if Echoicelist[current_index] == "manual":
                     set_origin()
+                    ev3.screen.clear()
 
                             #get out of here
                             #break
@@ -319,27 +321,37 @@ def colorzones():
     # 'Blue'      : 2,
     # 'Yellow'   : 3
     # }    
-    counter = 0
-    colors = ["Red","Yellow", "Green","Blue", "pick1", "pick2"]
+    counter = -1
+    colors = ["Red","Yellow", "Green","Blue", "pick1", "pick2", "coms"]
     current_index=0
     temp = True
     ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
+        theend = 3
+        if len(colors) in {1, 2, 3}:
+            for i in colors:
+                ev3.screen.clear()
+                ev3.screen.print("processing...")
+                theend += 1 
+                zoneSort[i] = theend
+                print(zoneSort)
+                ev3.speaker.beep()
+            ev3.screen.clear()
+            ev3.screen.print("done!")
+            ev3.speaker.beep()
+            temp = False
+            keys_to_keep = list(zoneSort.keys())[:-3]
+            sorted_items = sorted(zoneSort.items(), key=lambda x: x[1]) # sorts based on number
+            sorted_items = sorted_items[:-3] # cuts so only 4 left
+            zoneSort = dict(sorted_items)
+            print("THE NEW DICT: "+ str(zoneSort))                
+            return zoneSort
         for button in buttons:
 
-            if len(colors) == 0:
-                ev3.screen.print("done!")
-                ev3.speaker.beep()
-                temp = False
-                keys_to_keep = list(zoneSort.keys())[:-2]
-                sorted_items = sorted(zoneSort.items(), key=lambda x: x[1])
-                sorted_items = sorted_items[:-2]
-                new_dict = dict(sorted_items)
-                print("THE NEW DICK: "+ str(new_dict))                
-                return new_dict
-            
+            #elif len(colors) == 0:
+
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(colors)
@@ -356,7 +368,8 @@ def colorzones():
                 chosen = colors.pop(current_index % len(colors)) 
                 print("Colors:", colors)
                 print("popped:", chosen)
-                zoneSort[chosen] = str(counter)
+                zoneSort[chosen] = counter
+                ev3.speaker.beep()
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
