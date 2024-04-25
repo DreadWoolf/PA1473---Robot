@@ -54,13 +54,13 @@ RobotIdentity = 'E'
 # }
 
 zoneSort = {
-    'pick1'     :   0,
+    'pick1'     :   2,
     'Green'     :   1,
-    'Yellow'    :   2,
-    'Blue'      :   3,
+    'Yellow'    :   0,
+    'Blue'      :   3
     # 'red':4,
-    'pick2'     :   4,
-    'coms'      :   5,
+#    'pick2'     :   4,
+#    'coms'      :   5
     }
 
 
@@ -101,10 +101,10 @@ else:
 
 
 zoneHeight = {
-    0: 0,
-    1: 0,
+    0: 1,
+    1: 2,
     2: 20,
-    3: 0
+    3: 3
 }
 
 

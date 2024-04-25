@@ -6,7 +6,7 @@
 
 # The server must be started before the client!
 
-from pybricks.messaging import BluetoothMailboxServer, TextMailbox
+from pybricks.messaging import BluetoothMailboxServer, TextMailbox, BluetoothMailboxClient
 
 server = BluetoothMailboxServer()
 mbox = TextMailbox('greeting', server)

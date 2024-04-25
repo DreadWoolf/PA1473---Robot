@@ -15,9 +15,16 @@ from menu import menu, Emenu
 # import Parameters as par
 #czones , zonecords = menu()
 zoneSort, zoneHeight = menu()
-for key in zoneSort:
-    if key == 'coms':
-        garbage = 'coms'
+print(zoneSort)
+# try:
+#     garbage = zoneSort['coms']
+# except TypeError:
+#     print("YEEEEEe")
+if 'coms' in zoneSort:
+    garbage = 'coms'
+# for key in zoneSort:
+#     if key == 'coms':
+#         garbage = 'coms'
         
 # par.zoneSort = czones
 # par.zoneHeight = zonecords
@@ -83,14 +90,16 @@ def main():
                 cca = clawMotor.angle()
                 if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
                     try:
-                        tmp = zoneSort[garbage]
+                        sortZone = zoneSort[garbage]
                         # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
                         print(cca)
-                        rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
-                        Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                        rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
+                        Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                     except NameError:
                         print("idk what to do!")
-                        Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                        ev3.screen.print("color not supported")
+                        running = False
+                        #Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
             else:
                 
                 wait(5)
@@ -98,7 +107,7 @@ def main():
                 rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
 
                 ## Drop of again, if detected random color.
-                Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                 # lastZone = location
             
             cargo = False
@@ -106,9 +115,9 @@ def main():
         else: 
             # goToZone = location
             pickupzone = zoneSort["pick1"]
-            armMovement(goToZone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
+            armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-            Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
+            Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
         clawAngle = clawMotor.angle()
         if clawAngle <= -10:

@@ -3,15 +3,11 @@ from Parameters import *
 import Parameters
 
 def menu():
-    #global Estop
-    #global restart
-    #Estop = False
-    #restart = False
     choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight","work_times"]
     current_index=0
     temp=True
-    zonecords = 0
-    czones = 0
+    zonecords = zoneHeight
+    czones = zoneSort
     ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
@@ -235,11 +231,11 @@ def Emenu():
 
 
 def zone_hight():
-    zonenum = [1,2,3,4]
+    zonenum = [0,1,2,3]
     zonecords = {
                  0:0,
                  1:0,
-                 2:0,
+                 2:5,
                  3:0
                  }
     #rotationMotor.reset_angle(0)
@@ -265,7 +261,7 @@ def zone_hight():
                     horangle = rotationMotor.angle() 
                     verangle = elevationMotor.angle()
                     zonecords[num] = verangle
-                    if num == 4:
+                    if num == 3:
                         return zonecords
                     temp=False
                 if button_str == "Button.LEFT":
@@ -315,12 +311,6 @@ def set_origin():
 
 def colorzones():
     global zoneSort
-    # zoneSort = {
-    # 'Red'       : 0,
-    # 'Green'     : 1,
-    # 'Blue'      : 2,
-    # 'Yellow'   : 3
-    # }    
     counter = -1
     colors = ["Red","Yellow", "Green","Blue", "pick1", "pick2", "coms"]
     current_index=0
@@ -336,13 +326,12 @@ def colorzones():
                 ev3.screen.print("processing...")
                 theend += 1 
                 zoneSort[i] = theend
-                print(zoneSort)
                 ev3.speaker.beep()
             ev3.screen.clear()
             ev3.screen.print("done!")
             ev3.speaker.beep()
             temp = False
-            keys_to_keep = list(zoneSort.keys())[:-3]
+            #keys_to_keep = list(zoneSort.keys())[:-3]
             sorted_items = sorted(zoneSort.items(), key=lambda x: x[1]) # sorts based on number
             sorted_items = sorted_items[:-3] # cuts so only 4 left
             zoneSort = dict(sorted_items)
@@ -366,14 +355,13 @@ def colorzones():
                 counter += 1
                 ev3.screen.clear()
                 chosen = colors.pop(current_index % len(colors)) 
-                print("Colors:", colors)
-                print("popped:", chosen)
+                print("popped:", chosen, "zone:", counter)
                 zoneSort[chosen] = counter
                 ev3.speaker.beep()
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
-            print(zoneSort)
+
             
 
 

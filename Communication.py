@@ -1,87 +1,127 @@
 #!/usr/bin/env pybricks-micropython
-from pybricks.hubs import TechnicHub
-from pybricks.pupdevices import Motor
-from pybricks.parameters import Port
-from pybricks.tools import wait
+
+# Before running this program, make sure the client and server EV3 bricks are
+# paired using Bluetooth, but do NOT connect them. The program will take care
+# of establishing the connection.
+
+# The server must be started before the client!
+from Parameters import *
+#!/usr/bin/env pybricks-micropython
+
+# Before running this program, make sure the client and server EV3 bricks are
+# paired using Bluetooth, but do NOT connect them. The program will take care
+# of establishing the connection.
+
+# The server must be started before the client!
+
+from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
+
+# Pybricks imports
+from pybricks import robotics
 from pybricks.hubs import EV3Brick
+from pybricks.ev3devices import Motor
+from pybricks.parameters import Port, Stop
+from pybricks.tools import wait
+
+me = 'server'
+# This is the name of the remote EV3 or PC we are connecting to.
+SERVERID = 'ev3dev'
+
+if me == 'server':
+    print("I'm server")
+    server = BluetoothMailboxServer()
+    me = server
+    me.wait_for_connection()
+else:
+    # This is the name of the remote EV3 or PC we are connecting to.
+    # SERVER = 'ev3dev'
+    print("I'm Client")
+    client = BluetoothMailboxClient()
+    me = client    
+    me.connect(SERVERID)
+    print('connected!')
 
 
-# Change this later
-# from Parameters import *
 ev3 = EV3Brick()
-
-# Initialize the hub.
-hub = TechnicHub(broadcast_channel=1)
-observe = TechnicHub(observe_channels=2)
-
-# # Initialize the motors.
-# left_motor = Motor(Port.A)
-# right_motor = Motor(Port.B)
+# client = BluetoothMailboxClient()
+mbox = TextMailbox('greeting', me)
+ev3.speaker.beep()
+# print('establishing connection...')
 
 
-data = True
-listeningData = False
+# # In this program, the client sends the first message and then waits for the
+# # server to reply.
+# for i in range(4):
+messages = ['occupied', 'gift4u']
 
-while True:
-    # # Read the motor angles to be sent to the other hub.
-    # left_angle = left_motor.angle()
-    # right_angle = right_motor.angle()
+if me == 'client':
+    mbox.send(messages[1])
+else:
+    mbox.wait()
 
-    # # Set the broadcast data and start broadcasting if not already doing so.
-    # data = (left_angle, right_angle)
-
-    # data = True
-
-    if data:
-        hub.ble.broadcast(data)
-        data = False
+for i in range(5):
+    print("Started loop")
+    # mbox.send('hello!')
+    inbox = mbox.read()
+    while inbox == messages[0]: 
+        inbox = mbox.read()
+        ev3.screen.print(inbox)
+    
+    if inbox == messages[1]:
+        message = messages[0]
     else:
-        hub.ble.broadcast(data)
-        data = True
+        message = ''
 
-    listeningData = hub.ble.observe(2)
-    if listeningData:
-        ev3.speaker.beep()
-    
-    print("Sending data is: ", data)
-    print("listening data is: ", listeningData)
-    
+    mbox.send(message)
+    # mbox.wait()
+    # test = mbox.read()
+    ev3.screen.print(message)
 
+    # print(test)
 
-    # Broadcasts are only sent every 100 milliseconds, so there is no reason
-    # to call the broadcast() method more often than that.
-    wait(100)
+    wait(5000)
 
 
-# Initialize the hub.
-# hub = TechnicHub(observe_channels=[1])
 
-# # Initialize the motors.
-# left_motor = Motor(Port.A)
-# right_motor = Motor(Port.B)
 
-# while True:
-#     # Receive broadcast from the other hub.
+#!/usr/bin/env pybricks-micropython
 
-# #     data = hub.ble.observe(1)
+# Before running this program, make sure the client and server EV3 bricks are
+# # paired using Bluetooth, but do NOT connect them. The program will take care
+# # of establishing the connection.
 
-#     if data is None:
-#         # No data has been received in the last 1 second.
-#         hub.light.on(Color.RED)
-#     else:
-#         # Data was received and is less that one second old.
-#         hub.light.on(Color.GREEN)
+# # The server must be started before the client!
 
-#         # *data* contains the same values in the same order
-#         # that were passed to hub.ble.broadcast() on the
-#         # other hub.
-#         left_angle, right_angle = data
+# from pybricks.messaging import BluetoothMailboxClient, TextMailbox
 
-#         # Make the motors on this hub mirror the position of the
-#         # motors on the other hub.
-#         left_motor.track_target(left_angle)
-#         right_motor.track_target(right_angle)
+# # # Pybricks imports
+# # from pybricks import robotics
+# from pybricks.hubs import EV3Brick
+# # from pybricks.ev3devices import Motor
+# # from pybricks.parameters import Port, Stop
+# from pybricks.tools import wait
 
-#     # Broadcasts are only sent every 100 milliseconds, so there is
-#     # no reason to call the observe() method more often than that.
-#     wait(100)
+# ev3 = EV3Brick()
+# server = BluetoothMailboxServer()
+# mbox = TextMailbox('greeting', server)
+
+# ev3.speaker.beep()
+
+# # The server must be started before the client!
+# print('waiting for connection...')
+# server.wait_for_connection()
+# print('connected!')
+# ev3.speaker.beep()
+
+
+
+# # In this program, the server waits for the client to send the first message
+# # and then sends a reply.
+# for i in range(4):
+#     mbox.wait()
+#     test = mbox.read()
+#     ev3.screen.print(test)
+#     print(test)
+#     mbox.send('hello to you!')
+
+#     wait(5000)

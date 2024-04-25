@@ -55,31 +55,31 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
     # if 
 
 
-def sort(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
-    sortZone = 0
-    armMovement(gotoZone, zoneHeight[gotoZone], 40, calibrate = duringCallibration)
-    wait(5)  #2
-    sortZone, color = colorSort()
-    print("Sortzone: ", sortZone)
-    print("Color: ", color)
+# def sort(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
+#     sortZone = 0
+#     armMovement(gotoZone, zoneHeight[gotoZone], 40, calibrate = duringCallibration)
+#     wait(5)  #2
+#     sortZone, color = colorSort()
+#     print("Sortzone: ", sortZone)
+#     print("Color: ", color)
 
-    if sortZone == 'Error' or sortZone == 'nothing':
-        print("Sortzone ", sortZone)
+#     if sortZone == 'Error' or sortZone == 'nothing':
+#         print("Sortzone ", sortZone)
 
-        ## Will continue if found nothing, otherwise place the cargo.
-        if sortZone == "nothing":
+#         ## Will continue if found nothing, otherwise place the cargo.
+#         if sortZone == "nothing":
             
-            ev3.speaker.beep()
-            wait(4)
-            ev3.speaker.beep()
+#             ev3.speaker.beep()
+#             wait(4)
+#             ev3.speaker.beep()
 
-            ### print error on robot.
-            ev3.screen.print('Error "color" 404')
-            wait(1000)
+#             ### print error on robot.
+#             ev3.screen.print('Error "color" 404')
+#             wait(1000)
 
-            ## Drop of again, if detected random color.
-            Place(goToZone= gotoZone, angleTarget=-angletarget, openClawsFirst=False)
-            # lastZone = location
+#             ## Drop of again, if detected random color.
+#             Place(goToZone= gotoZone, angleTarget=-angletarget, openClawsFirst=False)
+#             # lastZone = location
 
 
 def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, height:int = 0, operatingspeed = 100, potentialCargo= False):
@@ -134,6 +134,16 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingspeed = 100
     # global Estop
 
     # print("Estop  ... ", Estop)
+    #height = zoneHeight[goToZone]
+    print(zoneHeight)
+    # print("Fucking Height is: ", height)
+    # print("angletarget is: ", angleTarget)
+    # test = (abs(angleTarget) - height)
+    # print("Test is: ", test)
+    # testpositive = abs(test)
+    # tmp = (testpositive) 
+    # print("tmp is: ", tmp)
+    # print("angle for motor: ", tmp * multiplyAngle)
 
     if calibrate:
         # print("start arm angle " , elevationMotor.angle())
@@ -154,6 +164,7 @@ def armMovement(goToZone, angleTarget: int, height:int = 0, operatingspeed = 100
         ######################################
         
         elevationMotor.run_target(operatingspeed,(angleTarget - height) * multiplyAngle)
+        # elevationMotor.run_target(operatingspeed,(tmp) * multiplyAngle)
     # print("targeted arm angle " , elevationMotor.angle())
 
     # Check if the event is set
@@ -246,13 +257,14 @@ if __name__ == "__main__":
     elevationMotor.reset_angle(40 * multiplyAngle)
 
     print("do stuff")
-    
+    wait(2000)
+    armMovement(2, armStartAngle)
     # armMovement(0, armStartAngle, calibrate=True)
     # clawMovement(0, armStartAngle, open= (False)) # If not open first will grip here.
     # clawMovement(0, armStartAngle, open= (True)) # If not open first will grip here.
 
     # clawMovement(True, calibrate=True)  # Calibrate
-    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialcargo)
+    # Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialcargo)
 
     # Pickup(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, potentialCargo= potentialcargo)
 
