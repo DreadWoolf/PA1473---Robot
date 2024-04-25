@@ -140,7 +140,6 @@ def getColor():
 #         return 'Error', None # Did not find any color.
     
 def colorSort(zoneSort):
-    trash = 'coms'
             # return 'nothing', None
         # else:
         # print(cca)
@@ -159,6 +158,7 @@ def colorSort(zoneSort):
             return 'Error', None # Did not find any color.
     except KeyError:
             try:
+                trash = 'coms'
                 return zoneSort[trash], None
             except NameError:
                 return 'Error', None

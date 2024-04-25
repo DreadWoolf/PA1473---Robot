@@ -15,6 +15,10 @@ from menu import menu, Emenu
 # import Parameters as par
 #czones , zonecords = menu()
 zoneSort, zoneHeight = menu()
+for key in zoneSort:
+    if key == 'coms':
+        garbage = 'coms'
+        
 # par.zoneSort = czones
 # par.zoneHeight = zonecords
 # print(par.zoneSort)
@@ -26,7 +30,6 @@ thread2 = th.Thread()
 
 Robotrun = True
 stopRobot = False
-
 
 def main():
     global Robotrun
@@ -56,7 +59,6 @@ def main():
     lastZone = 0
     goToZone = 0
     speed = 400
-    trash = 'coms'
     running = True
     while running:
         
@@ -80,12 +82,15 @@ def main():
                 # if sortZone == "Error":
                 cca = clawMotor.angle()
                 if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
-                    # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
-                    tmp = zoneSort[trash]
-                    # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
-                    print(cca)
-                    rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
-                    Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                    try:
+                        tmp = zoneSort[garbage]
+                        # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
+                        print(cca)
+                        rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
+                        Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                    except NameError:
+                        print("idk what to do!")
+                        Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
             else:
                 
                 wait(5)
