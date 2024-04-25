@@ -114,8 +114,46 @@ restart = [False]
 
 
 
+tstamps = {}
+ctime = []
 
 
+def wtii(ctime, tstamps):
+    stopwatch = StopWatch()
+    temp=True
+    if (len(ctime) != 0) and (len(tstamps)!=0):    
+        # Define the number of days in each month
+        month_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        while temp:
+            # Get the time passed in seconds since the last update
+            Timepast = stopwatch.time() // 1000
+
+            # Calculate the new minutes, hours, and days
+            ctime[4] += Timepast // 60  # Add the minutes
+            if  Timepast // 60 == 1:   
+                stopwatch.reset()
+            ctime[3] += ctime[4] // 60  # Add the hours
+            ctime[2] += ctime[3] // 24  # Add the days
+
+            # Reset the minutes, hours, and days if they exceed their limits
+            ctime[4] %= 60
+            ctime[3] %= 24
+
+            # Check if it's a leap year
+            if ctime[0] % 4 == 0 and (ctime[0] % 100 != 0 or ctime[0] % 400 == 0):
+                month_days[1] = 29
+            else:
+                month_days[1] = 28
+
+            # Update the month and year if the days exceed their limit
+            if ctime[2] > month_days[ctime[1] - 1]:
+                ctime[2] -= month_days[ctime[1] - 1]  # Subtract the number of days in the current month
+                ctime[1] += 1  # Increment the month
+                if ctime[1] > 12:  # If the month exceeds 12, increment the year and reset the month to 1
+                    ctime[1] = 1
+                    ctime[0] += 1
+
+            print(ctime)
 
 
 
