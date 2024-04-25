@@ -13,7 +13,7 @@ import sys as s
 
 from menu import menu, Emenu
 # import Parameters as par
-czones , zonecords = menu()
+#czones , zonecords = menu()
 # par.zoneSort = czones
 # par.zoneHeight = zonecords
 # print(par.zoneSort)
@@ -31,11 +31,11 @@ def main():
     global Robotrun
     # Robotrun = True
     ev3.speaker.beep()
-    #Zonesort, zoneHeight = menu()
+    Zonesort, zoneHeight = menu()
 
-    zoneSort['pick1'] = 2
-    zoneSort['Blue'] = 0
-    zoneSort['unSuported'] = 3
+    #zoneSort['pick1'] = 2
+    #zoneSort['Blue'] = 0
+    #zoneSort['unSuported'] = 3
 
     print(zoneSort)
 
