@@ -13,7 +13,7 @@ import sys as s
 
 from menu import menu, Emenu
 # import Parameters as par
-czones , zonecords = menu()
+#czones , zonecords = menu()
 # par.zoneSort = czones
 # par.zoneHeight = zonecords
 # print(par.zoneSort)

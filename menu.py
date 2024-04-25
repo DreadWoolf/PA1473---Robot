@@ -233,6 +233,7 @@ def colorzones():
                 print("Colors:", colors)
                 print("popped:", chosen)
                 zoneSort[chosen] = counter
+                ev3.speaker.beep()
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
