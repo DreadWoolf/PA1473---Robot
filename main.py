@@ -26,8 +26,6 @@ thread2 = th.Thread()
 Robotrun = True
 stopRobot = False
 
-# Event for synchronization
-# event = th.Event()
 
 def main():
     global Robotrun
