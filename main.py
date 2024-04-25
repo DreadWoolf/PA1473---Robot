@@ -56,7 +56,7 @@ def main():
     lastZone = 0
     goToZone = 0
     speed = 400
-    
+    trash = 'coms'
     running = True
     while running:
         
@@ -80,7 +80,9 @@ def main():
                 # if sortZone == "Error":
                 cca = clawMotor.angle()
                 if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
-                    tmp = zoneSort['unSuported']
+                    # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
+                    tmp = zoneSort[trash]
+                    # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
                     print(cca)
                     rotateBase(zoneLocation[tmp], tmp, armStartAngle, speed)
                     Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
@@ -99,7 +101,7 @@ def main():
         else: 
             # goToZone = location
             pickupzone = zoneSort["pick1"]
-            armMovement(goToZone, angleTarget= armStartAngle, operatingSpeed= speed/2) # make sure we are up.
+            armMovement(goToZone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
             Pickup(goToZone= goToZone, angleTarget= -armStartAngle, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
