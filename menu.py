@@ -195,7 +195,7 @@ def colorzones():
     # 'Blue'      : 2,
     # 'Yellow'   : 3
     # }    
-    counter = 0
+    counter = -1
     colors = ["Red","Yellow", "Green","Blue", "pick1", "pick2", "coms"]
     current_index=0
     temp = True
