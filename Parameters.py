@@ -33,6 +33,12 @@ pressureSense = TouchSensor(Port.S1)
 
 # robot = DriveBase(clawMotor, rotationMotor)
 
+
+
+
+#########################################
+#            zone parameters            #
+#########################################
 RobotRegister = {
     'A' : 0,
     'B' : 19,  ## Accurate
@@ -56,25 +62,15 @@ RobotIdentity = 'E'
 zoneSort = {
     'pick1'     :   2,
     'Green'     :   1,
-    'Yellow'    :   0,
-    'Blue'      :   3
+#    'Yellow'    :   0,
+    'Blue'      :   0,
     # 'red':4,
 #    'pick2'     :   4,
-#    'coms'      :   5
+    'coms'      :   3
     }
-
 
 errorMargin = RobotRegister[RobotIdentity]
 
-# zoneLocation = {
-#     0: 0,
-#     1: 90 + errorMargin,
-#     2: 135 + errorMargin + 2,
-#     3: 180 + errorMargin + 3
-# }
-
-# Depending on the installation of the robot, either "Right" or "Left".
-# From Robots perspective.
 oriontation = "Right"
 
 rightOriented = {
@@ -101,18 +97,39 @@ else:
 
 
 zoneHeight = {
-    0: 1,
-    1: 2,
-    2: 20,
-    3: 3
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0
 }
 
 
+
+#################################
+#       Stop and Emergency      #
+#################################
 Estop = [False]
 restart = [False]
 
+#################################
+#     Communication parameter   #
+#################################
+# The server must be started before the client!
+me = ['server']
+# This is the name of the remote EV3 or PC we are connecting to.
+SERVERID = 'ev3dev'
+# Before running this program, make sure the client and server EV3 bricks are
+# paired using Bluetooth, but do NOT connect them. The program will take care
+# of establishing the connection.
+messages = ['occupied', 'gift4u']
+send = [3] # 0 for occupied, 1 for gift4u, 3:send nothing.
 
 
+
+
+#################################
+#           Work Time           #
+#################################
 
 tstamps = {}
 ctime = []
@@ -155,33 +172,3 @@ def wtii(ctime, tstamps):
 
             print(ctime)
 
-
-
-
-# from threading import Thread
-# import time
-
-# def task1():
-#     for i in range(5):
-#         ev3.speak.beep()
-#         time.sleep(1)
-
-# def task2():
-#     for i in range(5):
-#         print("Task 2 executing...")
-#         time.sleep(1)
-
-# if __name__ == "__main__":
-#     # Create two threads for each task
-#     thread1 = Thread(target=task1)
-#     thread2 = Thread(target=task2)
-
-#     # Start the threads
-#     thread1.start()
-#     thread2.start()
-
-#     # Wait for both threads to finish
-#     thread1.join()
-#     thread2.join()
-
-#     print("Both tasks are completed.")

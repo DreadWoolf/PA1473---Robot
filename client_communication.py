@@ -8,37 +8,58 @@
 
 # from pybricks.messaging import BluetoothMailboxClient, TextMailbox
 from pybricks.messaging import BluetoothMailboxClient, TextMailbox
-
-# Pybricks imports
-from pybricks import robotics
-from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import Motor
-from pybricks.parameters import Port, Stop
 from pybricks.tools import wait
-
-
-
-# This is the name of the remote EV3 or PC we are connecting to.
-SERVER = 'ev3dev'
-
+from pybricks.hubs import EV3Brick
+# Pybricks imports
+# from pybricks import robotics
+# from pybricks.hubs import EV3Brick
+# from pybricks.ev3devices import Motor
+# from pybricks.parameters import Port, Stop
+# from pybricks.tools import wait
 ev3 = EV3Brick()
+SERVER = 'ev3dev'
 client = BluetoothMailboxClient()
 mbox = TextMailbox('greeting', client)
 
-ev3.speaker.beep()
-
-print('establishing connection...')
+ev3.screen.print('gonna connect!!')
 client.connect(SERVER)
-print('connected!')
+ev3.screen.print('connected!')
 
-# # In this program, the client sends the first message and then waits for the
-# # server to reply.
-# for i in range(4):
-mbox.send('hello!')
-mbox.wait()
-test = mbox.read()
-ev3.screen.print(test)
+while True:
+    ev3.screen.print('sedning <3')
+    mbox.send('gift4u')
+    mbox.wait()
+    inbox = mbox.read()
+    if inbox == 'occupied':
+        ev3.screen.print(inbox)
+        ev3.speaker.beep()
+        ev3.screen.print("ok!")
+        ev3.screen.print("i wont go there")
+        wait(12000)
+        ev3.screen.clear()
 
-print(test)
 
-#     wait(5000)
+# # This is the name of the remote EV3 or PC we are connecting to.
+# SERVER = 'ev3dev'
+
+# ev3 = EV3Brick()
+# client = BluetoothMailboxClient()
+# mbox = TextMailbox('greeting', client) # <---- ska det inte stå SERVER ist för client
+
+# ev3.speaker.beep()
+
+# print('establishing connection...')
+# client.connect(SERVER)
+# print('connected!')
+
+# # # In this program, the client sends the first message and then waits for the
+# # # server to reply.
+# # for i in range(4):
+# mbox.send('hello!')
+# mbox.wait()
+# test = mbox.read()
+# ev3.screen.print(test)
+
+# print(test)
+
+# #     wait(5000)

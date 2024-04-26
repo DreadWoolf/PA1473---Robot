@@ -6,6 +6,7 @@ def menu():
     choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight","work_times"]
     current_index=0
     temp=True
+    zoneHeight[2] = 30
     zonecords = zoneHeight
     czones = zoneSort
     ev3.screen.print(choicelist[current_index])
@@ -233,9 +234,9 @@ def Emenu():
 def zone_hight():
     zonenum = [0,1,2,3]
     zonecords = {
-                 0:0,
-                 1:0,
-                 2:5,
+                 0:1,
+                 1:2,
+                 2:20,
                  3:0
                  }
     #rotationMotor.reset_angle(0)
@@ -260,8 +261,12 @@ def zone_hight():
                     ev3.speaker.beep()
                     horangle = rotationMotor.angle() 
                     verangle = elevationMotor.angle()
-                    zonecords[num] = verangle
+                    zonecords[num] = verangle 
                     if num == 3:
+                        ev3.speaker.beep()
+                        ev3.screen.clear()
+                        ev3.screen.print("done!")
+                        ev3.speaker.beep()
                         return zonecords
                     temp=False
                 if button_str == "Button.LEFT":
