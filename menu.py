@@ -8,7 +8,8 @@ def menu(zonecords = zoneHeight, czones = zoneSort):
     temp=True
     zoneHeight[2] = 30
     ev3.screen.print("set origin first")
-    set_origin()
+    if Estop[0] = False:
+        set_origin()
     #ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
