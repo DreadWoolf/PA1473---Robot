@@ -349,7 +349,7 @@ def colorzones():
             temp = False
             #keys_to_keep = list(zoneSort.keys())[:-3]
             sorted_items = sorted(zoneSort.items(), key=lambda x: x[1]) # sorts based on number
-            sorted_items = sorted_items[:-3] # cuts so only 4 left
+            sorted_items = sorted_items[:-2] # cuts so only 4 left
             zoneSort = dict(sorted_items)
             print("THE NEW DICT: "+ str(zoneSort))                
             return zoneSort
