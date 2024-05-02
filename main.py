@@ -116,7 +116,7 @@ def main(thread2:th.Thread):
                 ### Send info occupied
                 send[0] = 0
             else:
-                pickupzone = zoneSort["pick1"]
+                pickupzone = zoneSort["pickup"]
             # goToZone = location
             armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
