@@ -2,13 +2,11 @@
 from Parameters import *
 import Parameters
 
-def menu():
+def menu(zonecords = zoneHeight, czones = zoneSort):
     choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight","work_times"]
     current_index=0
     temp=True
     zoneHeight[2] = 30
-    zonecords = zoneHeight
-    czones = zoneSort
     ev3.screen.print("set origin first")
     set_origin()
     #ev3.screen.print(choicelist[current_index])
@@ -177,8 +175,8 @@ def work_times():
 
 
 
-def Emenu():
-    Echoicelist = ["resume", "restart","manual"]
+def Emenu(czones , zonecords):
+    Echoicelist = ["resume", "manual", "startmenu"] #, "restart"]
     current_index=0
     temp=True
     zonecords = 0
@@ -204,16 +202,21 @@ def Emenu():
                 ev3.speaker.beep()
                 ev3.screen.clear()
                 ev3.screen.print("you chose ",Echoicelist[current_index])
-                if Echoicelist[current_index] == "restart":
-                    restart = True
-                    wait(5)
-                    ev3.screen.clear()
-                    return
+                # if Echoicelist[current_index] == "restart":
+                #     restart = True
+                #     wait(5)
+                #     ev3.screen.clear()
+                #     return
                 if Echoicelist[current_index] == "resume":
                     Estop[0] = False
                     wait(5)
                     ev3.screen.clear()
-                    return
+                    tmp = False
+                
+                if Echoicelist[current_index] == "startmenu":
+                    czones , zonecords = menu(czones , zonecords)
+                    tmp = False
+                    # return
 
                 if Echoicelist[current_index] == "manual":
                     set_origin()
@@ -226,7 +229,10 @@ def Emenu():
 
                             #### needs to båe imporved#######################3
                             ######################################3
-                            #########################3                    
+                            #########################3  
+    return czones , zonecords
+    
+                                          
 
 #stop till False
 #reset till True
@@ -297,6 +303,7 @@ def set_origin():
                 bigGear = 40
                 smallGear = 8
                 multiplyAngle = -(bigGear/smallGear)
+                # Check if we are coming from Emenu or at startup.
                 if Estop[0] == False:
                     elevationMotor.reset_angle(40 * multiplyAngle)
                     ev3.screen.print("angle reseted")

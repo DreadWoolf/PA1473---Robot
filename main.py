@@ -31,6 +31,8 @@ Robotrun = True
 stopRobot = False
 
 def main(thread2:th.Thread):
+    global zoneSort
+    global zoneHeight
     global Robotrun
     # Robotrun = True
     ev3.speaker.beep()
@@ -145,6 +147,8 @@ def main(thread2:th.Thread):
 def testThreading():
     global RobotRun
     global stopRobot
+    global zoneSort
+    global zoneHeight
     
     
     stopProcess = False
@@ -167,7 +171,7 @@ def testThreading():
         while stopProcess:
             # buttons = ev3.buttons.pressed()
 
-            Emenu()
+            zoneSort, zoneHeight = Emenu(zoneSort, zoneHeight)
             wait(2)
 
             stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
