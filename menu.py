@@ -268,7 +268,7 @@ def zone_hight():
                     ev3.speaker.beep()
                     horangle = rotationMotor.angle() 
                     verangle = elevationMotor.angle()
-                    zonecords[num] = verangle 
+                    zonecords[num - 1] = verangle 
                     if num == 3:
                         ev3.speaker.beep()
                         ev3.screen.clear()
