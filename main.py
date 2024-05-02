@@ -5,7 +5,7 @@ from Parameters import *
 from movement import Place, Pickup, armMovement, clawMovement, rotateBase, Calibrate
 from colorAlgorithm import colorSort
 import sys as s
-from coms import coms, distribute
+from coms import coms, distribute, Connect, sendMessage
 
 from menu import menu, Emenu
 zoneSort, zoneHeight = menu()
@@ -67,16 +67,22 @@ def main(thread2:th.Thread):
 
         ev3.screen.clear()
 
+        
 
-        if 'coms' in zoneSort and startup == True:
-            garbage = 'coms'
+        if  not thread2.is_alive() and ('coms' in zoneSort or 'belt' in zoneSort):
+            if 'coms' in zoneSort: garbage = 'coms'
             thread2.start()
-            startup = False
 
-            
-        if 'belt' in zoneSort:
-            thread2.start()
-            startup = False
+
+        
+        # At belt.
+        # belt()
+
+
+        # if 'belt' in zoneSort:
+        #     # reflection = colorSense.reflection()
+
+            # startup = False
         
         # if Estop[]
 
@@ -130,13 +136,25 @@ def main(thread2:th.Thread):
             if distribute[0] == True:
                 pickupzone = zoneSort["coms"]
                 ### Send info occupied
-                send[0] = 0
+                send[0] = 1
             else:
-                pickupzone = zoneSort["pickup"]
+                if 'belt' in zoneSort:
+                    pickupzone = zoneSort["belt"] 
+                    armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2)
+                    rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+                    Pickup(goToZone= pickupzone,angleTarget= -armStartAngle , zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= True)
+                    # Pickup(goToZone= pickupzone, 
+                    # have that claw always open
+
+
+                else:
+                    pickupzone = zoneSort["pickup"]
+
+                    armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
+                    rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+                    Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
             # goToZone = location
-            armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
-            rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-            Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
+
 
         clawAngle = clawMotor.angle()
         if clawAngle <= -10:
@@ -192,8 +210,23 @@ def testThreading():
 
 # def btnCheck():
 
-def collaborate():
-    coms()
+# def collaborate():
+#     coms()
+
+
+# def belt():
+#     margin = 20
+#     # send[0] = 3
+#     reflection = colorSense.reflection()
+
+#     while reflection >= 0 + margin and reflection <= 100 - margin:
+#         reflection = colorSense.reflection()
+#         send[0] = 'feed'
+#         # return False
+    
+#     send[0] = 'stop' # Send stop feeding
+#     # return True
+
 
 
 
@@ -207,7 +240,8 @@ def StopRobot(stopRobot):
 if __name__ == "__main__":
     # Create two threads for each task
     thread1 = th.Thread(target=testThreading)
-    thread2 = th.Thread(target=collaborate)
+    thread2 = th.Thread(target=coms)
+    # thread3 = th.Thread(target=belt)
     # thread3 = th.Thread(target=main, args=(thread2))
 
 

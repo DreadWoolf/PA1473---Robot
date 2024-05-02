@@ -42,36 +42,29 @@ pressureSense = TouchSensor(Port.S1)
 RobotRegister = {
     'A' : 0,
     'B' : 19,  ## Accurate
-    'C' : 0,
+    'C' : 15,
     'D' : 0,  
     'E' : 5,
     'F' : 0,
     'G' : 18
 }
 
-RobotIdentity = 'G'
+RobotIdentity = 'C'
  
 
-# zoneSort = {
-#     0: 'DropOf',
-#     1: 'Red',
-#     2: 'Blue',
-#     3: 'Yellow'
-# }
+zoneSort = {
+    'pickup'     :   2,
+    'Green'     :   1,
+    'Blue'      :   0,
+    'coms'      :  3
+    }
 
-# zoneSort = {
-#     'pickup'     :   2,
-#     'Green'     :   1,
-#     'Blue'      :   0,
-#     'coms'      :  3
-#     }
-
-# zoneHeight = {
-#     0: 0,
-#     1: 0,
-#     2: 0,
-#     3: 0
-# }
+zoneHeight = {
+    0: 0,
+    1: 0,
+    2: 0,
+    3: 0
+}
 
 
 errorMargin = RobotRegister[RobotIdentity]
@@ -101,14 +94,6 @@ else:
     exit()
 
 
-# zoneHeight = {
-#     0: 0,
-#     1: 0,
-#     2: 0,
-#     3: 0
-# }
-
-
 
 #################################
 #       Stop and Emergency      #
@@ -126,8 +111,8 @@ SERVERID = 'ev3dev'
 # Before running this program, make sure the client and server EV3 bricks are
 # paired using Bluetooth, but do NOT connect them. The program will take care
 # of establishing the connection.
-messages = ['occupied', 'gift4u']
-send = [3] # 0 for occupied, 1 for gift4u, 3:send nothing.
+messages = ['occupied', 'gift4u', 'feed', 'stop']
+send = ['nothing'] # 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop.
 
 
 

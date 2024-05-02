@@ -2,6 +2,8 @@
 
 from Parameters import *
 from colorAlgorithm import colorSort
+from coms import sendMessage
+#from pybricks.messaging import BluetoothMailboxClient, TextMailbox
 # from Parameters import elevationMotor, clawMotor, Stop, Estop
 # from Emergencystop import emergencyStop
 # from rotationMotor import rotateBase
@@ -62,7 +64,26 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
             
     
 
-def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dict = {}, operatingspeed = 100, potentialCargo= False):
+
+def Belt():
+    margin = 20
+    # send[0] = 3
+    reflection = colorSense.reflection()
+    send[0] = 'feed'
+
+    while reflection >= 0 + margin: # and reflection <= 100 - margin:
+        print("reflektion ", reflection)
+        reflection = colorSense.reflection()
+        sendMessage()
+        # return False
+    
+    send[0] = 'stop' # Send stop feeding
+    sendMessage()
+
+    # return True
+
+
+def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dict = {}, operatingspeed = 100, potentialCargo= False, belt = False):
     # if height <= 0:
     while not Estop[0]:
         clawMovement(goToZone, angleTarget, open = openClawsFirst, operatingspeed= operatingspeed) # If openFirst = True will open here.
@@ -71,6 +92,10 @@ def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dic
         armMovement(goToZone, angleTarget= angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, pickingup = True)
         wait(2)
         if Estop[0]: break
+
+        if belt:  # wait here if we have belt.
+            Belt()
+        
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         wait(2)
         if Estop[0]: break
@@ -228,6 +253,18 @@ def rotateBase(angle, goToZone, armtarget, operatingSpeed = 60, speed_limit = 12
     # # if Estop == True:
     #     emergencyStop(goToZone, armtarget, calibrate)
     #     print("Estop, ", Estop)
+
+# def hungryarm(ready):
+#     smallGear = 12  #Tooths for gear moving clockwise. 
+#     bigGear = 16   #Tooths for gear moving counter clockwise. 
+#     multiplyAngle = -(bigGear/smallGear)
+#     if ready == False:
+#         clawMovement(goToZone, angleTarget= 40, open= True, calibrate=False ,operatingspeed= 120)
+#     else:
+#         clawMovement(goToZone, angleTarget= 40, open= False, calibrate=False ,operatingspeed= 120) 
+
+
+#     return 0
 
 
 if __name__ == "__main__":

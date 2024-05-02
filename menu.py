@@ -3,19 +3,19 @@ from Parameters import *
 import Parameters
 
 
-zoneSort = {
-    'pickup'     :   2,
-    'Green'     :   1,
-    'Blue'      :   0,
-    'coms'      :  3
-    }
+# zoneSort = {
+#     'pickup'     :   2,
+#     'Green'     :   1,
+#     'Blue'      :   0,
+#     'coms'      :  3
+#     }
 
-zoneHeight = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0
-}
+# zoneHeight = {
+#     0: 0,
+#     1: 0,
+#     2: 0,
+#     3: 0
+# }
 
 
 
@@ -373,7 +373,7 @@ def set_origin():
 def colorzones():
     global zoneSort
     counter = 0
-    colors = ["Red","Yellow", "Green","Blue", "pickup", "coms"]
+    colors = ["Red","Yellow", "Green","Blue", "pickup", "coms", "belt"]
     current_index=0
     temp = True
     ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
@@ -381,7 +381,7 @@ def colorzones():
         buttons= ev3.buttons.pressed()
         wait(250)
         theend = 3
-        if len(colors) in {1, 2}:
+        if counter == 4:    #len(colors) in {1, 2}:
             for i in colors:
                 ev3.screen.clear()
                 ev3.screen.print("processing...")
