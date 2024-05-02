@@ -13,6 +13,8 @@ def menu(zonecords = zoneHeight, czones = zoneSort):
         set_origin()
         ev3.screen.clear()
         ev3.screen.print(choicelist[current_index])
+    else:
+        ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
@@ -225,12 +227,15 @@ def Emenu(zoneSort:dict, zoneHeight:dict):
                     do = False
                 
                 if Echoicelist[current_index] == "startmenu":
+                    ev3.screen.clear()
                     zoneSort, zoneHeight = menu(zoneSort, zoneHeight)
                     ev3.screen.clear()
                     ev3.screen.print(Echoicelist[current_index])
                     do = False
 
                 if Echoicelist[current_index] == "manual":
+                    ev3.screen.clear()
+                    ev3.screen.print("manual control")
                     set_origin()
                     ev3.screen.clear()
     Estop[0] = False
