@@ -178,12 +178,11 @@ def work_times():
 
 
 
-def Emenu(czones , zonecords):
+def Emenu(zoneSort:dict, zoneHeight:dict):
     Echoicelist = ["resume", "manual", "startmenu"] #, "restart"]
     current_index=0
     do=True
-    zonecords = 0
-    czones = 0
+    
     ev3.screen.print(Echoicelist[current_index])
 
     while do:
@@ -217,7 +216,7 @@ def Emenu(czones , zonecords):
                     do = False
                 
                 if Echoicelist[current_index] == "startmenu":
-                    czones , zonecords = menu(czones , zonecords)
+                    zoneSort, zoneHeight = menu(zoneSort, zoneHeight)
                     do = False
 
                 if Echoicelist[current_index] == "manual":
@@ -231,8 +230,11 @@ def Emenu(czones , zonecords):
 
                             #### needs to båe imporved#######################3
                             ######################################3
-                            #########################3  
-    return czones , zonecords
+                            #########################3 
+
+    print(type(zoneSort))
+
+    return zoneSort, zoneHeight
     
                                           
 
