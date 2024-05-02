@@ -61,56 +61,6 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
         armMovement(gotoZone, angletarget, potentialCargo=True)
             
     
-    #########################################
-    #   Make checks for current position    #
-    #########################################
-
-    # if potentialCargo == True:
-    
-    # if clawMotor.angle() > 0 + 8 and clawMotor.angle() < 0 - 8:
-    #     print("Holding something")
-    #     clawMovement(gotoZone, angleTarget= angletarget, open= False, calibrate= True)
-    #     ## Cargo.
-    #     # sort(gotoZone, angletarget, duringCallibration = False, potentialCargo = False)
-    #     ev3.speaker.beep()
-    #     wait(5)
-    #     ev3.speaker.beep()
-    #     wait(5)
-    #     ev3.speaker.beep()
-    #     # clawMotor.angle()
-    # else:
-    #     armMovement(gotoZone, zoneHeight[gotoZone], angletarget, calibrate = duringCallibration)
-    #     rotateBase(zoneLocation[gotoZone], gotoZone, angletarget, calibrate = duringCallibration)
-                
-    # if 
-
-
-# def sort(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
-#     sortZone = 0
-#     armMovement(gotoZone, zoneHeight[gotoZone], 40, calibrate = duringCallibration)
-#     wait(5)  #2
-#     sortZone, color = colorSort()
-#     print("Sortzone: ", sortZone)
-#     print("Color: ", color)
-
-#     if sortZone == 'Error' or sortZone == 'nothing':
-#         print("Sortzone ", sortZone)
-
-#         ## Will continue if found nothing, otherwise place the cargo.
-#         if sortZone == "nothing":
-            
-#             ev3.speaker.beep()
-#             wait(4)
-#             ev3.speaker.beep()
-
-#             ### print error on robot.
-#             ev3.screen.print('Error "color" 404')
-#             wait(1000)
-
-#             ## Drop of again, if detected random color.
-#             Place(goToZone= gotoZone, angleTarget=-angletarget, openClawsFirst=False)
-#             # lastZone = location
-
 
 def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dict = {}, operatingspeed = 100, potentialCargo= False):
     # if height <= 0:
@@ -165,7 +115,11 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
 
     # print("Estop  ... ", Estop)
     # height = zoneHeight[goToZone]
+    print("in armmovement")
     print(zoneHeight)
+    print("gotozone ", goToZone)
+    print("angletarget ", angleTarget)
+    print("")
     # print("Fucking Height is: ", height)
     # print("angletarget is: ", angleTarget)
     # test = (abs(angleTarget) - height)

@@ -37,9 +37,6 @@ def main(thread2:th.Thread):
     # Robotrun = True
     ev3.speaker.beep()
     
-    if 'coms' in zoneSort:
-        garbage = 'coms'
-        thread2.start()
 
     #zoneSort['pick1'] = 2
     #zoneSort['Blue'] = 0
@@ -63,8 +60,15 @@ def main(thread2:th.Thread):
     lastZone = 0
     goToZone = 0
     speed = 400
+    
+    startup = False
     running = True
     while running:
+
+        if 'coms' in zoneSort and startup == True:
+            garbage = 'coms'
+            thread2.start()
+            startup = False
         
         # if Estop[]
 
