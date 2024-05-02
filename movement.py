@@ -7,6 +7,34 @@ from colorAlgorithm import colorSort
 # from rotationMotor import rotateBase
 
 
+def Calibrate(armStartAngle:int = 40, speed = 60):
+
+    # armMovement(0,1,calibrate=False)
+    # elevationMotor.stop()
+    # clawMotor.stop()
+    # rotationMotor.stop()
+    # wait(2000)
+
+    ev3.screen.print("Callibrate arm")
+    if elevationMotor.angle() != armStartAngle:
+        armMovement(0, armStartAngle, calibrate= True, )
+        # if stopRobot:
+        #     print("stop")
+        #     s.sys.exit()
+
+    ev3.screen.print("Callibrate claw")
+
+    clawMovement(0 , armStartAngle, None, calibrate= True)
+    # if stopRobot:
+    #     print("stop")
+    #     s.sys.exit()
+
+    ev3.screen.print("Callibrate rotation")
+    rotateBase(angle= 0, goToZone= 0, operatingSpeed= speed, armtarget= armStartAngle, calibrate= True)
+    
+    ev3.screen.clear()
+    return 0
+
 def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
     global Estop
     global restart
@@ -25,6 +53,8 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
     print("callibrate ", duringCallibration)
 
     clawAngle = clawMotor.angle()
+    if duringCallibration:
+        Calibrate()
     if clawAngle <= -10:
         ## Might not work since it is pick up... (but place wouldn't either)
         # Pickup(gotoZone,angletarget, openClawsFirst=False, potentialCargo= True)

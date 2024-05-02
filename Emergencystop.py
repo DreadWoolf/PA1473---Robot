@@ -2,7 +2,7 @@
 
 from Parameters import *
 from rotationMotor import rotateBase
-from Arm_and_Claw import armMovement, clawMovement
+from movement import armMovement, clawMovement
 
 
 def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False):

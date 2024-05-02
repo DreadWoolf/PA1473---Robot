@@ -2,7 +2,7 @@
 
 # Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
-from Arm_and_Claw import Place, Pickup, armMovement, clawMovement, rotateBase
+from movement import Place, Pickup, armMovement, clawMovement, rotateBase, Calibrate
 from colorAlgorithm import colorSort
 import sys as s
 from coms import coms, distribute
@@ -73,7 +73,6 @@ def main(thread2:th.Thread):
             print("Sortzone: ", sortZone)
             print("Color: ", color)
 
-            
 
             clawAngle = clawMotor.angle()
             print("claw angle: ", clawAngle)
@@ -188,33 +187,6 @@ def collaborate():
     coms()
 
 
-def Calibrate(armStartAngle:int = 40, speed = 60):
-
-    # armMovement(0,1,calibrate=False)
-    # elevationMotor.stop()
-    # clawMotor.stop()
-    # rotationMotor.stop()
-    # wait(2000)
-
-    ev3.screen.print("Callibrate arm")
-    if elevationMotor.angle() != armStartAngle:
-        armMovement(0, armStartAngle, calibrate= True)
-        # if stopRobot:
-        #     print("stop")
-        #     s.sys.exit()
-
-    ev3.screen.print("Callibrate claw")
-
-    clawMovement(0 , armStartAngle, None, calibrate= True)
-    # if stopRobot:
-    #     print("stop")
-    #     s.sys.exit()
-
-    ev3.screen.print("Callibrate rotation")
-    rotateBase(angle= 0, goToZone= 0, operatingSpeed= speed, armtarget= armStartAngle)
-    
-    ev3.screen.clear()
-    return 0
 
 def StopRobot(stopRobot):
     if stopRobot:

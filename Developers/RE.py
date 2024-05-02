@@ -55,7 +55,7 @@
 
 # Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
-from Arm_and_Claw import Place, Pickup, armMovement, clawMovement, rotateBase
+from movement import Place, Pickup, armMovement, clawMovement, rotateBase
 # from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
 import sys as s

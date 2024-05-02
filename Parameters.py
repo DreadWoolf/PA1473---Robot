@@ -71,7 +71,7 @@ zoneSort = {
 
 errorMargin = RobotRegister[RobotIdentity]
 
-oriontation = "Left"
+oriontation = "Right"
 
 rightOriented = {
     0: 0,

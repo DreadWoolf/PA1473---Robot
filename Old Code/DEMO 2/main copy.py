@@ -2,7 +2,7 @@
 
 # Should import all, and work otherwise uncomment the stuff.
 from Parameters import *
-from Arm_and_Claw import Place, Pickup, armMovement, clawMovement
+from movement import Place, Pickup, armMovement, clawMovement
 from rotationMotor import rotateBase
 from colorAlgorithm import colorSort
 from menu import menu
