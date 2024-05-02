@@ -9,7 +9,9 @@ def menu():
     zoneHeight[2] = 30
     zonecords = zoneHeight
     czones = zoneSort
-    ev3.screen.print(choicelist[current_index])
+    ev3.screen.print("set origin first")
+    set_origin()
+    #ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
@@ -176,7 +178,6 @@ def work_times():
 
 
 def Emenu():
-    ev3.speaker.say("Emergency!")
     Echoicelist = ["resume", "restart","manual"]
     current_index=0
     temp=True
