@@ -124,12 +124,15 @@ def Emenu(zoneSort:dict, zoneHeight:dict):
                     do = False
                 
                 if Echoicelist[current_index] == "startmenu":
+                    ev3.screen.clear()
                     zoneSort, zoneHeight = menu(zoneHeight, zoneSort)
                     ev3.screen.clear()
                     ev3.screen.print(Echoicelist[current_index])
                     do = False
 
                 if Echoicelist[current_index] == "manual":
+                    ev3.screen.clear()
+                    ev3.screen.print("manual control")
                     set_origin()
                     ev3.screen.clear()
     Estop[0] = False
