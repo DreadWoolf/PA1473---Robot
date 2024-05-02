@@ -393,7 +393,7 @@ def colorzones():
                 ev3.speaker.beep()
                 ev3.screen.print("you chose: " + str(chosen) +  "\n")
                 ev3.screen.print("to zone: " + str(counter) +  "\n")
-                wait(150)
+                wait(500)
                 ev3.screen.clear()
                 ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index % len(colors)])
                 #chosen_zone = zoneSort[chosen.lower()] 
@@ -401,7 +401,7 @@ def colorzones():
                 #temp=False
 
             
-
+###
 
 
 if __name__ =="__main__":
