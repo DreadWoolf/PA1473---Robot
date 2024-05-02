@@ -49,7 +49,7 @@ RobotRegister = {
     'G' : 18
 }
 
-RobotIdentity = 'E'
+RobotIdentity = 'G'
  
 
 # zoneSort = {
@@ -60,7 +60,7 @@ RobotIdentity = 'E'
 # }
 
 zoneSort = {
-    'pick1'     :   2,
+    'pickup'     :   2,
     'Green'     :   1,
 #    'Yellow'    :   0,
     'Blue'      :   0,
@@ -71,7 +71,7 @@ zoneSort = {
 
 errorMargin = RobotRegister[RobotIdentity]
 
-oriontation = "Right"
+oriontation = "Left"
 
 rightOriented = {
     0: 0,
