@@ -178,12 +178,12 @@ def work_times():
 def Emenu(czones , zonecords):
     Echoicelist = ["resume", "manual", "startmenu"] #, "restart"]
     current_index=0
-    temp=True
+    do=True
     zonecords = 0
     czones = 0
     ev3.screen.print(Echoicelist[current_index])
 
-    while temp:
+    while do:
         buttons= ev3.buttons.pressed()
         wait(250)
         #ev3.speaker.say("Emergency!")
@@ -211,12 +211,11 @@ def Emenu(czones , zonecords):
                     Estop[0] = False
                     wait(5)
                     ev3.screen.clear()
-                    tmp = False
+                    do = False
                 
                 if Echoicelist[current_index] == "startmenu":
                     czones , zonecords = menu(czones , zonecords)
-                    tmp = False
-                    # return
+                    do = False
 
                 if Echoicelist[current_index] == "manual":
                     set_origin()
