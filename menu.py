@@ -7,9 +7,12 @@ def menu(zonecords = zoneHeight, czones = zoneSort):
     current_index=0
     temp=True
     zoneHeight[2] = 30
-    ev3.screen.print("set origin first")
-    set_origin()
-    #ev3.screen.print(choicelist[current_index])
+    
+    if Estop[0] = False:
+        ev3.screen.print("set origin first")
+        set_origin()
+        ev3.screen.clear()
+        ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
@@ -267,7 +270,7 @@ def zone_hight():
                     ev3.speaker.beep()
                     horangle = rotationMotor.angle() 
                     verangle = elevationMotor.angle()
-                    zonecords[num] = verangle 
+                    zonecords[num - 1] = verangle 
                     if num == 3:
                         ev3.speaker.beep()
                         ev3.screen.clear()
