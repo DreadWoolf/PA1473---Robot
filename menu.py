@@ -190,6 +190,49 @@ def get_month_days(year, month):
         return 0
 
 def work_times():
+    # Initialize an empty dictionary to store time stamps
+    timestamps = {}
+
+    # Phase 1: Choose the number of time stamps (limit between 1 and 99)
+    aots = get_user_input("How many time\nstamps do you want:", 1, 99)
+
+    for i in range(aots):
+
+        # Phase 2: Choose the year (limit between 2024 and 2100)
+        year = get_user_input("time stamp {} \nEnter the\n year:".format(i+1), 2024, 2100)
+
+        # Phase 3: Choose the month (limited between 1 and 12)
+        month = get_user_input("Enter the\n month (1-12):", 1, 12)
+
+        # Phase 4: Choose the day (limited between 1 and the number of days in the chosen month)
+        days_in_month = get_month_days(year, month)
+        day = get_user_input("time stamp {} \nEnter the\n day (1-{}):".format(i+1,days_in_month), 1, days_in_month)
+
+        # Phase 5: Choose the starting hour (limited between 1 and 24)
+        start_hour = get_user_input("time stamp {} \nEnter the starting\n hour (1-24):".format(i+1), 1, 24)
+
+        # Phase 6: Choose the starting minute (limited between 0 and 59)
+        start_min = get_user_input("time stamp {} \nEnter the starting\n minute (0-59):".format(i+1), 0, 59)
+
+        # Phase 7: Choose the ending hour (limited between 1 and 24)
+        end_hour = get_user_input("time stamp {} \nEnter the ending\n hour (1-24):".format(i+1), 1, 24)
+
+        # Phase 8: Choose the ending minute (limited between 0 and 59)
+        end_min = get_user_input("time stamp {} \nEnter the ending\n minute (0-59):".format(i+1), 0, 59)
+
+        # Create start_date and end_date strings
+        start_date = [year, month, day, start_hour, start_min]
+        end_date = [year, month, day, end_hour, end_min]
+        if start_hour < end_hour:
+            timestamps[i] = [start_date, end_date]
+        elif  start_hour == end_hour and start_min < end_min:
+            timestamps[i] = [start_date, end_date]
+        else:
+            ev3.screen.print("invaled date \ninputed \n restart choise")
+            wait(5000)
+            return       
+
+
     rsd_year = get_user_input("Enter current\n year:", 2024, 2100)
     rsd_month = get_user_input("Enter current\n month (1-12):", 1, 12)
     rsd_days_in_month = get_month_days(rsd_year, rsd_month)
@@ -197,59 +240,44 @@ def work_times():
     rsd_hour = get_user_input("Enter current\n hour (1-24):", 1, 24)
     rsd_min = get_user_input("Enter current\n minute (0-59):", 0, 59)
     rsd = [rsd_year,rsd_month,rsd_day,rsd_hour,rsd_min]
+    print(rsd)
 
-    # Phase 1: Choose the number of time stamps (limit between 1 and 99)
-    aots = get_user_input("How many time\nstamps do you want:", 1, 99)
-
-    # Initialize an empty dictionary to store time stamps
-    timestamps = {}
-
-    # Phase 2: Choose the year (limit between 2024 and 2100)
-    year = get_user_input("Enter the\n year:", 2024, 2100)
-    print(year)
-
-    # Phase 3: Choose the month (limited between 1 and 12)
-    month = get_user_input("Enter the\n month (1-12):", 1, 12)
-    print(month)
-    # Phase 4: Choose the day (limited between 1 and the number of days in the chosen month)
-    days_in_month = get_month_days(year, month)
-    day = get_user_input("Enter the\n day (1-{}):".format(days_in_month), 1, days_in_month)
-    print(day)
-
-    # Phase 5: Choose the starting hour (limited between 1 and 24)
-    start_hour = get_user_input("Enter the starting\n hour (1-24):", 1, 24)
-    print(start_hour)
-    # Phase 6: Choose the starting minute (limited between 0 and 59)
-    start_min = get_user_input("Enter the starting\n minute (0-59):", 0, 59)
-    print(start_min)
-    # Phase 7: Choose the ending hour (limited between 1 and 24)
-    end_hour = get_user_input("Enter the ending\n hour (1-24):", 1, 24)
-
-    print(end_hour)
-    # Phase 8: Choose the ending minute (limited between 0 and 59)
-    end_min = get_user_input("Enter the ending\n minute (0-59):", 0, 59)
-    print(end_min)
-    # Create start_date and end_date strings
-    start_date = [year, month, day, start_hour, start_min]
-    end_date = [year, month, day, end_hour, end_min]
-    print(start_date)
-    print(end_date)
-
-    # Check if start_date is before end_date
-    try:
-        if (start_hour < end_hour) or ((start_hour == end_hour) and (start_min < end_min)) :
-            # Store the time stamps in the dictionary
-            timestamps[aots] = [start_date, end_date]
-            print("Time stamps:")
-            for key, value in timestamps.items():
-                print("{}: {}".format(key, value))
-            Parameters.tstamps = timestamps
-            Parameters.ctime = rsd
-            wtii(rsd,timestamps)
+    for i in timestamps:
+        print (timestamps[i]) 
+        for date in timestamps[i]:
+            for x in range(len(rsd)):
+                if date[x] < rsd[x] :
+                    ev3.screen.print("Invalid date \ninputed. \nRestart choice.")
+                    wait(5000)
+                    return 0
+                elif date[x] > rsd[x]:
+                    break
+                elif date == rsd :
+                    ev3.screen.print("Invalid date \ninputed. \nRestart choice.")
+                    wait(5000)
+                    return 0
+            else:
+                continue
+            break
         else:
-            print("Invalid time range. Start date must be before end date.")
-    except ValueError:
-        print("Invalid date format. Please enter a valid date and time.")
+            # Check for duplicate or overlapping timestamps
+            for j in timestamps:
+                if i != j:  # Don't compare the timestamp with itself
+                    for x in range(len(timestamps[i][0])):
+                        if timestamps[i][0][x] <= timestamps[j][1][x] and timestamps[j][0][x] <= timestamps[i][1][x]:
+                            ev3.screen.print("Invalid input.\nOverlapping timestamps")
+                            wait(5000)
+                            return 0
+                        else:
+                            break
+            if i == list(timestamps.keys())[-1]:       
+                print("Time stamps:")
+                for key, value in timestamps.items():
+                    print("{}: {}".format(key, value))
+                Parameters.tstamps = timestamps
+                Parameters.ctime = rsd
+                wtii(rsd,timestamps)
+                return 0
 
 
                              

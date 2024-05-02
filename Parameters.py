@@ -159,6 +159,7 @@ def wtii(ctime, tstamps):
                 if ctime[1] > 12:  # If the month exceeds 12, increment the year and reset the month to 1
                     ctime[1] = 1
                     ctime[0] += 1
-
             print(ctime)
+            for time in tstamps.items():
+                print (time)
 
