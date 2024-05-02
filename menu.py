@@ -8,7 +8,7 @@ def menu(zonecords = zoneHeight, czones = zoneSort):
     temp=True
     zoneHeight[2] = 30
     
-    if Estop[0] = False:
+    if Estop[0] == False:
         ev3.screen.print("set origin first")
         set_origin()
         ev3.screen.clear()
@@ -178,12 +178,11 @@ def work_times():
 
 
 
-def Emenu(czones , zonecords):
+def Emenu(zoneSort:dict, zoneHeight:dict):
     Echoicelist = ["resume", "manual", "startmenu"] #, "restart"]
     current_index=0
     do=True
-    zonecords = 0
-    czones = 0
+    
     ev3.screen.print(Echoicelist[current_index])
 
     while do:
@@ -217,7 +216,7 @@ def Emenu(czones , zonecords):
                     do = False
                 
                 if Echoicelist[current_index] == "startmenu":
-                    czones , zonecords = menu(czones , zonecords)
+                    zoneSort, zoneHeight = menu(zoneSort, zoneHeight)
                     do = False
 
                 if Echoicelist[current_index] == "manual":
@@ -231,8 +230,11 @@ def Emenu(czones , zonecords):
 
                             #### needs to båe imporved#######################3
                             ######################################3
-                            #########################3  
-    return czones , zonecords
+                            #########################3 
+
+    print(type(zoneSort))
+
+    return zoneSort, zoneHeight
     
                                           
 
@@ -348,7 +350,7 @@ def colorzones():
             temp = False
             #keys_to_keep = list(zoneSort.keys())[:-3]
             sorted_items = sorted(zoneSort.items(), key=lambda x: x[1]) # sorts based on number
-            sorted_items = sorted_items[:-3] # cuts so only 4 left
+            sorted_items = sorted_items[:-2] # cuts so only 4 left
             zoneSort = dict(sorted_items)
             print("THE NEW DICT: "+ str(zoneSort))                
             return zoneSort
