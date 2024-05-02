@@ -8,7 +8,7 @@ def menu(zonecords = zoneHeight, czones = zoneSort):
     temp=True
     zoneHeight[2] = 30
     
-    if Estop[0] = False:
+    if Estop[0] == False:
         ev3.screen.print("set origin first")
         set_origin()
         ev3.screen.clear()
@@ -373,6 +373,8 @@ def colorzones():
                 print("popped:", chosen, "zone:", counter)
                 zoneSort[chosen] = counter - 1
                 ev3.speaker.beep()
+                ev3.screen.print("you chose: " + str(chosen) +  "\n")
+                ev3.screen.print("to zone: " + str(counter) +  "\n")
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
