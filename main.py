@@ -67,16 +67,21 @@ def main(thread2:th.Thread):
 
         ev3.screen.clear()
 
+        
 
-        if 'coms' in zoneSort and startup == True:
-            garbage = 'coms'
+        if  not thread2.is_alive and ('coms' in zoneSort or 'belt' in zoneSort):
+            if 'coms' in zoneSort: garbage = 'coms'
             thread2.start()
-            startup = False
 
-            
-        if 'belt' in zoneSort:
-            thread2.start()
-            startup = False
+        
+        # At belt.
+        belt()
+
+
+        # if 'belt' in zoneSort:
+        #     # reflection = colorSense.reflection()
+
+            # startup = False
         
         # if Estop[]
 
@@ -130,9 +135,12 @@ def main(thread2:th.Thread):
             if distribute[0] == True:
                 pickupzone = zoneSort["coms"]
                 ### Send info occupied
-                send[0] = 0
+                send[0] = 1
             else:
-                pickupzone = zoneSort["pickup"]
+                if 'belt' in zoneSort:
+                    belt()
+                else:
+                    pickupzone = zoneSort["pickup"]
             # goToZone = location
             armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
             rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
@@ -192,8 +200,23 @@ def testThreading():
 
 # def btnCheck():
 
-def collaborate():
-    coms()
+# def collaborate():
+#     coms()
+
+
+def belt():
+    margin = 20
+    send[0] = 3
+    reflection = colorSense.reflection()
+
+    while reflection >= 0 + margin and reflection <= 100 - margin:
+        reflection = colorSense.reflection()
+        send[0] = 3
+    
+    send[0] = 
+        
+
+    return 0
 
 
 
@@ -207,7 +230,8 @@ def StopRobot(stopRobot):
 if __name__ == "__main__":
     # Create two threads for each task
     thread1 = th.Thread(target=testThreading)
-    thread2 = th.Thread(target=collaborate)
+    thread2 = th.Thread(target=coms)
+    # thread3 = th.Thread(target=belt)
     # thread3 = th.Thread(target=main, args=(thread2))
 
 

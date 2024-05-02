@@ -3,19 +3,19 @@ from Parameters import *
 import Parameters
 
 
-zoneSort = {
-    'pickup'     :   2,
-    'Green'     :   1,
-    'Blue'      :   0,
-    'coms'      :  3
-    }
+# zoneSort = {
+#     'pickup'     :   2,
+#     'Green'     :   1,
+#     'Blue'      :   0,
+#     'coms'      :  3
+#     }
 
-zoneHeight = {
-    0: 0,
-    1: 0,
-    2: 0,
-    3: 0
-}
+# zoneHeight = {
+#     0: 0,
+#     1: 0,
+#     2: 0,
+#     3: 0
+# }
 
 
 
