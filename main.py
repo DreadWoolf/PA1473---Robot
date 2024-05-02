@@ -66,6 +66,7 @@ def main(thread2:th.Thread):
     running = True
     while running:
         
+        # if Estop[]
 
         if cargo and Estop[0] == False: #
 
@@ -119,8 +120,6 @@ def main(thread2:th.Thread):
                 ### Send info occupied
                 send[0] = 0
             else:
-                print(type(pickupzone))
-                print(type(zoneSort))
                 pickupzone = zoneSort["pickup"]
             # goToZone = location
             armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.

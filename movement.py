@@ -122,8 +122,8 @@ def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dic
         wait(2)
         if Estop[0]: break
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
-        if Estop[0]: break
         wait(2)
+        if Estop[0]: break
         armMovement(goToZone, angleTarget= -angleTarget, operatingspeed= operatingspeed)
         wait(2)
         break

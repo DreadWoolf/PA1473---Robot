@@ -182,7 +182,7 @@ def Emenu(zoneSort:dict, zoneHeight:dict):
     Echoicelist = ["resume", "manual", "startmenu"] #, "restart"]
     current_index=0
     do=True
-    
+
     ev3.screen.print(Echoicelist[current_index])
 
     while do:
@@ -210,7 +210,7 @@ def Emenu(zoneSort:dict, zoneHeight:dict):
                 #     ev3.screen.clear()
                 #     return
                 if Echoicelist[current_index] == "resume":
-                    Estop[0] = False
+                    # Estop[0] = False
                     wait(5)
                     ev3.screen.clear()
                     do = False
@@ -222,18 +222,7 @@ def Emenu(zoneSort:dict, zoneHeight:dict):
                 if Echoicelist[current_index] == "manual":
                     set_origin()
                     ev3.screen.clear()
-
-                            #get out of here
-                            #break
-                            #  wait(1000)
-
-
-                            #### needs to båe imporved#######################3
-                            ######################################3
-                            #########################3 
-
-    print(type(zoneSort))
-
+    Estop[0] = False
     return zoneSort, zoneHeight
     
                                           
