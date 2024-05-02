@@ -239,12 +239,12 @@ def Emenu(czones , zonecords):
 
 
 def zone_hight():
-    zonenum = [0,1,2,3]
+    zonenum = [1,2,3,4]
     zonecords = {
-                 0:1,
-                 1:2,
-                 2:20,
-                 3:0
+                 1:1,
+                 2:2,
+                 3:20,
+                 4:0
                  }
     #rotationMotor.reset_angle(0)
     #elevationMotor.reset_angle(0)
@@ -324,7 +324,7 @@ def set_origin():
 
 def colorzones():
     global zoneSort
-    counter = -1
+    counter = 0
     colors = ["Red","Yellow", "Green","Blue", "pickup", "coms"]
     current_index=0
     temp = True
@@ -333,7 +333,7 @@ def colorzones():
         buttons= ev3.buttons.pressed()
         wait(250)
         theend = 3
-        if len(colors) in {1, 2, 3}:
+        if len(colors) in {1, 2}:
             for i in colors:
                 ev3.screen.clear()
                 ev3.screen.print("processing...")
