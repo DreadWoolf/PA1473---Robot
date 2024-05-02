@@ -30,6 +30,8 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
         set_origin()
         ev3.screen.clear()
         ev3.screen.print(choicelist[current_index])
+    else:
+        ev3.screen.print(choicelist[current_index])
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
