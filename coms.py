@@ -4,48 +4,67 @@ from Parameters import *
 from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
 
 
-distribute = ['receevied', 'deliver']  #0 : receevied, 1: deliver.
+distributeText = ['receevied', 'deliver']  #0 : receevied, 1: deliver.
+distribute = [False, False]
+
+# server = BluetoothMailboxServer()
+# me[0] = server
+# mbox = TextMailbox('greeting', me[0])
+# print("trying to connect")
+# me[0].wait_for_connection()
 
 
-server = BluetoothMailboxServer()
-me[0] = server
-mbox = TextMailbox('greeting', me[0])
-print("trying to connect")
-me[0].wait_for_connection()
 
-
-
-def coms():
-    global mbox
+def coms(mbox):
+    # global mbox
     # mbox = Connect()
     while True:
-        mbox.wait()
+        if thread2Alive[0] == False: break
+
+        # mbox.wait()
+
         inbox = mbox.read()
-        if inbox == messages[1]:
+
+        if inbox == messages[0]: # Occupied
+            distribute[1] = True # Collision warning!
+            distribute[0] = False # receevied is false.
+            ev3.sepaker.beep()
+            ev3.screen.print("Collision warning!")
+        
+        elif inbox == messages[1]: # giftForme
             ev3.speaker.beep()
             # Will go there and pick up the stuff
-            send[0] = 'occupied' # Send occupied signal.
-            distribute[0] = 'receevied'
+            # send[0] = 'occupied' # Send occupied signal.
+
+            # Package has been delivered to us and safe to go there.
+            distribute[0] = True  # receevied
+            distribute[1] = False # occupied 
             wait(10)
             ev3.screen.print(inbox)
-            while True:
-                if send[0] == 0:
-                    text = messages[0]
-                    print(text)
-                    sendMessage()
-                    # mbox.send(text)
-                    send[0] == 3
-                    break
-                else:
-                    wait(300)
+            # while True:
+            #     if send[0] == 0:
+            #         text = messages[0]
+            #         print(text)
+            #         sendMessage()
+            #         # mbox.send(text)
+            #         send[0] == 3
+            #         break
+            #     else:
+            #         wait(300)
+        elif inbox == messages[5]: # Free
+            distribute[0] = False # Occupied
+            distribute[1] = False # Receevied
+        elif inbox == messages[4]: # Emergency stop
+            Estop[0] = True  # does this work?
+
         
         
 # messages = ['occupied', 'gift4u', 'feed', 'stop']
         
 
 
-def sendMessage():
-    global mbox
+def sendMessage(mbox):
+    # global mbox
     if send[0] == messages[0]: # Occupied
         text = send[0]  # occupied
         mbox.send(text)
@@ -53,11 +72,17 @@ def sendMessage():
         text = send[0]  # gif4u
         mbox.send(text)
     elif send[0] == messages[2]: #'feed':
-        text = messages[3]  # feed
+        text = send[0] #messages[2]  # feed
+        print("sent message ", send[0])
         mbox.send(text)
     elif send[0] == messages[3]: # Stop belt
         text = send[0]  # stop
         mbox.send(text)
+    elif send[0] == messages[4]: # Emergency
+        text = send[0]  # emergency
+        mbox.send(text)
+
+
 
 
 
@@ -137,4 +162,5 @@ def Connect():
 
 
 if __name__ == "__main__":
-    coms()
+    mbox = Connect()
+    coms(mbox)

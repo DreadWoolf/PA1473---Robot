@@ -53,20 +53,26 @@
 #     # thread2.join()
 
 #     print("Both tasks are completed.")
-from pybricks.messaging import BluetoothMailboxClient, TextMailbox
+# from pybricks.messaging import BluetoothMailboxClient, TextMailbox
 
-# This is the name of the remote EV3 or PC we are connecting to.
-SERVER = 'ev3dev'
+# # This is the name of the remote EV3 or PC we are connecting to.
+# SERVER = 'ev3dev'
 
-client = BluetoothMailboxClient()
-mbox = TextMailbox('greeting', client)
+# client = BluetoothMailboxClient()
+# mbox = TextMailbox('greeting', client)
 
-print('establishing connection...')
-client.connect(SERVER)
-print('connected!')
+# print('establishing connection...')
+# client.connect(SERVER)
+# print('connected!')
 
-# In this program, the client sends the first message and then waits for the
-# server to reply.
-mbox.send('hello!')
-mbox.wait()
-print(mbox.read())
+# # In this program, the client sends the first message and then waits for the
+# # server to reply.
+# mbox.send('hello!')
+# mbox.wait()
+# print(mbox.read())
+zonenum = [1,2,3,4, "done?"]
+
+temp = True
+while temp:
+    test = int(input("input number: "))
+    print(zonenum[test % len(zonenum)])

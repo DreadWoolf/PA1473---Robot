@@ -111,9 +111,13 @@ SERVERID = 'ev3dev'
 # Before running this program, make sure the client and server EV3 bricks are
 # paired using Bluetooth, but do NOT connect them. The program will take care
 # of establishing the connection.
-messages = ['occupied', 'gift4u', 'feed', 'stop']
-send = ['nothing'] # 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop.
 
+messages = ['occupied', 'gift4u', 'feed', 'stop', 'emergency', 'free']
+# 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop, 5 free.
+send = ['nothing']
+
+# Coms thread.
+thread2Alive = [False]
 
 
 

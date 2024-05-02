@@ -30,7 +30,7 @@ thread2 = th.Thread()
 Robotrun = True
 stopRobot = False
 
-def main(thread2:th.Thread):
+def main(): #thread2:th.Thread):
     global zoneSort
     global zoneHeight
     global Robotrun
@@ -55,54 +55,74 @@ def main(thread2:th.Thread):
     
     Calibrate(armStartAngle)
     
-    run = 0
-    location = 0 # Go to first 1.
-    lastZone = 0
+    # run = 0
+    # location = 0 # Go to first 1.
+    # lastZone = 0
     goToZone = 0
     speed = 400
     
-    startup = False
+    # startup = False
     running = True
-    thred2Alive = False
     while running:
 
         ev3.screen.clear()
 
         
-
-        if  not thred2Alive and ('coms' in zoneSort or 'belt' in zoneSort):
+        ###############################
+        #       start coms thread     #
+        ###############################
+        if  not thread2Alive[0] and ('coms' in zoneSort or 'belt' in zoneSort):
             if 'coms' in zoneSort: garbage = 'coms'
-            thread2Alive = True
+
+            # Wait for connection, before startup and then start communication Thread.
+            mbox = Connect()
+            wait(2)
+            thread2 = th.Thread(target=coms, args=mbox)
+            thread2Alive[0] = True
             thread2.start()
 
-
+        # Aptempt to Turn of thread2, if zones is changed.
+        elif not ('coms' in zoneSort or 'belt' in zoneSort):
+            thread2Alive[0] = False
+            wait(5)
+            if thread2Alive:    thread2.join()
         
-        # At belt.
-        # belt()
+        # If thread2 is active, send appropiate messages to companion.
+        elif thread2Alive[0] == True:
+            zoneMargin = 200
+            check = zoneLocation[zoneSort['coms']]
+
+            if send[0] != 'nothing' and rotationMotor.angle() >= check + zoneMargin and rotationMotor.angle() <= check - zoneMargin:
+                send[0] = messages[5] # Free
+                sendMessage()
+                send[0] = 'nothing'
+            # Make sure we are not blocking the coms zone, if no pickup exists.
+            elif not 'pickup' in zoneSort:
+                pickupzone = zoneSort['coms'] % (zoneSort['coms'] + 1)
+                armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2)
+                rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
 
 
-        # if 'belt' in zoneSort:
-        #     # reflection = colorSense.reflection()
 
-            # startup = False
-        
-        # if Estop[]
+
+
+
 
         if cargo and Estop[0] == False: #
 
             sortZone = 0
             wait(5)  #2
             sortZone, color = colorSort(zoneSort)
-            print("Sortzone: ", sortZone)
-            print("Color: ", color)
+            # print("Sortzone: ", sortZone)
+            # print("Color: ", color)
 
 
             clawAngle = clawMotor.angle()
-            print("claw angle: ", clawAngle)
+            # print("claw angle: ", clawAngle)
 
             if sortZone == 'Error' or sortZone == 'nothing':
 
-                print("Sortzone ", sortZone)
+                # print("Sortzone ", sortZone)
 
                 
 
@@ -124,6 +144,19 @@ def main(thread2:th.Thread):
             else:
                 ev3.screen.print(str(color) + " to " + str(sortZone))
                 
+                if sortZone == zoneSort['coms']:
+                    while True:
+                        if distribute[1]: # Collision warning
+                            wait(500)
+                        elif distribute[0]: # Other robot has already left a package.
+                            ev3.screen.print("Error package \nalready there!")
+                        else:
+                            send[0] = messages[0] # 'occupied'
+                            sendMessage()
+                            wait(10)
+                            break
+
+
                 wait(5)
 
                 rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
@@ -135,10 +168,13 @@ def main(thread2:th.Thread):
             cargo = False
                 # lastZone = location
         else:
-            if distribute[0] == True:
+            # If receevied = True and Occupied = False.
+            if distribute[0] == True and distribute[1] == False:
                 pickupzone = zoneSort["coms"]
                 ### Send info occupied
-                send[0] = 1
+                send[0] = messages[0] # 'occupied'
+                wait(2)
+                sendMessage()
                 wait(2)
                 armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
                 rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
@@ -182,7 +218,7 @@ def main(thread2:th.Thread):
 
 
 
-def testThreading():
+def EmergencyThread():
     global RobotRun
     global stopRobot
     global zoneSort
@@ -246,8 +282,9 @@ def StopRobot(stopRobot):
 ## Checks if this is the running script, and not imported from somewhere!
 if __name__ == "__main__":
     # Create two threads for each task
-    thread1 = th.Thread(target=testThreading)
-    thread2 = th.Thread(target=coms)
+    thread1 = th.Thread(target=EmergencyThread)
+    # thread2 = th.Thread(target=coms, args=mbox)
+
     # thread3 = th.Thread(target=belt)
     # thread3 = th.Thread(target=main, args=(thread2))
 
@@ -257,7 +294,7 @@ if __name__ == "__main__":
     # thread3.start()
 
     # Skicka tråd2 till main
-    main(thread2)
+    main()  #thread2)
 
     # # Wait for both threads to finish
     # thread1.join()

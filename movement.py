@@ -73,9 +73,9 @@ def Belt():
     send[0] = 'feed'
     
     wait(2)
-    while reflection >= 0 + margin: # and reflection <= 100 - margin:
-        print("reflektion ", reflection)
+    while colorSense.reflection() >= 0 + margin: # and reflection <= 100 - margin:
         reflection = colorSense.reflection()
+        print("reflektion ", reflection)
         sendMessage()
         # return False
     
@@ -96,7 +96,7 @@ def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dic
         wait(2)
         if Estop[0]: break
 
-        if belt:  # wait here if we have belt.
+        if belt == True:  # wait here if we have belt.
             Belt()
         
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
