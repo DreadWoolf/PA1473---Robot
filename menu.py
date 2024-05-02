@@ -289,7 +289,7 @@ def zone_hight():
                     horangle = rotationMotor.angle() 
                     verangle = elevationMotor.angle()
                     zonecords[num - 1] = verangle 
-                    if num == 4:
+                    if num == 3:
                         ev3.speaker.beep()
                         ev3.screen.clear()
                         ev3.screen.print("done!")
@@ -345,7 +345,7 @@ def set_origin():
 def colorzones():
     global zoneSort
     counter = 0
-    colors = ["Red","Yellow", "Green","Blue", "pickup", "coms"]
+    colors = ["Red","Yellow", "Green","Blue", "pickup", "coms", "belt"]
     current_index=0
     temp = True
     ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
@@ -353,7 +353,7 @@ def colorzones():
         buttons= ev3.buttons.pressed()
         wait(250)
         theend = 3
-        if len(colors) in {1, 2}:
+        if counter == 4:    #len(colors) in {1, 2}:
             for i in colors:
                 ev3.screen.clear()
                 ev3.screen.print("processing...")
