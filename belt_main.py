@@ -47,12 +47,12 @@ belt.control.limits(speed=150, acceleration=60)
 #####################coms##########################
 
 def resturaunt():
-    SERVER = 'ev3dev'
+    SERVER = 'ev3dev-C'
     client = BluetoothMailboxClient()
-    mbox = TextMailbox('kitchen', client)
-    print('establishing connection...')
+    mbox = TextMailbox('greeting', client)
+    ev3.screen.print('establishing connection...')
     client.connect(SERVER)
-    print('connected!')
+    ev3.screen.print('connected!')
 
     while True:
         mbox.wait()
@@ -61,11 +61,11 @@ def resturaunt():
             speed = 50
             ev3.screen.print("Speed:", speed)
             belt.run(speed)
-        else inbox == "stop":
+        elif inbox == "stop":
             ev3.screen.print("halt!")
             belt.stop()
 
 
 if __name__ == '__main__':
     resturaunt()
-    #when get "feed" being feeding!!!
+    #when geting "feed" feed material!!!

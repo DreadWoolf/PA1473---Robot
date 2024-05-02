@@ -10,11 +10,14 @@ distribute = ['receevied', 'deliver']  #0 : receevied, 1: deliver.
 server = BluetoothMailboxServer()
 me[0] = server
 mbox = TextMailbox('greeting', me[0])
+print("trying to connect")
+me[0].wait_for_connection()
+
 
 
 def coms():
     global mbox
-    mbox = Connect()
+    # mbox = Connect()
     while True:
         mbox.wait()
         inbox = mbox.read()
@@ -37,7 +40,7 @@ def coms():
                     wait(300)
         
         
-messages = ['occupied', 'gift4u', 'feed', 'stop']
+# messages = ['occupied', 'gift4u', 'feed', 'stop']
         
 
 

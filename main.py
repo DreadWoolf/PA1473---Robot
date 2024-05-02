@@ -63,14 +63,16 @@ def main(thread2:th.Thread):
     
     startup = False
     running = True
+    thred2Alive = False
     while running:
 
         ev3.screen.clear()
 
         
 
-        if  not thread2.is_alive() and ('coms' in zoneSort or 'belt' in zoneSort):
+        if  not thred2Alive and ('coms' in zoneSort or 'belt' in zoneSort):
             if 'coms' in zoneSort: garbage = 'coms'
+            thread2Alive = True
             thread2.start()
 
 
@@ -137,6 +139,11 @@ def main(thread2:th.Thread):
                 pickupzone = zoneSort["coms"]
                 ### Send info occupied
                 send[0] = 1
+                wait(2)
+                armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
+                rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+                Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
+
             else:
                 if 'belt' in zoneSort:
                     pickupzone = zoneSort["belt"] 

@@ -66,11 +66,13 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
 
 
 def Belt():
-    margin = 20
+    margin = 20 # 20
     # send[0] = 3
     reflection = colorSense.reflection()
+    print("reflektion outside ", reflection)
     send[0] = 'feed'
-
+    
+    wait(2)
     while reflection >= 0 + margin: # and reflection <= 100 - margin:
         print("reflektion ", reflection)
         reflection = colorSense.reflection()
@@ -78,6 +80,7 @@ def Belt():
         # return False
     
     send[0] = 'stop' # Send stop feeding
+    wait(4)
     sendMessage()
 
     # return True
