@@ -60,7 +60,7 @@ RobotIdentity = 'G'
 # }
 
 zoneSort = {
-    'pick1'     :   2,
+    'pickup'     :   2,
     'Green'     :   1,
 #    'Yellow'    :   0,
     'Blue'      :   0,

@@ -317,7 +317,7 @@ def set_origin():
 def colorzones():
     global zoneSort
     counter = -1
-    colors = ["Red","Yellow", "Green","Blue", "pick1", "pick2", "coms"]
+    colors = ["Red","Yellow", "Green","Blue", "pickup", "coms"]
     current_index=0
     temp = True
     ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index])
