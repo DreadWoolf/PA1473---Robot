@@ -38,17 +38,25 @@ def menu(zonecords = zoneHeight, czones = zoneSort):
                     ev3.speaker.beep()
                     zonecords = zone_hight()
                     print(zonecords)
+                    ev3.screen.clear()
+                    ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] == "set_origin":
                     ev3.speaker.beep()
                     origin = set_origin()
                     print(origin)
+                    ev3.screen.clear()
+                    ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] == "zonecolor_selection":
                     ev3.speaker.beep()
                     czones = colorzones()
                     print(czones)
+                    ev3.screen.clear()
+                    ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] =="work_times":
                     ev3.speaker.beep()
                     work_times()
+                    ev3.screen.clear()
+                    ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] == "start_code":
                     ev3.speaker.beep()
                     return czones , zonecords
@@ -213,10 +221,13 @@ def Emenu(zoneSort:dict, zoneHeight:dict):
                     # Estop[0] = False
                     wait(5)
                     ev3.screen.clear()
+                    ev3.screen.print(Echoicelist[current_index])
                     do = False
                 
                 if Echoicelist[current_index] == "startmenu":
                     zoneSort, zoneHeight = menu(zoneSort, zoneHeight)
+                    ev3.screen.clear()
+                    ev3.screen.print(Echoicelist[current_index])
                     do = False
 
                 if Echoicelist[current_index] == "manual":
@@ -334,7 +345,7 @@ def colorzones():
                 zoneSort[i] = theend
                 ev3.speaker.beep()
             ev3.screen.clear()
-            ev3.screen.print("done!")
+            ev3.screen.print("<--  done!  -->")
             ev3.speaker.beep()
             temp = False
             #keys_to_keep = list(zoneSort.keys())[:-3]
@@ -364,6 +375,8 @@ def colorzones():
                 print("popped:", chosen, "zone:", counter)
                 zoneSort[chosen] = counter - 1
                 ev3.speaker.beep()
+                ev3.screen.print("you chose: " + str(chosen) +  "\n")
+                ev3.screen.print("to zone: " + str(counter) +  "\n")
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])
                 #temp=False
