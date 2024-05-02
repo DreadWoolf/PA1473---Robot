@@ -65,8 +65,16 @@ def main(thread2:th.Thread):
     running = True
     while running:
 
+        ev3.screen.clear()
+
+
         if 'coms' in zoneSort and startup == True:
             garbage = 'coms'
+            thread2.start()
+            startup = False
+
+            
+        if 'belt' in zoneSort:
             thread2.start()
             startup = False
         
@@ -180,16 +188,6 @@ def testThreading():
             wait(2)
 
             stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
-
-            # for button in buttons:
-            #     if str(button) == "Button.CENTER":
-            #         ev3.speaker.beep()
-            #         wait(1000)
-            #         stopProcess = False  # Sätt flaggan till True när knappen trycks
-            #         Estop[0] = False
-            #         # thread2.start()
-
-                    # break  # Avbryt loopen när knappen trycks
     return 0
 
 # def btnCheck():
