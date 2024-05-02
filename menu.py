@@ -369,7 +369,7 @@ def colorzones():
                 ev3.screen.clear()
                 chosen = colors.pop(current_index % len(colors)) 
                 print("popped:", chosen, "zone:", counter)
-                zoneSort[chosen] = counter
+                zoneSort[chosen] = counter - 1
                 ev3.speaker.beep()
                 #chosen_zone = zoneSort[chosen.lower()] 
                 #ev3.screen.print("you chose ",choicelist[current_index])

@@ -60,13 +60,10 @@ RobotIdentity = 'G'
 # }
 
 zoneSort = {
-    'pickup'     :   3,
-    'Green'     :   2,
-#    'Yellow'    :   0,
-    'Blue'      :   1,
-    # 'red':4,
-#    'pick2'     :   4,
-    'coms'      :  4
+    'pickup'     :   2,
+    'Green'     :   1,
+    'Blue'      :   0,
+    'coms'      :  3
     }
 
 errorMargin = RobotRegister[RobotIdentity]
