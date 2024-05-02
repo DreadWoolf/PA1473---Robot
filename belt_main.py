@@ -52,7 +52,7 @@ def resturaunt(order):
         wait(300)
     speed = 0
     ev3.screen.print("Speed:", speed)
-    belt.run(speed)
+    belt.stop()
     # elif order == "wait":
     #     speed = 0
     #     ev3.screen.print("Speed:", speed)
@@ -60,16 +60,16 @@ def resturaunt(order):
     #     wait(300)
     #     return 1
 
-
 SERVER = 'ev3dev'
 client = BluetoothMailboxClient()
 mbox = TextMailbox('kitchen', client)
 print('establishing connection...')
 client.connect(SERVER)
 print('connected!')
-mbox.wait()
-order = mbox.read()
-
+while True:
+    mbox.wait()
+    inbox = mbox.read()
+    resturaunt(inbox)
 
 
 if __name__ == '__main__':
