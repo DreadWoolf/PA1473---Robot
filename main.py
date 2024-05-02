@@ -78,6 +78,7 @@ def main(thread2:th.Thread):
             print("claw angle: ", clawAngle)
 
             if sortZone == 'Error' or sortZone == 'nothing':
+
                 print("Sortzone ", sortZone)
 
                 
@@ -98,6 +99,7 @@ def main(thread2:th.Thread):
                         running = False
                         #Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
             else:
+                ev3.screen.print(str(color) + " to " + str(sortZone))
                 
                 wait(5)
 
