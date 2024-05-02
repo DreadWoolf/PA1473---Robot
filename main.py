@@ -72,6 +72,9 @@ def main(thread2:th.Thread):
             sortZone, color = colorSort(zoneSort)
             print("Sortzone: ", sortZone)
             print("Color: ", color)
+            
+
+
             clawAngle = clawMotor.angle()
             print("claw angle: ", clawAngle)
 
