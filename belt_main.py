@@ -42,5 +42,36 @@ def main():
             speed = change_speed(-10, speed)
         wait(100)
 
+
+#####################3coms##########################
+def resturaunt(order):
+    while order == "feed":
+        speed = 50
+        ev3.screen.print("Speed:", speed)
+        belt.run(speed)
+        wait(300)
+    speed = 0
+    ev3.screen.print("Speed:", speed)
+    belt.stop()
+    # elif order == "wait":
+    #     speed = 0
+    #     ev3.screen.print("Speed:", speed)
+    #     belt.run(speed)
+    #     wait(300)
+    #     return 1
+
+SERVER = 'ev3dev'
+client = BluetoothMailboxClient()
+mbox = TextMailbox('kitchen', client)
+print('establishing connection...')
+client.connect(SERVER)
+print('connected!')
+while True:
+    mbox.wait()
+    inbox = mbox.read()
+    resturaunt(inbox)
+
+
 if __name__ == '__main__':
     main()
+    #when get "feed" being feeding!!!
