@@ -8,7 +8,7 @@ import sys as s
 from coms import coms, distribute, Connect, sendMessage
 
 from menu import menu, Emenu
-zoneSort, zoneHeight , we = menu()
+zoneSort, zoneHeight = menu()
 print(zoneSort)
 
 # if 'coms' in zoneSort:

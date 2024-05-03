@@ -303,7 +303,7 @@ def zone_hight():
                     abs_values = {key: abs(value) for key, value in zonecords.items()}
                     farthest_key = max(abs_values, key=abs_values.get)
                     farthest_value = zonecords[farthest_key]
-                    print("Key with farthest value from 0:", farthest_key)
+                    #print("Key with farthest value from 0:", farthest_key)
                     print("Value at that key:", farthest_value)
                     weHaveHeight[0] = farthest_value
                     print(weHaveHeight)
