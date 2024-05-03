@@ -174,7 +174,7 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
         elevationMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=10) #20
         # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
     elif pickingup == True:#height != 0:
-        
+        height = zoneHeight[goToZone]/multiplyAngle
         # print(zoneHeight)
         # print("Fucking Height is: ", height)
         # print("angletarget is: ", angleTarget)
