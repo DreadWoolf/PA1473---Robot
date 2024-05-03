@@ -65,29 +65,33 @@ def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, pot
     
 
 
-def Belt():
-    margin = 20 # 20
+def Belt(mbox):
+    margin = bReflectionMargin #30 # 20
     # send[0] = 3
     reflection = colorSense.reflection()
     print("reflektion outside ", reflection)
-    send[0] = 'feed'
+    send[0] = messages[2]  # Feed
     
+    print("before checking send is: ", send[0])
     wait(2)
-    while colorSense.reflection() >= 0 + margin: # and reflection <= 100 - margin:
+    send[0] = messages[2]  # Feed
+    wait(250)
+    sendMessage(mbox) # send the message.
+
+    while colorSense.reflection() <= 0 + margin: # and reflection <= 100 - margin:
         reflection = colorSense.reflection()
         print("reflektion ", reflection)
-        sendMessage()
+
         # return False
     
-    send[0] = 'stop' # Send stop feeding
-    wait(4)
-    sendMessage()
+    send[0] = messages[3] # Send stop feeding
+    wait(10)
+    sendMessage(mbox)
+    wait(20)
 
-    # return True
 
 
-def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dict = {}, operatingspeed = 100, potentialCargo= False, belt = False):
-    # if height <= 0:
+def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dict = {}, operatingspeed = 100, potentialCargo= False, belt = False, mbox=''):
     while not Estop[0]:
         clawMovement(goToZone, angleTarget, open = openClawsFirst, operatingspeed= operatingspeed) # If openFirst = True will open here.
         wait(2)
@@ -96,8 +100,10 @@ def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dic
         wait(2)
         if Estop[0]: break
 
+        print("before belt")
         if belt == True:  # wait here if we have belt.
-            Belt()
+            print("belt in pickup")
+            Belt(mbox)
         
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         wait(2)

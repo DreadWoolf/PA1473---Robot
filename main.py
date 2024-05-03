@@ -8,7 +8,7 @@ import sys as s
 from coms import coms, distribute, Connect, sendMessage
 
 from menu import menu, Emenu
-zoneSort, zoneHeight = menu()
+zoneSort, zoneHeight , we = menu()
 print(zoneSort)
 
 # if 'coms' in zoneSort:
@@ -52,6 +52,11 @@ def main(): #thread2:th.Thread):
     periodTime = 4000 # 4s (4000)
 
     armStartAngle = 40 #28 #38 #40 #39  # 40
+    packageHeight = 0
+    mbox = ''
+
+    comsExists = False
+    beltExists = False
     
     Calibrate(armStartAngle)
     
@@ -67,12 +72,22 @@ def main(): #thread2:th.Thread):
 
         ev3.screen.clear()
 
+        if packageHeight != weHaveHeight[0]:
+            packageHeight = weHaveHeight[0]
+            # angletarget = armStartAngle + packageHeight
+
         
         ###############################
         #       start coms thread     #
         ###############################
         if  not thread2Alive[0] and ('coms' in zoneSort or 'belt' in zoneSort):
-            if 'coms' in zoneSort: garbage = 'coms'
+            if 'coms' in zoneSort:
+                garbage = 'coms'
+                comsExists = True
+
+            if 'belt' in zoneSort:
+                beltExists = True
+                            
 
             # Wait for connection, before startup and then start communication Thread.
             mbox = Connect()
@@ -81,44 +96,45 @@ def main(): #thread2:th.Thread):
             thread2Alive[0] = True
             thread2.start()
 
+
         # Aptempt to Turn of thread2, if zones is changed.
         elif not ('coms' in zoneSort or 'belt' in zoneSort):
             thread2Alive[0] = False
+            comsExists= False
+            beltExists= False
             wait(5)
             if thread2Alive:    thread2.join()
         
         # If thread2 is active, send appropiate messages to companion.
-        elif thread2Alive[0] == True:
+        elif comsExists: # and thread2Alive[0] == True:
             zoneMargin = 200
             check = zoneLocation[zoneSort['coms']]
 
             if send[0] != 'nothing' and rotationMotor.angle() >= check + zoneMargin and rotationMotor.angle() <= check - zoneMargin:
                 send[0] = messages[5] # Free
-                sendMessage()
+                sendMessage(mbox)
                 send[0] = 'nothing'
             # Make sure we are not blocking the coms zone, if no pickup exists.
             elif not 'pickup' in zoneSort:
                 pickupzone = zoneSort['coms'] % (zoneSort['coms'] + 1)
                 armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2)
                 rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+                # rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
 
 
 
 
 
 
-
+        # If we have cargo and is not stopped, execute this.
         if cargo and Estop[0] == False: #
 
             sortZone = 0
-            wait(5)  #2
+            wait(5)  
             sortZone, color = colorSort(zoneSort)
-            # print("Sortzone: ", sortZone)
-            # print("Color: ", color)
 
 
-            clawAngle = clawMotor.angle()
-            # print("claw angle: ", clawAngle)
+            # clawAngle = clawMotor.angle()
 
             if sortZone == 'Error' or sortZone == 'nothing':
 
@@ -128,12 +144,14 @@ def main(): #thread2:th.Thread):
 
                 ## Will continue if found nothing, otherwise place the cargo.
                 # if sortZone == "Error":
-                cca = clawMotor.angle()
-                if (((cca >= -5 ) and  (5 >= cca)) or (cca <= 5)):
+                cAngle = clawMotor.angle()
+                if (((cAngle >= -5 ) and  (5 >= cAngle)) or (cAngle <= 5)):
                     try:
                         sortZone = zoneSort[garbage]
                         # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
-                        print(cca)
+                        # print(cAngle) 
+                        # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
+                        # Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                         rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
                         Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                     except NameError:
@@ -144,17 +162,20 @@ def main(): #thread2:th.Thread):
             else:
                 ev3.screen.print(str(color) + " to " + str(sortZone))
                 
-                if sortZone == zoneSort['coms']:
-                    while True:
+                # We sort to coms zone.
+                if comsExists and sortZone == zoneSort['coms']:
+                    do = True
+                    while do:
                         if distribute[1]: # Collision warning
                             wait(500)
                         elif distribute[0]: # Other robot has already left a package.
                             ev3.screen.print("Error package \nalready there!")
                         else:
                             send[0] = messages[0] # 'occupied'
-                            sendMessage()
+                            wait(2)
+                            sendMessage(mbox) # Send the message
                             wait(10)
-                            break
+                            do = False
 
 
                 wait(5)
@@ -169,12 +190,12 @@ def main(): #thread2:th.Thread):
                 # lastZone = location
         else:
             # If receevied = True and Occupied = False.
-            if distribute[0] == True and distribute[1] == False:
+            if comsExists and distribute[0] == True and distribute[1] == False:
                 pickupzone = zoneSort["coms"]
                 ### Send info occupied
                 send[0] = messages[0] # 'occupied'
                 wait(2)
-                sendMessage()
+                sendMessage(mbox)
                 wait(2)
                 armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
                 rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
@@ -185,7 +206,7 @@ def main(): #thread2:th.Thread):
                     pickupzone = zoneSort["belt"] 
                     armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2)
                     rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-                    Pickup(goToZone= pickupzone,angleTarget= -armStartAngle , zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= True)
+                    Pickup(goToZone= pickupzone,angleTarget= -armStartAngle , zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= True, mbox= mbox)
                     # Pickup(goToZone= pickupzone, 
                     # have that claw always open
 
@@ -196,14 +217,14 @@ def main(): #thread2:th.Thread):
                     armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
                     rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
                     Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
-            # goToZone = location
 
-
+        # Make sure if we are holding cargo or not.
         clawAngle = clawMotor.angle()
         if clawAngle <= -10:
             cargo = True
         elif clawAngle >= 0 - 4:
             cargo = False
+            # make sure the angle is correct.
             clawMotor.reset_angle(0)
             print("Reseted claw angle!")
             wait(500)
@@ -213,7 +234,8 @@ def main(): #thread2:th.Thread):
         #     break
     # Go back to start, if arm is higher than ground level.
     # armMovement(angleTarget= -armStartAngle)
-    armMovement(goToZone= goToZone,angleTarget= -armStartAngle)
+    if stopRobot == True:
+        armMovement(goToZone= goToZone,angleTarget= -armStartAngle)
     print("\n\nStopped!")
 
 
@@ -231,25 +253,25 @@ def EmergencyThread():
     while True:
         buttons = ev3.buttons.pressed()
         wait(250) # 250
-        for button in buttons:
-            if str(button) == "Button.CENTER":
-                ev3.speaker.beep()
-                Estop[0] = True
-                elevationMotor.hold()
-                clawMotor.hold()
-                rotationMotor.hold()
-                wait(1000)
-                stopProcess = True  # Sätt flaggan till True när knappen trycks
-                break  # Avbryt loopen när knappen trycks
+        if not inMenu[0]:
+            for button in buttons:
+                if str(button) == "Button.CENTER":
+                    ev3.speaker.beep()
+                    Estop[0] = True
+                    elevationMotor.hold()
+                    clawMotor.hold()
+                    rotationMotor.hold()
+                    wait(1000)
+                    stopProcess = True  # Sätt flaggan till True när knappen trycks
+                    break  # Avbryt loopen när knappen trycks
 
-        while stopProcess:
-            # buttons = ev3.buttons.pressed()
+            while stopProcess:
+                # buttons = ev3.buttons.pressed()
 
-            zoneSort, zoneHeight = Emenu(zoneSort, zoneHeight)
-            wait(2)
+                zoneSort, zoneHeight = Emenu(zoneSort, zoneHeight)
+                wait(2)
 
-            stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
-    return 0
+                stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
 
 # def btnCheck():
 

@@ -46,17 +46,40 @@ belt.control.limits(speed=150, acceleration=60)
 
 #####################coms##########################
 
+collaborator = 'D'
+
+
 def resturaunt():
-    SERVER = 'ev3dev-C'
+    SERVER = 'ev3dev3-' + collaborator
+    # SERVER = 'ev3dev-' + collaborator
     client = BluetoothMailboxClient()
     mbox = TextMailbox('greeting', client)
-    ev3.screen.print('establishing connection...')
-    client.connect(SERVER)
-    ev3.screen.print('connected!')
+    # ev3.screen.print('establishing connection...')
 
     while True:
-        mbox.wait()
+        ev3.screen.print('establishing connection...')
+        ev3.screen.print("With " + SERVER)
+
+
+        try:
+            client.connect(SERVER)
+            ev3.screen.clear()
+            break
+        except ValueError:
+            ev3.screen.clear()
+            ev3.screen.print("Failed to connect")
+            wait(5000)
+
+
+
+    ev3.screen.print('connected!')
+
+    ev3.screen.print('entering whileloop')
+    while True:
+        mbox.wait() #here we got an error
+        ev3.screen.print('reeved')
         inbox = mbox.read()
+        ev3.screen.print("read!")
         if inbox == "feed":
             speed = 50
             ev3.screen.print("Speed:", speed)
@@ -66,6 +89,23 @@ def resturaunt():
             belt.stop()
 
 
+def main():
+    ev3.screen.print("Waiting for \ncenter btn")
+    do = True
+    while do:
+        buttons = ev3.buttons.pressed()
+        wait(250) # 250
+        for button in buttons:
+            if str(button) == "Button.CENTER":
+                ev3.speaker.beep()        
+                ev3.screen.clear()
+                wait(5)
+                do = False
+                break  # Avbryt loopen när knappen trycks
+
+    resturaunt()   #when geting "feed" feed material!!!
+
+
 if __name__ == '__main__':
-    resturaunt()
-    #when geting "feed" feed material!!!
+    main()
+    

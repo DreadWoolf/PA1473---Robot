@@ -7,6 +7,8 @@ from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
 from pybricks.parameters import Port, Stop, Direction, Color
 from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
+from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
+
 
 # import datetime
 import random
@@ -94,6 +96,21 @@ else:
     exit()
 
 
+#################################
+#         Menu parameters      #
+#################################
+inMenu = [False]
+
+
+
+
+#################################
+#           Belt                #
+#################################
+beltRotation = ''
+bReflectionMargin = 4
+
+
 
 #################################
 #       Stop and Emergency      #
@@ -101,13 +118,18 @@ else:
 Estop = [False]
 restart = [False]
 
+
+
 #################################
 #     Communication parameter   #
 #################################
+collaborators = ['A', 'B', 'C', 'D']
+collaborator = 'D'
+
 # The server must be started before the client!
 me = ['server']
 # This is the name of the remote EV3 or PC we are connecting to.
-SERVERID = 'ev3dev'
+SERVERID = 'ev3dev-' + collaborator
 # Before running this program, make sure the client and server EV3 bricks are
 # paired using Bluetooth, but do NOT connect them. The program will take care
 # of establishing the connection.
@@ -166,4 +188,9 @@ def wtii(ctime, tstamps):
             print(ctime)
             for time in tstamps.items():
                 print (time)
+
+
+###################################hight########################
+weHaveHeight = [0]
+# wehaveheight = [False, packageheight]
 

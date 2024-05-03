@@ -1,7 +1,6 @@
 #!/usr/bin/env pybricks-micropython
 
 from Parameters import *
-from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
 
 
 distributeText = ['receevied', 'deliver']  #0 : receevied, 1: deliver.
@@ -21,7 +20,10 @@ def coms(mbox):
     while True:
         if thread2Alive[0] == False: break
 
-        # mbox.wait()
+        try:
+            mbox.wait()
+        except:
+            wait(500)
 
         inbox = mbox.read()
 
@@ -57,6 +59,7 @@ def coms(mbox):
         elif inbox == messages[4]: # Emergency stop
             Estop[0] = True  # does this work?
 
+
         
         
 # messages = ['occupied', 'gift4u', 'feed', 'stop']
@@ -65,22 +68,34 @@ def coms(mbox):
 
 def sendMessage(mbox):
     # global mbox
-    if send[0] == messages[0]: # Occupied
-        text = send[0]  # occupied
-        mbox.send(text)
-    elif send[0] == messages[1]: # gif4u
-        text = send[0]  # gif4u
-        mbox.send(text)
-    elif send[0] == messages[2]: #'feed':
-        text = send[0] #messages[2]  # feed
-        print("sent message ", send[0])
-        mbox.send(text)
-    elif send[0] == messages[3]: # Stop belt
-        text = send[0]  # stop
-        mbox.send(text)
-    elif send[0] == messages[4]: # Emergency
-        text = send[0]  # emergency
-        mbox.send(text)
+    print("sending message: ", send[0])
+    do = True
+
+    while do:
+        try:
+            if send[0] == messages[0]: # Occupied
+                text = send[0]  # occupied
+                mbox.send(text)
+                do = False
+            elif send[0] == messages[1]: # gif4u
+                text = send[0]  # gif4u
+                mbox.send(text)
+                do = False
+            elif send[0] == messages[2]: #'feed':
+                text = send[0] #messages[2]  # feed
+                print("sent message ", send[0])
+                mbox.send(text)
+                do = False
+            elif send[0] == messages[3]: # Stop belt
+                text = send[0]  # stop
+                mbox.send(text)
+                do = False
+            elif send[0] == messages[4]: # Emergency
+                text = send[0]  # emergency
+                mbox.send(text)
+                do = False
+        except:
+            wait(5)
 
 
 
@@ -88,11 +103,33 @@ def sendMessage(mbox):
 
 
 def Connect():
+
+    # while True:
+    #     ev3.screen.print('establishing connection...')
+    #     try:
+    #         client.connect(SERVER)
+    #         ev3.screen.clear()
+    #         break
+    #     except ValueError:
+    #         ev3.screen.clear()
+    #         wait(2000)
+
+    # for collaborator in collaborators:
+    #     if collaborator != RobotIdentity:
+            
+
+
+
     if me[0] == 'server':
         print("I'm server")
         server = BluetoothMailboxServer()
         me[0] = server
+        ev3.screen.print("wait for connection")
         me[0].wait_for_connection()
+        ev3.screen.clear()
+        ev3.screen.print("Connected")
+        wait(1000)
+        ev3.screen.clear()
     else:
         # This is the name of the remote EV3 or PC we are connecting to.
         # SERVER = 'ev3dev'

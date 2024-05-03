@@ -1,6 +1,6 @@
 #!/usr/bin/env pybricks-micropython
 from Parameters import *
-import Parameters
+# import Parameters
 
 
 # zoneSort = {
@@ -24,6 +24,7 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
     current_index=0
     temp=True
     zoneHeight[2] = 30
+    inMenu[0]= True
     
     if Estop[0] == False:
         ev3.screen.print("set origin first")
@@ -78,6 +79,7 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
                     ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] == "start_code":
                     ev3.speaker.beep()
+                    inMenu[0] = False
                     return zoneSort , zoneHeight
                 # if choicelist[current_index] == "EMERGENCY" and Estop:
                 #     return 0
@@ -261,11 +263,12 @@ def work_times():
 def zone_hight():
     zonenum = [1,2,3,4, "done?"]
     zonecords = {
-                 1:1,
-                 2:2,
-                 3:20,
-                 4:0
+                 0:0,
+                 1:0,
+                 2:0,
+                 3:0
                  }
+    weHaveHeight = [0]
     #rotationMotor.reset_angle(0)
     #elevationMotor.reset_angle(0) 
     current_index=0
@@ -277,43 +280,68 @@ def zone_hight():
     #     ev3.screen.clear()
     #     ev3.screen.print("chose the location \n of zone: ",num)
     ev3.screen.clear()
-    ev3.screen.print("chose the location \n of zone: ",zonenum)
+    ev3.screen.print(zonenum)
+    ev3.screen.print("set hight for zone\n"+ str(zonenum[current_index])+"?\n")
     while temp:
         buttons = ev3.buttons.pressed()
-        wait(250)
+        wait(250)  
         for button in buttons:
+            print(button, "in", buttons)
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(zonenum)
-                ev3.screen.print("set hight for zone\n"+"nr "+zonenum[current_index]+"?\n")
+                ev3.screen.print("set hight for zone\n"+ str(zonenum[current_index])+"?\n")
             
             if str(button) == "Button.RIGHT":
                 ev3.screen.clear()
                 current_index = (current_index - 1) % len(zonenum)
-                ev3.screen.print("set higt for zone\n"+"nr "+zonenum[current_index]+"?\n")
+                ev3.screen.print("set higt for zone\n"+str(zonenum[current_index])+"?\n")
 
             elif str(button) == "Button.CENTER":
-                anothertemp = True
+                if zonenum[current_index % len(zonenum)] == "done?":
+                    temp = False
+                    abs_values = {key: abs(value) for key, value in zonecords.items()}
+                    farthest_key = max(abs_values, key=abs_values.get)
+                    farthest_value = zonecords[farthest_key]
+                    print("Key with farthest value from 0:", farthest_key)
+                    print("Value at that key:", farthest_value)
+                    weHaveHeight[0] = farthest_value
+                    print(weHaveHeight)
+                    print(zonecords)
+                    ev3.speaker.beep()
+                    ev3.screen.print("back!")
+                    ev3.speaker.beep()
+                    ev3.screen.clear()
+                    return zonecords
+                else:
+                    anothertemp = True
+                    ev3.screen.print("changing hight for: \n" + str(zonenum[current_index % len(zonenum)]))
             while anothertemp == True:
-                ev3.screen.clear()
-                ev3.screen.print("changing hight for: \n" + str(zonenum[current_index % len(zonenum)]))
+                buttons = []
+                buttons = ev3.buttons.pressed()
                 for button in buttons:
+                    wait(100)
                     button_str = str(button)
                     if button_str == "Button.UP":
                         elevationMotor.run_angle(60,-10)
                     if button_str == "Button.DOWN":
                         elevationMotor.run_angle(60,10)
-                    elif button_str == "Button.CENTER":
-                        if zonenum[current_index% len(zonenum)] == "done?":
-                            temp = False
-                        else:
-                            ev3.speaker.beep()
-                            verangle = elevationMotor.angle()
-                            zonecords[zonenum[current_index % len(zonenum)] - 1] = verangle 
-                            ev3.screen.print("you chose: " + str(zonenum[current_index% len(zonenum)]) +  "\n")
-                            ev3.screen.print("to zone: " + str(verangle) +  "\n")
-                            wait(10000)
-                            anothertemp=False
+                    if button_str == "Button.LEFT":
+                        rotationMotor.run_angle(60,-10)
+                    if button_str == "Button.RIGHT":
+                        rotationMotor.run_angle(60,10)
+
+                    if button_str == "Button.CENTER":
+                        ev3.speaker.beep()
+                        verangle = elevationMotor.angle()
+                        zonecords[zonenum[current_index % len(zonenum)] - 1] = verangle 
+                        ev3.screen.print("you chose: " + str(zonenum[current_index% len(zonenum)]) +  "\n")
+                        ev3.screen.print("to zone: " + str(verangle) +  "\n")
+                        wait(550)
+                        ev3.screen.clear()
+                        ev3.screen.print("set hight for zone\n"+ str(zonenum[current_index])+"?\n")
+                        print(zonecords)
+                        anothertemp=False
                         # if num == :
                         #     ev3.speaker.beep()
                         #     ev3.screen.clear()
@@ -326,8 +354,8 @@ def set_origin():
     temp=True
 
     while temp:
-        buttons = ev3.buttons.pressed()
         wait(250)
+        buttons = ev3.buttons.pressed()
         speed = 10
         for button in buttons:
             combos = [str(obj) for obj in buttons]
@@ -338,7 +366,9 @@ def set_origin():
             if button_str == "Button.DOWN":
                 speed += 5
                 elevationMotor.run_angle(60 + speed,10)
-            elif button_str == "Button.CENTER": 
+            elif button_str == "Button.CENTER":
+                ev3.speaker.beep()
+                wait(450) 
                 ev3.speaker.beep()
                 verangle = elevationMotor.angle()
                 bigGear = 40
@@ -373,8 +403,8 @@ def colorzones():
     while temp:
         buttons= ev3.buttons.pressed()
         wait(250)
-        theend = 3
-        if lens(colors) in {1,2,3}: #counter == 4:    #len(colors) in {1, 2}:
+        theend = 5
+        if len(colors) in {1,2,3}: #counter == 4:    #len(colors) in {1, 2}:
             for i in colors:
                 ev3.screen.clear()
                 ev3.screen.print("processing...")
@@ -387,7 +417,7 @@ def colorzones():
             temp = False
             #keys_to_keep = list(zoneSort.keys())[:-3]
             sorted_items = sorted(zoneSort.items(), key=lambda x: x[1]) # sorts based on number
-            sorted_items = sorted_items[:-2] # cuts so only 4 left
+            sorted_items = sorted_items[:-3] # cuts so only 4 left
             zoneSort = dict(sorted_items)
             print("THE NEW DICT: "+ str(zoneSort))                
             return zoneSort
