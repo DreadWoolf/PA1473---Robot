@@ -55,10 +55,12 @@ RobotIdentity = 'C'
  
 
 zoneSort = {
-    'pickup'     :   2,
-    'Green'     :   1,
-    'Blue'      :   0,
-    'coms'      :  3
+    'Green' :   2,
+    'Blue'  :   1,
+    #'belt'      :   0,
+    'pickup'    :0,
+    'Yellow'    :   3
+
     }
 
 zoneHeight = {
@@ -71,7 +73,7 @@ zoneHeight = {
 
 errorMargin = RobotRegister[RobotIdentity]
 
-oriontation = "Right"
+oriontation = "Left"
 
 rightOriented = {
     0: 0,
@@ -192,5 +194,7 @@ def wtii(ctime, tstamps):
 
 ###################################hight########################
 weHaveHeight = [0]
+packageheight = 100
+
 # wehaveheight = [False, packageheight]
 

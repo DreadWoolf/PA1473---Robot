@@ -72,9 +72,12 @@ def main(): #thread2:th.Thread):
 
         ev3.screen.clear()
 
-        if packageHeight != weHaveHeight[0]:
+        # Check if we have a height on one zone.
+        if weHaveHeight[0] >= armStartAngle:
             packageHeight = weHaveHeight[0]
-            # angletarget = armStartAngle + packageHeight
+        else:
+            packageHeight = armStartAngle
+            
 
         
         ###############################
@@ -92,13 +95,13 @@ def main(): #thread2:th.Thread):
             # Wait for connection, before startup and then start communication Thread.
             mbox = Connect()
             wait(2)
-            thread2 = th.Thread(target=coms, args=mbox)
+            thread2 = th.Thread(target=coms, args=(mbox,))
             thread2Alive[0] = True
             thread2.start()
 
 
         # Aptempt to Turn of thread2, if zones is changed.
-        elif not ('coms' in zoneSort or 'belt' in zoneSort):
+        elif thread2Alive[0] == True and not ('coms' in zoneSort or 'belt' in zoneSort):
             thread2Alive[0] = False
             comsExists= False
             beltExists= False
@@ -117,8 +120,9 @@ def main(): #thread2:th.Thread):
             # Make sure we are not blocking the coms zone, if no pickup exists.
             elif not 'pickup' in zoneSort:
                 pickupzone = zoneSort['coms'] % (zoneSort['coms'] + 1)
-                armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2)
-                rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+                # Var armstartangle before
+                armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
+                rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed)
                 # rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
 
 
@@ -129,9 +133,14 @@ def main(): #thread2:th.Thread):
         # If we have cargo and is not stopped, execute this.
         if cargo and Estop[0] == False: #
 
+            armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are at sensor.
+
             sortZone = 0
             wait(5)  
             sortZone, color = colorSort(zoneSort)
+            # make sure we are at free height.
+            armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
+
 
 
             # clawAngle = clawMotor.angle()
@@ -197,16 +206,17 @@ def main(): #thread2:th.Thread):
                 wait(2)
                 sendMessage(mbox)
                 wait(2)
-                armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
+                armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
                 rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
                 Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
             else:
                 if 'belt' in zoneSort:
                     pickupzone = zoneSort["belt"] 
-                    armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2)
-                    rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-                    Pickup(goToZone= pickupzone,angleTarget= -armStartAngle , zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= True, mbox= mbox)
+                    # maybe higher
+                    armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
+                    rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed)
+                    Pickup(goToZone= pickupzone,angleTarget= -armStartAngle, zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= True, mbox= mbox)
                     # Pickup(goToZone= pickupzone, 
                     # have that claw always open
 
@@ -214,7 +224,7 @@ def main(): #thread2:th.Thread):
                 else:
                     pickupzone = zoneSort["pickup"]
 
-                    armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
+                    armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
                     rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
                     Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 

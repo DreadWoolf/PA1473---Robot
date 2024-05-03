@@ -1,21 +1,6 @@
 #!/usr/bin/env pybricks-micropython
 from Parameters import *
-# import Parameters
 
-
-# zoneSort = {
-#     'pickup'     :   2,
-#     'Green'     :   1,
-#     'Blue'      :   0,
-#     'coms'      :  3
-#     }
-
-# zoneHeight = {
-#     0: 0,
-#     1: 0,
-#     2: 0,
-#     3: 0
-# }
 
 
 
@@ -29,6 +14,7 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
     if Estop[0] == False:
         ev3.screen.print("set origin first")
         set_origin()
+        #tempfunc()
         ev3.screen.clear()
         ev3.screen.print(choicelist[current_index])
     else:
@@ -64,6 +50,7 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
                     ev3.speaker.beep()
                     origin = set_origin()
                     print(origin)
+                    
                     ev3.screen.clear()
                     ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] == "zonecolor_selection":
@@ -254,6 +241,26 @@ def work_times():
         print("Invalid date format. Please enter a valid date and time.")
 
 
+# def tempfunc():
+#     zonecords = {
+#                 0:-200,
+#                 1:0,
+#                 2:0,
+#                 3:0
+#                 }
+#     print(zonecords)
+#     abso = {key: abs(value) for key, value in zonecords.items()}
+#     fartkey = max(abso, key=abso.get)
+#     highest = zonecords[fartkey]
+#     #print("Key with farthest value from 0:", farthest_key)
+#     print("highest in the room: ", highest)
+#     bigGear = 40
+#     smallGear = 8
+#     multiplyAngle = -(bigGear/smallGear)
+
+#     weHaveHeight[0] = abs((abs(highest) + packageheight)/multiplyAngle)
+#     print("weHaveHeight[0] =",weHaveHeight[0])
+#     return 0
                              
 
 #stop till False
@@ -268,7 +275,6 @@ def zone_hight():
                  2:0,
                  3:0
                  }
-    weHaveHeight = [0]
     #rotationMotor.reset_angle(0)
     #elevationMotor.reset_angle(0) 
     current_index=0
@@ -300,13 +306,16 @@ def zone_hight():
             elif str(button) == "Button.CENTER":
                 if zonenum[current_index % len(zonenum)] == "done?":
                     temp = False
-                    abs_values = {key: abs(value) for key, value in zonecords.items()}
-                    farthest_key = max(abs_values, key=abs_values.get)
-                    farthest_value = zonecords[farthest_key]
+                    abso = {key: abs(value) for key, value in zonecords.items()}
+                    fartkey = max(abso, key=abso.get)
+                    highest = zonecords[fartkey]
                     #print("Key with farthest value from 0:", farthest_key)
-                    print("Value at that key:", farthest_value)
-                    weHaveHeight[0] = farthest_value
-                    print(weHaveHeight)
+                    print("highest in the room: ", highest)
+                    bigGear = 40
+                    smallGear = 8
+                    multiplyAngle = -(bigGear/smallGear)
+                    weHaveHeight[0] = abs((abs(highest) + packageheight)/multiplyAngle)
+                    print(weHaveHeight[0])
                     print(zonecords)
                     ev3.speaker.beep()
                     ev3.screen.print("back!")
