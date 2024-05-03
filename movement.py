@@ -18,24 +18,29 @@ def Calibrate(armStartAngle:int = 40, speed = 60):
     # wait(2000)
 
     ev3.screen.print("Callibrate arm")
-    if elevationMotor.angle() != armStartAngle:
-        armMovement(0, armStartAngle, calibrate= True, )
+    print("wehaveheight", weHaveHeight[0])
+    angletarget = weHaveHeight[0]
+    if elevationMotor.angle() != angletarget:
+        tmpdic = {0:0,
+                  1:0,
+                  2:0,
+                  3:0}
+        armMovement(0, angletarget, zoneHeight=tmpdic,calibrate= True )
         # if stopRobot:
         #     print("stop")
         #     s.sys.exit()
 
     ev3.screen.print("Callibrate claw")
 
-    clawMovement(0 , armStartAngle, None, calibrate= True)
+    clawMovement(0 , angletarget, None, calibrate= True)
     # if stopRobot:
     #     print("stop")
     #     s.sys.exit()
 
     ev3.screen.print("Callibrate rotation")
-    rotateBase(angle= 0, goToZone= 0, operatingSpeed= speed, armtarget= armStartAngle, calibrate= True)
+    rotateBase(angle= 0, goToZone= 0, operatingSpeed= speed, armtarget= angletarget, calibrate= True)
     
     ev3.screen.clear()
-    return 0
 
 def emergencyStop(gotoZone:int, angletarget:int, duringCallibration = False, potentialCargo = False):
     global Estop
@@ -80,10 +85,9 @@ def Belt(mbox):
 
     while colorSense.reflection() <= 0 + margin: # and reflection <= 100 - margin:
         reflection = colorSense.reflection()
-        print("reflektion ", reflection)
 
-        # return False
-    
+    wait(300)
+    print("reflektion ", reflection)
     send[0] = messages[3] # Send stop feeding
     wait(10)
     sendMessage(mbox)
@@ -96,38 +100,38 @@ def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dic
         clawMovement(goToZone, angleTarget, open = openClawsFirst, operatingspeed= operatingspeed) # If openFirst = True will open here.
         wait(2)
         if Estop[0]: break
-        armMovement(goToZone, angleTarget= angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, pickingup = True)
-        wait(2)
-        if Estop[0]: break
 
         print("before belt")
         if belt == True:  # wait here if we have belt.
             print("belt in pickup")
             Belt(mbox)
         
+        armMovement(goToZone, angleTarget= angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, pickingup = True)
+        wait(2)
+        if Estop[0]: break
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         wait(2)
         if Estop[0]: break
-        armMovement(goToZone, angleTarget= -angleTarget, operatingspeed= operatingspeed)
+        armMovement(goToZone, angleTarget= -angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed)
         wait(2)
         break
 
 
-def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, operatingspeed = 100, potentialCargo = True):
+def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, zoneHeight:dict = {}, operatingspeed = 100, potentialCargo = True):
     
     # If openFirst = True will open first.
     while not Estop[0]:
         # armMovement(goToZone, angleTarget= -angleTarget) # make sure we are up.
         # if Estop[0]: break
         wait(2)
-        armMovement(goToZone, angleTarget= angleTarget, operatingspeed= operatingspeed, potentialCargo = potentialCargo)
+        armMovement(goToZone, angleTarget= angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         if Estop[0]: break
         wait(2)
 
-        armMovement(goToZone, angleTarget= -angleTarget, operatingspeed= operatingspeed, potentialCargo = not potentialCargo)
+        armMovement(goToZone, angleTarget= -angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, potentialCargo = not potentialCargo)
         # ev3.speaker.beep()
         # wait(500)
         # ev3.speaker.beep()
@@ -162,16 +166,22 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
     # tmp = (testpositive) 
     # print("tmp is: ", tmp)
     # print("angle for motor: ", tmp * multiplyAngle)
-
+    # if zoneHeight[goToZone] != 0:
+    #    height = zoneHeight[goToZone]/multiplyAngle
+    print(zoneHeight)
+    print(zoneHeight[goToZone])
+    height = zoneHeight[goToZone]/multiplyAngle
     if calibrate:
         # print("start arm angle " , elevationMotor.angle())
         elevationMotor.run_target(operatingspeed, target_angle = angleTarget * multiplyAngle)
         # return
-    elif potentialCargo and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5:
+    
+
+    if potentialCargo and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5 and height == 0:
         elevationMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=10) #20
         # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
-    elif pickingup == True:
-        height = zoneHeight[goToZone]/multiplyAngle
+    elif height != 0:      #pickingup == True:   #height != 0:
+        #height = zoneHeight[goToZone]/multiplyAngle
         # print(zoneHeight)
         # print("Fucking Height is: ", height)
         # print("angletarget is: ", angleTarget)
@@ -199,6 +209,7 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
     
 
 def testForEmergency(goToZone, angleTarget, calibrate, potentialCargo = False):
+
     # print("Estop is: ", Estop[0])
     if Estop[0] == True:
         emergencyStop(goToZone, angleTarget, calibrate, potentialCargo)
