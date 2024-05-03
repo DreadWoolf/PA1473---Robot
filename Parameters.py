@@ -55,10 +55,10 @@ RobotIdentity = 'C'
  
 
 zoneSort = {
-    'Green' :   2,
+    'Green' :   0,
     'Blue'  :   1,
     #'belt'      :   0,
-    'pickup'    :0,
+    'pickup'    :2,
     'Yellow'    :   3
 
     }

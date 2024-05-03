@@ -133,13 +133,13 @@ def main(): #thread2:th.Thread):
         # If we have cargo and is not stopped, execute this.
         if cargo and Estop[0] == False: #
 
-            armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are at sensor.
+            armMovement(pickupzone, angleTarget= armStartAngle,zoneHeight= zoneHeight, operatingspeed= speed/2) # make sure we are at sensor.
 
             sortZone = 0
             wait(5)  
             sortZone, color = colorSort(zoneSort)
             # make sure we are at free height.
-            armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
+            armMovement(pickupzone, angleTarget= packageHeight,zoneHeight= zoneHeight, operatingspeed= speed/2)
 
 
 
@@ -162,7 +162,7 @@ def main(): #thread2:th.Thread):
                         # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
                         # Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                         rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
-                        Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                        Place(goToZone= sortZone, angleTarget=-armStartAngle,zoneHeight= zoneHeight , openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                     except NameError:
                         print("idk what to do!")
                         ev3.screen.print("color not supported")
@@ -192,7 +192,7 @@ def main(): #thread2:th.Thread):
                 rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
 
                 ## Drop of again, if detected random color.
-                Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, zoneHeight =zoneHeight , operatingspeed= speed/2, potentialCargo= cargo)
                 # lastZone = location
             
             cargo = False
@@ -224,7 +224,7 @@ def main(): #thread2:th.Thread):
                 else:
                     pickupzone = zoneSort["pickup"]
 
-                    armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
+                    armMovement(pickupzone, angleTarget= packageHeight,zoneHeight=zoneHeight ,operatingspeed= speed/2) # make sure we are up.
                     rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
                     Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
