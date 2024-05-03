@@ -62,8 +62,6 @@ def coms(mbox):
 
         
         
-# messages = ['occupied', 'gift4u', 'feed', 'stop']
-        
 
 
 def sendMessage(mbox):
@@ -104,20 +102,6 @@ def sendMessage(mbox):
 
 def Connect():
 
-    # while True:
-    #     ev3.screen.print('establishing connection...')
-    #     try:
-    #         client.connect(SERVER)
-    #         ev3.screen.clear()
-    #         break
-    #     except ValueError:
-    #         ev3.screen.clear()
-    #         wait(2000)
-
-    # for collaborator in collaborators:
-    #     if collaborator != RobotIdentity:
-            
-
 
 
     if me[0] == 'server':
@@ -144,56 +128,7 @@ def Connect():
     mbox = TextMailbox('greeting', me[0])
 
     
-    # if me == 'client':
-    #     mbox.send(messages[1])
-    # else:
-    #     mbox.wait()
     return mbox
-
-
-# mbox = Connect()
-
-# Before running this program, make sure the client and server EV3 bricks are
-# paired using Bluetooth, but do NOT connect them. The program will take care
-# of establishing the connection.
-
-# The server must be started before the client!
-#!/usr/bin/env pybricks-micropython
-
-
-# print('establishing connection...')
-
-
-# # In this program, the client sends the first message and then waits for the
-# # server to reply.
-# for i in range(4):
-
-# if me == 'client':
-#     mbox.send(messages[1])
-# else:
-#     mbox.wait()
-
-# for i in range(5):
-#     print("Started loop")
-#     # mbox.send('hello!')
-#     inbox = mbox.read()
-#     while inbox == messages[0]: 
-#         inbox = mbox.read()
-#         ev3.screen.print(inbox)
-    
-#     if inbox == messages[1]:
-#         message = messages[0]
-#     else:
-#         message = ''
-
-#     mbox.send(message)
-#     # mbox.wait()
-#     # test = mbox.read()
-#     ev3.screen.print(message)
-
-#     # print(test)
-
-#     wait(5000)
 
 
 

@@ -10,17 +10,11 @@ from pybricks.robotics import DriveBase
 from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
 
 
-# import datetime
 import random
 import sys as s
 import threading as th
-# from threading import Thread #, Event
-#from threading import Thread, Event
 
-# Lock for synchronization
-# lock = th._thread.allocate_lock()
 
-# Your code goes here
 # Robot definitions
 ev3 = EV3Brick()
 
@@ -33,7 +27,6 @@ rotationMotor = Motor (Port.C) #12, 36
 colorSense = ColorSensor(Port.S2)
 pressureSense = TouchSensor(Port.S1)
 
-# robot = DriveBase(clawMotor, rotationMotor)
 
 
 
@@ -55,10 +48,10 @@ RobotIdentity = 'C'
  
 
 zoneSort = {
-    'Green' :   2,
-    'Blue'  :   1,
+    'Green'     :   2,
+    'Blue'      :   1,
     #'belt'      :   0,
-    'pickup'    :0,
+    'pickup'    :   0,
     'Yellow'    :   3
 
     }
@@ -193,8 +186,12 @@ def wtii(ctime, tstamps):
 
 
 ###################################hight########################
+
+###############################
+#     Elevated parameter      #
+###############################
+
 weHaveHeight = [0]
 packageheight = 100
 
-# wehaveheight = [False, packageheight]
 

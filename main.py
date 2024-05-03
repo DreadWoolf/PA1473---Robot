@@ -11,43 +11,26 @@ from menu import menu, Emenu
 zoneSort, zoneHeight = menu()
 print(zoneSort)
 
-# if 'coms' in zoneSort:
-#     garbage = 'coms'
-# for key in zoneSort:
-#     if key == 'coms':
-#         garbage = 'coms'
-        
-# par.zoneSort = czones
-# par.zoneHeight = zonecords
-# print(par.zoneSort)
 
 # Create two threads for each task
 thread1 = th.Thread()
 thread2 = th.Thread()
-# thread3 = th.Thread()
-# Event = th.Thread.Event()
+
 
 Robotrun = True
 stopRobot = False
 
-def main(): #thread2:th.Thread):
+def main():
     global zoneSort
     global zoneHeight
     global Robotrun
     # Robotrun = True
     ev3.speaker.beep()
-    
-
-    #zoneSort['pick1'] = 2
-    #zoneSort['Blue'] = 0
-    #zoneSort['unSuported'] = 3
 
     print(zoneSort)
 
 
 
-    times = 2  #10
-    zoneAmount = 3
     cargo = False
     periodTime = 4000 # 4s (4000)
 
@@ -95,6 +78,7 @@ def main(): #thread2:th.Thread):
             # Wait for connection, before startup and then start communication Thread.
             mbox = Connect()
             wait(2)
+            # Creates thread and declare the target.
             thread2 = th.Thread(target=coms, args=(mbox,))
             thread2Alive[0] = True
             thread2.start()
@@ -315,6 +299,7 @@ def StopRobot(stopRobot):
 if __name__ == "__main__":
     # Create two threads for each task
     thread1 = th.Thread(target=EmergencyThread)
+
     # thread2 = th.Thread(target=coms, args=mbox)
 
     # thread3 = th.Thread(target=belt)
