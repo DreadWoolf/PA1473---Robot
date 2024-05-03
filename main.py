@@ -10,7 +10,7 @@ from coms import coms, distribute, Connect, sendMessage
 from menu import menu, Emenu
 zoneSort, zoneHeight = menu()
 print(zoneSort)
-
+stopwatch = StopWatch()
 # if 'coms' in zoneSort:
 #     garbage = 'coms'
 # for key in zoneSort:
