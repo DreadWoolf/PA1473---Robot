@@ -21,7 +21,11 @@ def Calibrate(armStartAngle:int = 40, speed = 60):
     print("wehaveheight", weHaveHeight[0])
     angletarget = weHaveHeight[0]
     if elevationMotor.angle() != angletarget:
-        armMovement(0, angletarget, calibrate= True )
+        tmpdic = {0:0,
+                  1:0,
+                  2:0,
+                  3:0}
+        armMovement(0, angletarget, zoneHeight=tmpdic,calibrate= True )
         # if stopRobot:
         #     print("stop")
         #     s.sys.exit()
@@ -108,26 +112,26 @@ def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dic
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         wait(2)
         if Estop[0]: break
-        armMovement(goToZone, angleTarget= -angleTarget, operatingspeed= operatingspeed)
+        armMovement(goToZone, angleTarget= -angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed)
         wait(2)
         break
 
 
-def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, operatingspeed = 100, potentialCargo = True, zoneHeight:dict = {}):
+def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, zoneHeight:dict = {}, operatingspeed = 100, potentialCargo = True):
     
     # If openFirst = True will open first.
     while not Estop[0]:
         # armMovement(goToZone, angleTarget= -angleTarget) # make sure we are up.
         # if Estop[0]: break
         wait(2)
-        armMovement(goToZone, angleTarget= angleTarget, operatingspeed= operatingspeed, potentialCargo = potentialCargo)
+        armMovement(goToZone, angleTarget= angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
         clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         if Estop[0]: break
         wait(2)
 
-        armMovement(goToZone, angleTarget= -angleTarget, operatingspeed= operatingspeed, potentialCargo = not potentialCargo)
+        armMovement(goToZone, angleTarget= -angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, potentialCargo = not potentialCargo)
         # ev3.speaker.beep()
         # wait(500)
         # ev3.speaker.beep()
@@ -164,17 +168,20 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
     # print("angle for motor: ", tmp * multiplyAngle)
     # if zoneHeight[goToZone] != 0:
     #    height = zoneHeight[goToZone]/multiplyAngle
-
-    
+    print(zoneHeight)
+    print(zoneHeight[goToZone])
+    height = zoneHeight[goToZone]/multiplyAngle
     if calibrate:
         # print("start arm angle " , elevationMotor.angle())
         elevationMotor.run_target(operatingspeed, target_angle = angleTarget * multiplyAngle)
         # return
-    elif potentialCargo and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5 and height == 0:
+    
+
+    if potentialCargo and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5 and height == 0:
         elevationMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=10) #20
         # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
-    elif pickingup == True:#height != 0:
-        height = zoneHeight[goToZone]/multiplyAngle
+    elif height != 0:      #pickingup == True:   #height != 0:
+        #height = zoneHeight[goToZone]/multiplyAngle
         # print(zoneHeight)
         # print("Fucking Height is: ", height)
         # print("angletarget is: ", angleTarget)
@@ -202,6 +209,7 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
     
 
 def testForEmergency(goToZone, angleTarget, calibrate, potentialCargo = False):
+
     # print("Estop is: ", Estop[0])
     if Estop[0] == True:
         emergencyStop(goToZone, angleTarget, calibrate, potentialCargo)

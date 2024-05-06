@@ -1,6 +1,22 @@
 #!/usr/bin/env pybricks-micropython
 from Parameters import *
+import Parameters
+# import Parameters
 
+
+# zoneSort = {
+#     'pickup'     :   2,
+#     'Green'     :   1,
+#     'Blue'      :   0,
+#     'coms'      :  3
+#     }
+
+# zoneHeight = {
+#     0: 0,
+#     1: 0,
+#     2: 0,
+#     3: 0
+# }
 
 
 
@@ -14,7 +30,6 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
     if Estop[0] == False:
         ev3.screen.print("set origin first")
         set_origin()
-        #tempfunc()
         ev3.screen.clear()
         ev3.screen.print(choicelist[current_index])
     else:
@@ -50,7 +65,6 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
                     ev3.speaker.beep()
                     origin = set_origin()
                     print(origin)
-                    
                     ev3.screen.clear()
                     ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] == "zonecolor_selection":
@@ -66,6 +80,7 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
                     ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] == "start_code":
                     ev3.speaker.beep()
+                    wtii(Parameters.ctime,Parameters.tstamps)
                     inMenu[0] = False
                     return zoneSort , zoneHeight
                 # if choicelist[current_index] == "EMERGENCY" and Estop:
@@ -158,6 +173,8 @@ def get_user_input(prompt, min_value, max_value):
                     ev3.screen.print(prompt)
                     ev3.screen.print(str(value))
             elif strbut == "Button.CENTER":
+                ev3.speaker.beep()
+                ev3.screen.clear()
                 temp=False
     return value
 
@@ -179,6 +196,49 @@ def get_month_days(year, month):
         return 0
 
 def work_times():
+    # Initialize an empty dictionary to store time stamps
+    timestamps = Parameters.tstamps
+
+    # Phase 1: Choose the number of time stamps (limit between 1 and 99)
+    aots = get_user_input("How many time\nstamps do you want:", 1, 99)
+
+    for i in range(aots+len(timestamps)):
+
+        # Phase 2: Choose the year (limit between 2024 and 2100)
+        year = get_user_input("time stamp {} \nEnter the\n year:".format(i+1), 2024, 2100)
+
+        # Phase 3: Choose the month (limited between 1 and 12)
+        month = get_user_input("Enter the\n month (1-12):", 1, 12)
+
+        # Phase 4: Choose the day (limited between 1 and the number of days in the chosen month)
+        days_in_month = get_month_days(year, month)
+        day = get_user_input("time stamp {} \nEnter the\n day (1-{}):".format(i+1,days_in_month), 1, days_in_month)
+
+        # Phase 5: Choose the starting hour (limited between 1 and 24)
+        start_hour = get_user_input("time stamp {} \nEnter the starting\n hour (1-24):".format(i+1), 1, 24)
+
+        # Phase 6: Choose the starting minute (limited between 0 and 59)
+        start_min = get_user_input("time stamp {} \nEnter the starting\n minute (0-59):".format(i+1), 0, 59)
+
+        # Phase 7: Choose the ending hour (limited between 1 and 24)
+        end_hour = get_user_input("time stamp {} \nEnter the ending\n hour (1-24):".format(i+1), 1, 24)
+
+        # Phase 8: Choose the ending minute (limited between 0 and 59)
+        end_min = get_user_input("time stamp {} \nEnter the ending\n minute (0-59):".format(i+1), 0, 59)
+
+        # Create start_date and end_date strings
+        start_date = [year, month, day, start_hour, start_min]
+        end_date = [year, month, day, end_hour, end_min]
+        if start_hour < end_hour:
+            timestamps[i] = [start_date, end_date]
+        elif  start_hour == end_hour and start_min < end_min:
+            timestamps[i] = [start_date, end_date]
+        else:
+            ev3.screen.print("invaled date \ninputed \n restart choise")
+            wait(5000)
+            return       
+
+
     rsd_year = get_user_input("Enter current\n year:", 2024, 2100)
     rsd_month = get_user_input("Enter current\n month (1-12):", 1, 12)
     rsd_days_in_month = get_month_days(rsd_year, rsd_month)
@@ -186,81 +246,49 @@ def work_times():
     rsd_hour = get_user_input("Enter current\n hour (1-24):", 1, 24)
     rsd_min = get_user_input("Enter current\n minute (0-59):", 0, 59)
     rsd = [rsd_year,rsd_month,rsd_day,rsd_hour,rsd_min]
+    print(rsd)
 
-    # Phase 1: Choose the number of time stamps (limit between 1 and 99)
-    aots = get_user_input("How many time\nstamps do you want:", 1, 99)
-
-    # Initialize an empty dictionary to store time stamps
-    timestamps = {}
-
-    # Phase 2: Choose the year (limit between 2024 and 2100)
-    year = get_user_input("Enter the\n year:", 2024, 2100)
-    print(year)
-
-    # Phase 3: Choose the month (limited between 1 and 12)
-    month = get_user_input("Enter the\n month (1-12):", 1, 12)
-    print(month)
-    # Phase 4: Choose the day (limited between 1 and the number of days in the chosen month)
-    days_in_month = get_month_days(year, month)
-    day = get_user_input("Enter the\n day (1-{}):".format(days_in_month), 1, days_in_month)
-    print(day)
-
-    # Phase 5: Choose the starting hour (limited between 1 and 24)
-    start_hour = get_user_input("Enter the starting\n hour (1-24):", 1, 24)
-    print(start_hour)
-    # Phase 6: Choose the starting minute (limited between 0 and 59)
-    start_min = get_user_input("Enter the starting\n minute (0-59):", 0, 59)
-    print(start_min)
-    # Phase 7: Choose the ending hour (limited between 1 and 24)
-    end_hour = get_user_input("Enter the ending\n hour (1-24):", 1, 24)
-
-    print(end_hour)
-    # Phase 8: Choose the ending minute (limited between 0 and 59)
-    end_min = get_user_input("Enter the ending\n minute (0-59):", 0, 59)
-    print(end_min)
-    # Create start_date and end_date strings
-    start_date = [year, month, day, start_hour, start_min]
-    end_date = [year, month, day, end_hour, end_min]
-    print(start_date)
-    print(end_date)
-
-    # Check if start_date is before end_date
-    try:
-        if (start_hour < end_hour) or ((start_hour == end_hour) and (start_min < end_min)) :
-            # Store the time stamps in the dictionary
-            timestamps[aots] = [start_date, end_date]
-            print("Time stamps:")
-            for key, value in timestamps.items():
-                print("{}: {}".format(key, value))
-            Parameters.tstamps = timestamps
-            Parameters.ctime = rsd
-            wtii(rsd,timestamps)
-        else:
-            print("Invalid time range. Start date must be before end date.")
-    except ValueError:
-        print("Invalid date format. Please enter a valid date and time.")
+    for i in timestamps:
+        print (timestamps[i]) 
+        for date in timestamps[i]:
+            for x in range(len(rsd)):
+                if date[x] < rsd[x] :
+                    ev3.screen.print("Invalid date \ninputed. \nRestart choice.")
+                    wait(5000)
+                    return 0
+                elif date[x] > rsd[x]:
+                    break
+                elif date == rsd :
+                    ev3.screen.print("Invalid date \ninputed. \nRestart choice.")
+                    wait(5000)
+                    return 0
+            for j in timestamps: 
+                if i != j:  # Don't compare the timestamp with itself
+                    for x in range(len(timestamps[j][0])):
+                        print (timestamps[j][0][x])
+                    print ("next = end time")
+                    for x in range(len(timestamps[j][0])):
+                        print (timestamps[j][1][x])
+                    if timestamps[j][0][0]==timestamps[i][0][0] and timestamps[j][0][1] == timestamps[i][0][1] and timestamps[j][0][2] == timestamps[i][0][2]:
+                        if (((timestamps[j][0][3] <= timestamps[i][0][3] <= timestamps[j][1][3]) and (timestamps[j][0][4] <= timestamps[i][0][4] <= timestamps[j][1][4])) or ( (timestamps[i][0][3] <= timestamps[j][0][3] <= timestamps[i][1][3])and ((timestamps[i][0][3] <= timestamps[j][0][3] <= timestamps[i][1][3])))):
+                            ev3.screen.print("Invalid input.\nOverlapping timestamps")
+                            wait(5000)
+                            return 0
+            if i == list(timestamps.keys())[-1]:       
+                print("Time stamps:")
+                for key, value in timestamps.items():
+                    print("{}: {}".format(key, value))
+                Parameters.tstamps = timestamps
+                Parameters.ctime = rsd
+                Parameters.stopwatch.reset()
+                while True:
+                    print(stimes(Parameters.tstamps))
+                return 0
 
 
-# def tempfunc():
-#     zonecords = {
-#                 0:-200,
-#                 1:0,
-#                 2:0,
-#                 3:0
-#                 }
-#     print(zonecords)
-#     abso = {key: abs(value) for key, value in zonecords.items()}
-#     fartkey = max(abso, key=abso.get)
-#     highest = zonecords[fartkey]
-#     #print("Key with farthest value from 0:", farthest_key)
-#     print("highest in the room: ", highest)
-#     bigGear = 40
-#     smallGear = 8
-#     multiplyAngle = -(bigGear/smallGear)
+                             
 
-#     weHaveHeight[0] = abs((abs(highest) + packageheight)/multiplyAngle)
-#     print("weHaveHeight[0] =",weHaveHeight[0])
-#     return 0
+
                              
 
 #stop till False
@@ -275,6 +303,7 @@ def zone_hight():
                  2:0,
                  3:0
                  }
+    weHaveHeight = [0]
     #rotationMotor.reset_angle(0)
     #elevationMotor.reset_angle(0) 
     current_index=0
@@ -306,16 +335,13 @@ def zone_hight():
             elif str(button) == "Button.CENTER":
                 if zonenum[current_index % len(zonenum)] == "done?":
                     temp = False
-                    abso = {key: abs(value) for key, value in zonecords.items()}
-                    fartkey = max(abso, key=abso.get)
-                    highest = zonecords[fartkey]
+                    abs_values = {key: abs(value) for key, value in zonecords.items()}
+                    farthest_key = max(abs_values, key=abs_values.get)
+                    farthest_value = zonecords[farthest_key]
                     #print("Key with farthest value from 0:", farthest_key)
-                    print("highest in the room: ", highest)
-                    bigGear = 40
-                    smallGear = 8
-                    multiplyAngle = -(bigGear/smallGear)
-                    weHaveHeight[0] = abs((abs(highest) + packageheight)/multiplyAngle)
-                    print(weHaveHeight[0])
+                    print("Value at that key:", farthest_value)
+                    weHaveHeight[0] = farthest_value
+                    print(weHaveHeight)
                     print(zonecords)
                     ev3.speaker.beep()
                     ev3.screen.print("back!")
