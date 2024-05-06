@@ -126,13 +126,8 @@ def main():
             armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
 
 
-
-            # clawAngle = clawMotor.angle()
-
+            
             if sortZone == 'Error' or sortZone == 'nothing':
-
-                # print("Sortzone ", sortZone)
-
                 
 
                 ## Will continue if found nothing, otherwise place the cargo.
@@ -201,9 +196,6 @@ def main():
                     armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
                     rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed)
                     Pickup(goToZone= pickupzone,angleTarget= -armStartAngle, zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= True, mbox= mbox)
-                    # Pickup(goToZone= pickupzone, 
-                    # have that claw always open
-
 
                 else:
                     pickupzone = zoneSort["pickup"]
@@ -266,25 +258,6 @@ def EmergencyThread():
                 wait(2)
 
                 stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
-
-# def btnCheck():
-
-# def collaborate():
-#     coms()
-
-
-# def belt():
-#     margin = 20
-#     # send[0] = 3
-#     reflection = colorSense.reflection()
-
-#     while reflection >= 0 + margin and reflection <= 100 - margin:
-#         reflection = colorSense.reflection()
-#         send[0] = 'feed'
-#         # return False
-    
-#     send[0] = 'stop' # Send stop feeding
-#     # return True
 
 
 
