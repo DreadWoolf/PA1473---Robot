@@ -46,11 +46,11 @@ belt.control.limits(speed=150, acceleration=60)
 
 #####################coms##########################
 
-collaborator = 'D'
+collaborator = 'A'
 
 
 def resturaunt():
-    SERVER = 'ev3dev3-' + collaborator
+    SERVER = 'ev3dev-' + collaborator
     # SERVER = 'ev3dev-' + collaborator
     client = BluetoothMailboxClient()
     mbox = TextMailbox('greeting', client)

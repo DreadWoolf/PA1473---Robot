@@ -10,44 +10,28 @@ from coms import coms, distribute, Connect, sendMessage
 from menu import menu, Emenu
 zoneSort, zoneHeight = menu()
 print(zoneSort)
-stopwatch = StopWatch()
-# if 'coms' in zoneSort:
-#     garbage = 'coms'
-# for key in zoneSort:
-#     if key == 'coms':
-#         garbage = 'coms'
-        
-# par.zoneSort = czones
-# par.zoneHeight = zonecords
-# print(par.zoneSort)
+
 
 # Create two threads for each task
 thread1 = th.Thread()
 thread2 = th.Thread()
-# thread3 = th.Thread()
-# Event = th.Thread.Event()
+
 
 Robotrun = True
 stopRobot = False
+mbox = ''
 
-def main(): #thread2:th.Thread):
+def main():
     global zoneSort
     global zoneHeight
     global Robotrun
     # Robotrun = True
     ev3.speaker.beep()
-    
-
-    #zoneSort['pick1'] = 2
-    #zoneSort['Blue'] = 0
-    #zoneSort['unSuported'] = 3
 
     print(zoneSort)
 
 
 
-    times = 2  #10
-    zoneAmount = 3
     cargo = False
     periodTime = 4000 # 4s (4000)
 
@@ -58,7 +42,7 @@ def main(): #thread2:th.Thread):
     comsExists = False
     beltExists = False
     
-    Calibrate(armStartAngle)
+    Calibrate(armStartAngle, zoneHeight = zoneHeight)
     
     # run = 0
     # location = 0 # Go to first 1.
@@ -72,9 +56,12 @@ def main(): #thread2:th.Thread):
 
         ev3.screen.clear()
 
-        if packageHeight != weHaveHeight[0]:
+        # Check if we have a height on one zone.
+        if weHaveHeight[0] >= armStartAngle:
             packageHeight = weHaveHeight[0]
-            # angletarget = armStartAngle + packageHeight
+        else:
+            packageHeight = armStartAngle
+            
 
         
         ###############################
@@ -92,18 +79,19 @@ def main(): #thread2:th.Thread):
             # Wait for connection, before startup and then start communication Thread.
             mbox = Connect()
             wait(2)
-            thread2 = th.Thread(target=coms, args=mbox)
+            # Creates thread and declare the target.
+            thread2 = th.Thread(target=coms, args=(mbox,))
             thread2Alive[0] = True
             thread2.start()
 
 
         # Aptempt to Turn of thread2, if zones is changed.
-        elif not ('coms' in zoneSort or 'belt' in zoneSort):
+        elif thread2Alive[0] == True and not ('coms' in zoneSort or 'belt' in zoneSort):
             thread2Alive[0] = False
             comsExists= False
             beltExists= False
             wait(5)
-            if thread2Alive:    thread2.join()
+            if thread2Alive[0]:    thread2.join()
         
         # If thread2 is active, send appropiate messages to companion.
         elif comsExists: # and thread2Alive[0] == True:
@@ -114,11 +102,13 @@ def main(): #thread2:th.Thread):
                 send[0] = messages[5] # Free
                 sendMessage(mbox)
                 send[0] = 'nothing'
+
             # Make sure we are not blocking the coms zone, if no pickup exists.
             elif not 'pickup' in zoneSort:
                 pickupzone = zoneSort['coms'] % (zoneSort['coms'] + 1)
-                armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2)
-                rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+                # Var armstartangle before
+                armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
+                rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed)
                 # rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
 
 
@@ -129,12 +119,22 @@ def main(): #thread2:th.Thread):
         # If we have cargo and is not stopped, execute this.
         if cargo and Estop[0] == False: #
 
+            armMovement(pickupzone, angleTarget= armStartAngle,zoneHeight= zoneHeight, operatingspeed= speed/2) # make sure we are at sensor.
+
             sortZone = 0
             wait(5)  
             sortZone, color = colorSort(zoneSort)
+            # make sure we are at free height.
+            armMovement(pickupzone, angleTarget= packageHeight,zoneHeight= zoneHeight, operatingspeed= speed/2)
 
-            
+
+
+            # clawAngle = clawMotor.angle()
+
             if sortZone == 'Error' or sortZone == 'nothing':
+
+                # print("Sortzone ", sortZone)
+
                 
 
                 ## Will continue if found nothing, otherwise place the cargo.
@@ -148,7 +148,7 @@ def main(): #thread2:th.Thread):
                         # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
                         # Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                         rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
-                        Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                        Place(goToZone= sortZone, angleTarget=-armStartAngle,zoneHeight= zoneHeight, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                     except NameError:
                         print("idk what to do!")
                         ev3.screen.print("color not supported")
@@ -178,7 +178,7 @@ def main(): #thread2:th.Thread):
                 rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
 
                 ## Drop of again, if detected random color.
-                Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, zoneHeight =zoneHeight, operatingspeed= speed/2, potentialCargo= cargo)
                 # lastZone = location
             
             cargo = False
@@ -192,7 +192,7 @@ def main(): #thread2:th.Thread):
                 wait(2)
                 sendMessage(mbox)
                 wait(2)
-                armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
+                armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
                 rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
                 Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
@@ -203,11 +203,14 @@ def main(): #thread2:th.Thread):
                     armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
                     rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed)
                     Pickup(goToZone= pickupzone,angleTarget= -armStartAngle, zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= True, mbox= mbox)
+                    # Pickup(goToZone= pickupzone, 
+                    # have that claw always open
+
 
                 else:
                     pickupzone = zoneSort["pickup"]
 
-                    armMovement(pickupzone, angleTarget= armStartAngle, operatingspeed= speed/2) # make sure we are up.
+                    armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
                     rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
                     Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
@@ -238,6 +241,7 @@ def EmergencyThread():
     global stopRobot
     global zoneSort
     global zoneHeight
+    global mbox
     
     
     stopProcess = False
@@ -256,6 +260,9 @@ def EmergencyThread():
                     rotationMotor.hold()
                     wait(1000)
                     stopProcess = True  # Sätt flaggan till True när knappen trycks
+                    if mbox != '':
+                        send[0] = messages[3]
+                        sendMessage(mbox)
                     break  # Avbryt loopen när knappen trycks
 
             while stopProcess:
@@ -265,6 +272,25 @@ def EmergencyThread():
                 wait(2)
 
                 stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
+                
+# def btnCheck():
+
+# def collaborate():
+#     coms()
+
+
+# def belt():
+#     margin = 20
+#     # send[0] = 3
+#     reflection = colorSense.reflection()
+
+#     while reflection >= 0 + margin and reflection <= 100 - margin:
+#         reflection = colorSense.reflection()
+#         send[0] = 'feed'
+#         # return False
+    
+#     send[0] = 'stop' # Send stop feeding
+#     # return True
 
 
 
@@ -279,6 +305,7 @@ def StopRobot(stopRobot):
 if __name__ == "__main__":
     # Create two threads for each task
     thread1 = th.Thread(target=EmergencyThread)
+
     # thread2 = th.Thread(target=coms, args=mbox)
 
     # thread3 = th.Thread(target=belt)

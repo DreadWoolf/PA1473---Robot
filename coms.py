@@ -6,11 +6,6 @@ from Parameters import *
 distributeText = ['receevied', 'deliver']  #0 : receevied, 1: deliver.
 distribute = [False, False]
 
-# server = BluetoothMailboxServer()
-# me[0] = server
-# mbox = TextMailbox('greeting', me[0])
-# print("trying to connect")
-# me[0].wait_for_connection()
 
 
 
