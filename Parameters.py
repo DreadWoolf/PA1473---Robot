@@ -119,16 +119,15 @@ restart = [False]
 #################################
 #     Communication parameter   #
 #################################
-collaborators = ['A', 'B', 'C', 'D', 'E']
-collaborator = 'D'
+collaborators = ['A', 'B', 'C', 'D', 'E','F', 'G']
+# collaborator = 'D'
 
 # The server must be started before the client!
 me = ['server']
-# This is the name of the remote EV3 or PC we are connecting to.
-SERVERID = 'ev3dev-' + collaborator
-# Before running this program, make sure the client and server EV3 bricks are
-# paired using Bluetooth, but do NOT connect them. The program will take care
-# of establishing the connection.
+# me = ['client']
+
+ # This is the name of the remote EV3 or PC we are connecting to.
+# SERVERID = 'ev3dev-' + collaborator
 
 messages = ['occupied', 'gift4u', 'feed', 'stop', 'emergency', 'free']
 # 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop, 5 free.

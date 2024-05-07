@@ -80,7 +80,7 @@ def main():
             mbox = Connect()
             wait(2)
             # Creates thread and declare the target.
-            thread2 = th.Thread(target=coms, args=(mbox,))
+            thread2 = th.Thread(target=coms, args=(mbox, ))
             thread2Alive[0] = True
             thread2.start()
 
@@ -108,7 +108,7 @@ def main():
                 pickupzone = zoneSort['coms'] % (zoneSort['coms'] + 1)
                 # Var armstartangle before
                 armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
-                rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed)
+                rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed, zoneHeight=zoneHeight)
                 # rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
 
 
@@ -147,7 +147,7 @@ def main():
                         # print(cAngle) 
                         # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
                         # Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
-                        rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
+                        rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed, zoneHeight=zoneHeight)
                         Place(goToZone= sortZone, angleTarget=-armStartAngle,zoneHeight= zoneHeight, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                     except NameError:
                         print("idk what to do!")
@@ -175,15 +175,16 @@ def main():
 
                 wait(5)
 
-                rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
+                rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed, zoneHeight=zoneHeight)
 
                 ## Drop of again, if detected random color.
                 Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, zoneHeight =zoneHeight, operatingspeed= speed/2, potentialCargo= cargo)
                 # lastZone = location
             
             cargo = False
-                # lastZone = location
-        else:
+
+        else: # HERE WE PICK UP STUFF!
+
             # If receevied = True and Occupied = False.
             if comsExists and distribute[0] == True and distribute[1] == False:
                 pickupzone = zoneSort["coms"]
@@ -193,16 +194,16 @@ def main():
                 sendMessage(mbox)
                 wait(2)
                 armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
-                rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-                Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
+                rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed, zoneHeight=zoneHeight)
+                Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo, belt=False)
 
             else:
                 if 'belt' in zoneSort:
                     pickupzone = zoneSort["belt"] 
                     # maybe higher
                     armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
-                    rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed)
-                    Pickup(goToZone= pickupzone,angleTarget= -armStartAngle, zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= True, mbox= mbox)
+                    rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed, zoneHeight=zoneHeight)
+                    Pickup(goToZone= pickupzone,angleTarget= -armStartAngle, zoneHeight= zoneHeight, openClawsFirst= True, operatingspeed= speed/2, potentialCargo= cargo, belt= beltExists, mbox= mbox)
                     # Pickup(goToZone= pickupzone, 
                     # have that claw always open
 
@@ -211,7 +212,7 @@ def main():
                     pickupzone = zoneSort["pickup"]
 
                     armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
-                    rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+                    rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed, zoneHeight=zoneHeight)
                     Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
 
         # Make sure if we are holding cargo or not.
@@ -231,7 +232,7 @@ def main():
     # Go back to start, if arm is higher than ground level.
     # armMovement(angleTarget= -armStartAngle)
     if stopRobot == True:
-        armMovement(goToZone= goToZone,angleTarget= -armStartAngle)
+        armMovement(goToZone= goToZone,angleTarget= -armStartAngle, potentialCargo=True)
     print("\n\nStopped!")
 
 

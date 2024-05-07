@@ -11,70 +11,35 @@ ev3 = EV3Brick()
 belt = Motor(Port.D, Direction.CLOCKWISE)
 belt.control.limits(speed=150, acceleration=60)
 
-# def change_speed(change, speed):
-#     if -150 < speed + change <= 150:
-#         speed += change
-#         ev3.screen.print("Speed:", speed)
-#         belt.run(speed)
-#         wait(300)
-#     return speed
-
-# def main():
-#     speed = 50
-#     belt_on = True
-#     belt.run(speed)
-#     ev3.screen.print("Speed:", speed)
-
-#     while True:
-#         if Button.CENTER in ev3.buttons.pressed():
-#             if belt_on:
-#                 ev3.light.on(Color.RED)
-#                 belt.hold()
-#                 ev3.screen.print("STOP")
-#             else:
-#                 ev3.light.on(Color.GREEN)
-#                 belt.run(speed)
-#                 ev3.screen.print("Speed:", speed)
-#             belt_on = not belt_on
-#             wait(2000)
-#         if Button.UP in ev3.buttons.pressed() and belt_on:
-#             speed = change_speed(10, speed)
-#         if Button.DOWN in ev3.buttons.pressed() and belt_on:
-#             speed = change_speed(-10, speed)
-#         wait(100)
-
-
 #####################coms##########################
 
-collaborator = 'A'
+#collaborator = 'D'
+collaborators = ['A', 'B', 'C', 'D','E','F','G']
 
 
 def resturaunt():
-    SERVER = 'ev3dev-' + collaborator
-    # SERVER = 'ev3dev-' + collaborator
     client = BluetoothMailboxClient()
     mbox = TextMailbox('greeting', client)
-    # ev3.screen.print('establishing connection...')
 
-    while True:
+    for collaborator in collaborators:
+        SERVER = 'ev3dev-' + collaborator
         ev3.screen.print('establishing connection...')
         ev3.screen.print("With " + SERVER)
-
-
         try:
             client.connect(SERVER)
             ev3.screen.clear()
+
             break
+        # ev3.screen.print('establishing connection...')
         except ValueError:
-            ev3.screen.clear()
-            ev3.screen.print("Failed to connect")
+            ev3.screen.print("Failed to connect to\n"+ SERVER)
             wait(5000)
+            ev3.screen.clear()
 
 
 
     ev3.screen.print('connected!')
 
-    ev3.screen.print('entering whileloop')
     while True:
         mbox.wait() #here we got an error
         ev3.screen.print('reeved')

@@ -95,9 +95,10 @@ def sendMessage(mbox):
 
 
 
+# Before running this program, make sure the client and server EV3 bricks are
+# paired using Bluetooth, but do NOT connect them. The program will take care
+# of establishing the connection.
 def Connect():
-
-
 
     if me[0] == 'server':
         print("I'm server")
@@ -110,15 +111,31 @@ def Connect():
         wait(1000)
         ev3.screen.clear()
     else:
-        # This is the name of the remote EV3 or PC we are connecting to.
-        # SERVER = 'ev3dev'
         print("I'm Client")
         client = BluetoothMailboxClient()
-        me[0] = client    
-        me[0].connect(SERVERID)
-        print('connected!')
+        me[0] = client
+        for collaborator in collaborators:
+                # This is the name of the remote EV3 or PC we are connecting to.
+                SERVERID = 'ev3dev-' + collaborator
+                ev3.screen.print("Attempting to connect to\n" + SERVERID)
+                if collaborator != RobotIdentity:
+                    try:
+                        ev3.screen.print('establishing connection...')
+                        wait(10)
+                        me[0].connect(SERVERID)
+                        ev3.screen.clear()
+                        ev3.screen.print("Connected")
+                        wait(1000)
+                        ev3.screen.clear()
+                    except ValueError:
+                        ev3.screen.print("Failed to connect to\n"+ SERVERID)
+                        wait(1000)
+                        ev3.screen.clear()
         # client = BluetoothMailboxClient()
-        ev3.speaker.beep()
+        # me[0] = client    
+        # me[0].connect(SERVERID)
+        # print('connected!')
+        # client = BluetoothMailboxClient()
     
     mbox = TextMailbox('greeting', me[0])
 
