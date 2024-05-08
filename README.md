@@ -12,10 +12,7 @@ in this section you will be able to set up the diffrent zones for wich colors yo
 up zone from this section. Once you are done with all that, you are good to go. Scroll until you find "start_code" and press it. The robot will start
 sroting packages based on their color. 
 
-
 Features
-Lastly, you should write which of the user stories you did and didn't develop in this project, in the form
-of a checklist. Like this:
 - [ ] US_01: The robot shall locate, handle, and pick up items from a designated position without dropping them accidentally or harming the packages.
 - [ ] REQ02: The robot should place packages at a designated position safely, gently, and reliably with reasonable speed.
 - [ ] REQ03: The robot should be able to differentiate between workers and packages. As well, it should be able to find the packages in a designated pickup zone.
