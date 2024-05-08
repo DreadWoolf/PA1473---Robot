@@ -208,12 +208,15 @@ def main():
                     # have that claw always open
 
 
-                else:
+                # else:
+                elif 'pickup' in zoneSort:
                     pickupzone = zoneSort["pickup"]
 
                     armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
                     rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed, zoneHeight=zoneHeight)
                     Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
+                else:
+                    wait(200)
 
         # Make sure if we are holding cargo or not.
         clawAngle = clawMotor.angle()
@@ -223,7 +226,7 @@ def main():
             cargo = False
             # make sure the angle is correct.
             clawMotor.reset_angle(0)
-            print("Reseted claw angle!")
+            # print("Reseted claw angle!")
             wait(500)
     
 

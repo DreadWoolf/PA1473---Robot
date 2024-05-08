@@ -44,16 +44,16 @@ RobotRegister = {
     'G' : 18
 }
 
-RobotIdentity = 'C'
+RobotIdentity = 'D'
  
 
 zoneSort = {
     'Green'     :   2,
     'Blue'      :   1,
-    # 'coms'      :   0,
+    'coms'      :   0,
     # 'belt'      :   0,
-    'pickup'    :   0,
-    'Yellow'    :   3
+    'pickup'    :   3,
+    # 'Yellow'    :   3
 
     }
 
@@ -123,8 +123,8 @@ collaborators = ['A', 'B', 'C', 'D', 'E','F', 'G']
 # collaborator = 'D'
 
 # The server must be started before the client!
-me = ['server']
-# me = ['client']
+# me = ['server']
+me = ['client']
 
  # This is the name of the remote EV3 or PC we are connecting to.
 # SERVERID = 'ev3dev-' + collaborator

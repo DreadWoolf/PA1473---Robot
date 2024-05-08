@@ -12,6 +12,7 @@ distribute = [False, False]
 def coms(mbox):
     # global mbox
     # mbox = Connect()
+    print("I'm listning")
     while True:
         if thread2Alive[0] == False: break
 
@@ -21,6 +22,8 @@ def coms(mbox):
             wait(500)
 
         inbox = mbox.read()
+
+        print("Recevied message: ", str(inbox))
 
         if inbox == messages[0]: # Occupied
             distribute[1] = True # Collision warning!
@@ -110,10 +113,14 @@ def Connect():
         ev3.screen.print("Connected")
         wait(1000)
         ev3.screen.clear()
+        mbox = TextMailbox('greeting', me[0])
+
     else:
         print("I'm Client")
         client = BluetoothMailboxClient()
         me[0] = client
+        mbox = TextMailbox('greeting', me[0])
+
         for collaborator in collaborators:
                 # This is the name of the remote EV3 or PC we are connecting to.
                 SERVERID = 'ev3dev-' + collaborator
@@ -137,7 +144,6 @@ def Connect():
         # print('connected!')
         # client = BluetoothMailboxClient()
     
-    mbox = TextMailbox('greeting', me[0])
 
     
     return mbox
