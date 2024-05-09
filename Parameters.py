@@ -38,7 +38,7 @@ RobotRegister = {
     'A' : 0,
     'B' : 19,  ## Accurate
     'C' : 15,
-    'D' : 0,  
+    'D' : 15,  
     'E' : 5,
     'F' : 0,
     'G' : 18
@@ -50,10 +50,10 @@ RobotIdentity = 'D'
 zoneSort = {
     'Green'     :   2,
     'Blue'      :   1,
-    'coms'      :   0,
+    # 'coms'      :   0,
     # 'belt'      :   0,
     'pickup'    :   3,
-    # 'Yellow'    :   3
+    'Yellow'    :   0
 
     }
 
@@ -123,18 +123,21 @@ collaborators = ['A', 'B', 'C', 'D', 'E','F', 'G']
 # collaborator = 'D'
 
 # The server must be started before the client!
-# me = ['server']
-me = ['client']
+me = ['server']
+# me = ['client']
 
  # This is the name of the remote EV3 or PC we are connecting to.
 # SERVERID = 'ev3dev-' + collaborator
 
-messages = ['occupied', 'gift4u', 'feed', 'stop', 'emergency', 'free']
+messages = ['occupied', 'gift4u', 'feed', 'stop', 'emergency', 'free', 'nothing']
 # 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop, 5 free.
 send = ['nothing']
 
 # Coms thread.
 thread2Alive = [False]
+
+# Make empty mbox for later!
+mbox = ''
 
 
 

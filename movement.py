@@ -29,7 +29,6 @@ def Calibrate(armStartAngle:int = 40, speed = 60, zoneHeight:dict = {}):
     # if stopRobot:
     #     print("stop")
     #     s.sys.exit()
-
     ev3.screen.print("Callibrate rotation")
     rotateBase(angle= 0, goToZone= 0, operatingSpeed= speed, armtarget= armStartAngle, calibrate= True)
     
@@ -142,7 +141,7 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
     multiplyAngle = -(bigGear/smallGear)
 
     print("in armmovement")
-    print(zoneHeight)
+    #print(zoneHeight)
     print("gotozone ", goToZone)
     print("angletarget ", angleTarget)
     print("")

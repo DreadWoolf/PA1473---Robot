@@ -19,12 +19,12 @@ thread2 = th.Thread()
 
 Robotrun = True
 stopRobot = False
-mbox = ''
 
 def main():
     global zoneSort
     global zoneHeight
     global Robotrun
+    global mbox
     # Robotrun = True
     ev3.speaker.beep()
 
@@ -35,9 +35,9 @@ def main():
     cargo = False
     periodTime = 4000 # 4s (4000)
 
-    armStartAngle = 40 #28 #38 #40 #39  # 40
+    armStartAngle = 40  # This is preset to be at the sensor height.
     packageHeight = 0
-    mbox = ''
+    # mbox = ''
 
     comsExists = False
     beltExists = False
@@ -62,23 +62,29 @@ def main():
         else:
             packageHeight = armStartAngle
             
-
         
         ###############################
         #       start coms thread     #
         ###############################
         if  not thread2Alive[0] and ('coms' in zoneSort or 'belt' in zoneSort):
+            print("Starting thread")
             if 'coms' in zoneSort:
                 garbage = 'coms'
                 comsExists = True
+            else:
+                # garbage = None
+                comsExists = False
+
 
             if 'belt' in zoneSort:
                 beltExists = True
+            else:
+                beltExists = False
                             
 
             # Wait for connection, before startup and then start communication Thread.
             mbox = Connect()
-            wait(2)
+            wait(10)
             # Creates thread and declare the target.
             thread2 = th.Thread(target=coms, args=(mbox, ))
             thread2Alive[0] = True
@@ -86,7 +92,8 @@ def main():
 
 
         # Aptempt to Turn of thread2, if zones is changed.
-        elif thread2Alive[0] == True and not ('coms' in zoneSort or 'belt' in zoneSort):
+        # elif thread2Alive[0] == True and not ('coms' in zoneSort or 'belt' in zoneSort):
+        elif thread2Alive[0] == True and ('coms' not in zoneSort or 'belt' not in zoneSort):
             thread2Alive[0] = False
             comsExists= False
             beltExists= False
@@ -94,48 +101,63 @@ def main():
             if thread2Alive[0]:    thread2.join()
         
         # If thread2 is active, send appropiate messages to companion.
-        elif comsExists: # and thread2Alive[0] == True:
+        elif comsExists and cargo == False: # and thread2Alive[0] == True:
             zoneMargin = 200
             check = zoneLocation[zoneSort['coms']]
 
-            if send[0] != 'nothing' and rotationMotor.angle() >= check + zoneMargin and rotationMotor.angle() <= check - zoneMargin:
-                send[0] = messages[5] # Free
-                sendMessage(mbox)
-                send[0] = 'nothing'
-
             # Make sure we are not blocking the coms zone, if no pickup exists.
-            elif not 'pickup' in zoneSort:
+            if 'pickup' not in zoneSort:
+                print("we fucked up")
                 pickupzone = zoneSort['coms'] % (zoneSort['coms'] + 1)
+                print("pickupzone: ", pickupzone)
                 # Var armstartangle before
                 armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
                 rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed, zoneHeight=zoneHeight)
                 # rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
 
+            # if send[0] != 'nothing' and rotationMotor.angle() >= check + zoneMargin and rotationMotor.angle() <= check - zoneMargin:
+            if send[0] == messages[0] and rotationMotor.angle() >= check + zoneMargin and rotationMotor.angle() <= check - zoneMargin:
+                send[0] = messages[5] # Free
+                sendMessage(mbox)
+                # send[0] = 'nothing'
 
+            
+
+
+
+
+
+
+        # Make sure if we are holding cargo or not.
+        clawAngle = clawMotor.angle()
+        if clawAngle <= -10:
+            cargo = True
+        elif clawAngle >= 0 - 4:
+            cargo = False
+            # make sure the angle is correct.
+            clawMotor.reset_angle(0)
+            # print("Reseted claw angle!")
+            wait(500)
 
 
 
 
         # If we have cargo and is not stopped, execute this.
         if cargo and Estop[0] == False: #
-
-            armMovement(pickupzone, angleTarget= armStartAngle,zoneHeight= zoneHeight, operatingspeed= speed/2) # make sure we are at sensor.
+            # make sure we are at sensor height.
+            armMovement(pickupzone, angleTarget= armStartAngle,zoneHeight= zoneHeight, operatingspeed= speed/2)
 
             sortZone = 0
             wait(5)  
             sortZone, color = colorSort(zoneSort)
+
             # make sure we are at free height.
             armMovement(pickupzone, angleTarget= packageHeight,zoneHeight= zoneHeight, operatingspeed= speed/2)
 
 
 
-            # clawAngle = clawMotor.angle()
 
             if sortZone == 'Error' or sortZone == 'nothing':
-
-                # print("Sortzone ", sortZone)
-
-                
 
                 ## Will continue if found nothing, otherwise place the cargo.
                 # if sortZone == "Error":
@@ -144,42 +166,60 @@ def main():
                     try:
                         sortZone = zoneSort[garbage]
                         # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
+                        ##################################################
+                        ###################################################
+                        # maybe need to send message here!
+
+                        # if comsExists:
+                        #     send[0]
+
                         # print(cAngle) 
                         # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
                         # Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
-                        rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed, zoneHeight=zoneHeight)
-                        Place(goToZone= sortZone, angleTarget=-armStartAngle,zoneHeight= zoneHeight, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+                        sort(sortZone, armStartAngle, speed, cargo, comsExists)
+                        
+                        # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed, zoneHeight=zoneHeight)
+                        # Place(goToZone= sortZone, angleTarget=-armStartAngle,zoneHeight= zoneHeight, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                     except NameError:
                         print("idk what to do!")
                         ev3.screen.print("color not supported")
                         running = False
                         #Place(goToZone= goToZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
+            
+            
             else:
-                ev3.screen.print(str(color) + " to " + str(sortZone))
                 
-                # We sort to coms zone.
-                if comsExists and sortZone == zoneSort['coms']:
-                    do = True
-                    while do:
-                        if distribute[1]: # Collision warning
-                            wait(500)
-                        elif distribute[0]: # Other robot has already left a package.
-                            ev3.screen.print("Error package \nalready there!")
-                        else:
-                            send[0] = messages[0] # 'occupied'
-                            wait(2)
-                            sendMessage(mbox) # Send the message
-                            wait(10)
-                            do = False
+                # Sort (go to right location etc)
+                ev3.screen.print(str(color) + " to " + str(sortZone + 1))
+                
+                sort(sortZone, armStartAngle, speed, cargo, comsExists)
+                                
+                
+                # # We sort to coms zone.
+                # if comsExists and sortZone == zoneSort['coms']:
+                #     do = True
+                #     while do:
+                #         if distribute[1]: # Collision warning, wait for collaborator to finish.
+                #             wait(500)
+                #         elif distribute[0]: # Other robot has already left a package.
+                #             ev3.screen.print("Error package \nalready there!")
+                #             wait(2000)
+                #         else:
+                #             send[0] = messages[0] # set message to 'occupied'
+                #             wait(2)
+                #             sendMessage(mbox) # Send the message
+                #             wait(10)
+                #             do = False
 
 
-                wait(5)
+                # wait(5)
 
-                rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed, zoneHeight=zoneHeight)
+                # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed, zoneHeight=zoneHeight)
 
-                ## Drop of again, if detected random color.
-                Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, zoneHeight =zoneHeight, operatingspeed= speed/2, potentialCargo= cargo)
-                # lastZone = location
+                # ## Drop of again, if detected random color.
+                # Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, zoneHeight =zoneHeight, operatingspeed= speed/2, potentialCargo= cargo)
+                # distribute[0] = False  # Set receeved to false.
+                # # lastZone = location
             
             cargo = False
 
@@ -197,7 +237,8 @@ def main():
                 rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed, zoneHeight=zoneHeight)
                 Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo, belt=False)
 
-            else:
+            else: # when we have no collaborator or won't pick up at coms.
+
                 if 'belt' in zoneSort:
                     pickupzone = zoneSort["belt"] 
                     # maybe higher
@@ -216,18 +257,29 @@ def main():
                     rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed, zoneHeight=zoneHeight)
                     Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
                 else:
-                    wait(200)
 
-        # Make sure if we are holding cargo or not.
-        clawAngle = clawMotor.angle()
-        if clawAngle <= -10:
-            cargo = True
-        elif clawAngle >= 0 - 4:
-            cargo = False
-            # make sure the angle is correct.
-            clawMotor.reset_angle(0)
-            # print("Reseted claw angle!")
-            wait(500)
+
+                
+
+                # if comsExists:
+                #     rotangle = rotationMotor.angle() 
+
+                #     if abs(rotangle + 20) <= abs(zoneSort["coms"]) or abs(rotangle - 20) >= abs(zoneSort["coms"]):
+                #         rotateBase() 
+                    print("Waiting for instructions")
+                    wait(500)
+
+
+        # # Make sure if we are holding cargo or not.
+        # clawAngle = clawMotor.angle()
+        # if clawAngle <= -10:
+        #     cargo = True
+        # elif clawAngle >= 0 - 4:
+        #     cargo = False
+        #     # make sure the angle is correct.
+        #     clawMotor.reset_angle(0)
+        #     # print("Reseted claw angle!")
+        #     wait(500)
     
 
         # if Robotrun == False:
@@ -277,25 +329,40 @@ def EmergencyThread():
 
                 stopProcess = Estop[0]  # Go out from loop if Estop[0] is set to False
                 
-# def btnCheck():
-
-# def collaborate():
-#     coms()
 
 
-# def belt():
-#     margin = 20
-#     # send[0] = 3
-#     reflection = colorSense.reflection()
 
-#     while reflection >= 0 + margin and reflection <= 100 - margin:
-#         reflection = colorSense.reflection()
-#         send[0] = 'feed'
-#         # return False
-    
-#     send[0] = 'stop' # Send stop feeding
-#     # return True
+def sort(sortZone, armStartAngle, speed, cargo, comsExists):
+    global zoneSort
+    global zoneHeight
 
+    # We sort to coms zone.
+    if comsExists and sortZone == zoneSort['coms']:
+        do = True
+        while do:
+            if distribute[1]: # Collision warning, wait for collaborator to finish.
+                wait(500)
+            elif distribute[0]: # Other robot has already left a package.
+                ev3.screen.print("Error package \nalready there!")
+                wait(2000)
+            else:
+                send[0] = messages[0] # set message to 'occupied'
+                wait(2)
+                sendMessage(mbox) # Send the message
+                wait(10)
+                do = False
+
+
+    wait(5)
+
+    rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed, zoneHeight=zoneHeight)
+
+    ## Drop of again, if detected random color.
+    Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, zoneHeight =zoneHeight, operatingspeed= speed/2, potentialCargo= cargo)
+    distribute[0] = False  # Set receeved to false, we are done.
+    # lastZone = location
+
+    return 0
 
 
 
