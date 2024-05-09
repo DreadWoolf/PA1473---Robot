@@ -250,7 +250,7 @@ def EmergencyThread():
                     rotationMotor.hold()
                     wait(1000)
                     stopProcess = True  # Sätt flaggan till True när knappen trycks
-                    if mbox != '':
+                    if mbox != '': # will probably be error if we remove belt or coms.
                         send[0] = messages[3]
                         sendMessage(mbox)
                     break  # Avbryt loopen när knappen trycks
