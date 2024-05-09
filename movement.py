@@ -9,7 +9,7 @@ from coms import sendMessage
 # from rotationMotor import rotateBase
 
 
-def Calibrate(armStartAngle:int = 40, speed = 60, zoneHeight:dict = {}):
+def Calibrate(armStartAngle:int = 40, speed = 60): #, zoneHeight:dict = {}):
 
     # armMovement(0,1,calibrate=False)
     # elevationMotor.stop()
@@ -17,20 +17,27 @@ def Calibrate(armStartAngle:int = 40, speed = 60, zoneHeight:dict = {}):
     # rotationMotor.stop()
     # wait(2000)
 
+    # Check if we have a height on one zone.
+    if weHaveHeight[0] >= armStartAngle:
+        packageHeight = weHaveHeight[0]
+    else:
+        packageHeight = armStartAngle
+
+
     ev3.screen.print("Callibrate arm")
     # print("wehaveheight", weHaveHeight[0])
     # angletarget = weHaveHeight[0]
-    if elevationMotor.angle() != armStartAngle:
-        armMovement(0, armStartAngle ,zoneHeight= zoneHeight ,calibrate= True)
+    if elevationMotor.angle() != packageHeight:
+        armMovement(0, packageHeight ,calibrate= True)
 
     ev3.screen.print("Callibrate claw")
 
-    clawMovement(0 , armStartAngle, None, calibrate= True)
+    clawMovement(0 , packageHeight, None, calibrate= True)
     # if stopRobot:
     #     print("stop")
     #     s.sys.exit()
     ev3.screen.print("Callibrate rotation")
-    rotateBase(angle= 0, goToZone= 0, operatingSpeed= speed, armtarget= armStartAngle, calibrate= True)
+    rotateBase(angle= 0, goToZone= 0, operatingSpeed= speed, armtarget= packageHeight, calibrate= True)
     
     ev3.screen.clear()
 
@@ -91,7 +98,7 @@ def Belt(mbox):
 
 def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dict = {}, operatingspeed = 100, potentialCargo= False, belt = False, mbox=''):
     while not Estop[0]:
-        clawMovement(goToZone, angleTarget, open = openClawsFirst, operatingspeed= operatingspeed) # If openFirst = True will open here.
+        clawMovement(goToZone, angleTarget,zoneHeight= zoneHeight ,open = openClawsFirst, operatingspeed= operatingspeed) # If openFirst = True will open here.
         wait(2)
         if Estop[0]: break
 
@@ -102,7 +109,7 @@ def Pickup(goToZone, angleTarget:int, openClawsFirst:bool = True, zoneHeight:dic
         armMovement(goToZone, angleTarget= angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, pickingup = True)
         wait(2)
         if Estop[0]: break
-        clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
+        clawMovement(goToZone, angleTarget,zoneHeight= zoneHeight, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         wait(2)
         if Estop[0]: break
         armMovement(goToZone, angleTarget= -angleTarget,zoneHeight= zoneHeight, operatingspeed= operatingspeed)
@@ -120,14 +127,14 @@ def Place(goToZone, angleTarget:int, openClawsFirst:bool = False, zoneHeight:dic
         armMovement(goToZone, angleTarget= angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, potentialCargo = potentialCargo)
         if Estop[0]: break
         wait(2)
-        clawMovement(goToZone, angleTarget, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
+        clawMovement(goToZone, angleTarget,zoneHeight= zoneHeight, open= (not openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         if Estop[0]: break
         wait(2)
 
         armMovement(goToZone, angleTarget= -angleTarget, zoneHeight= zoneHeight, operatingspeed= operatingspeed, potentialCargo = not potentialCargo)
         if Estop[0]: break
         wait(2)
-        clawMovement(goToZone, angleTarget, open= (openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
+        clawMovement(goToZone, angleTarget,zoneHeight= zoneHeight, open= (openClawsFirst), operatingspeed= operatingspeed) # If not open first will grip here.
         wait(2)
         break
 
@@ -142,9 +149,9 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
 
     print("in armmovement")
     #print(zoneHeight)
-    print("gotozone ", goToZone)
+    # print("gotozone ", goToZone)
     print("angletarget ", angleTarget)
-    print("")
+    # print("")
     
 
     if len(zoneHeight) > 0 and zoneHeight[goToZone] != 0:
@@ -159,7 +166,9 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
     if potentialCargo and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5 and height == 0:
         elevationMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=10) #20
         # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
-    elif height != 0: #pickingup == True:#height != 0:
+    elif height != 0 and not (abs(elevationMotor.angle()) >= abs(height) + 10 and abs(elevationMotor.angle()) >= abs(height) - 10): #pickingup == True:#height != 0:
+        # elevationMotor.run_target(operatingspeed,(angleTarget) * multiplyAngle)
+        print("go for height")
         elevationMotor.run_target(operatingspeed,(height) * multiplyAngle)
     else:
         # elevationMotor.run_target(operatingspeed,(angleTarget - height) * multiplyAngle)
@@ -179,7 +188,7 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
 #     return
 
 
-def clawMovement(goToZone, angleTarget, open:bool, calibrate:bool = False, operatingspeed = 120): #100 before
+def clawMovement(goToZone, angleTarget, open:bool, zoneHeight:dict = {}, calibrate:bool = False, operatingspeed = 120): #100 before
     smallGear = 12  #Tooths for gear moving clockwise. 
     bigGear = 16   #Tooths for gear moving counter clockwise. 
     multiplyAngle = -(bigGear/smallGear)

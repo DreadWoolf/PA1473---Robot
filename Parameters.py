@@ -48,10 +48,10 @@ RobotIdentity = 'D'
 zoneSort = {
     'Green'     :   2,
     'Blue'      :   1,
-    # 'coms'      :   0,
+    'coms'      :   0,
     # 'belt'      :   0,
     'pickup'    :   3,
-    'Yellow'    :   0
+    # 'Yellow'    :   0
 
     }
 
@@ -128,7 +128,7 @@ me = ['server']
 # SERVERID = 'ev3dev-' + collaborator
 
 messages = ['occupied', 'gift4u', 'feed', 'stop', 'emergency', 'free', 'nothing']
-# 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop, 5 free.
+## 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop, 5 free.
 send = ['nothing']
 
 # Coms thread.
