@@ -1,46 +1,46 @@
 #!/usr/bin/env pybricks-micropython
 
-# from Parameters import *
+from Parameters import *
 
-from pybricks import robotics
-from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
-from pybricks.parameters import Port, Stop, Direction, Color
-from pybricks.tools import wait, StopWatch
-from pybricks.robotics import DriveBase
-from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
-
+# from pybricks import robotics
 # from pybricks.hubs import EV3Brick
-# from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
+# from pybricks.ev3devices import Motor, ColorSensor, TouchSensor
+# from pybricks.parameters import Port, Stop, Direction, Color
 # from pybricks.tools import wait, StopWatch
+# from pybricks.robotics import DriveBase
+# from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
+
+# # from pybricks.hubs import EV3Brick
+# # from pybricks.messaging import BluetoothMailboxClient, TextMailbox, BluetoothMailboxServer
+# # from pybricks.tools import wait, StopWatch
 
 
 
-ev3 = EV3Brick()
+# ev3 = EV3Brick()
 
 
-collaborators = ['A', 'B', 'C', 'D', 'E','F', 'G']
-RobotIdentity = 'A'
-# collaborator = 'D'
+# collaborators = ['A', 'B', 'C', 'D', 'E','F', 'G']
+# RobotIdentity = 'A'
+# # collaborator = 'D'
 
-# The server must be started before the client!
-# me = ['server']
-me = ['client']
+# # The server must be started before the client!
+# # me = ['server']
+# me = ['client']
 
- # This is the name of the remote EV3 or PC we are connecting to.
-# SERVERID = 'ev3dev-' + collaborator
+#  # This is the name of the remote EV3 or PC we are connecting to.
+# # SERVERID = 'ev3dev-' + collaborator
 
-messages = ['occupied', 'gift4u', 'feed', 'stop', 'emergency', 'free', 'nothing']
-# 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop, 5 free.
-send = ['nothing']
+# messages = ['occupied', 'gift4u', 'feed', 'stop', 'emergency', 'free', 'nothing']
+# # 0 send nothing, 1 for occupied, 2 for gift4u, 3 feed, 4 stop, 5 free.
+# send = ['nothing']
 
-# Coms thread.
-thread2Alive = [False]
+# # Coms thread.
+# thread2Alive = [False]
 
-# Make empty mbox for later!
-mbox = ''
+# # Make empty mbox for later!
+# mbox = ''
 
-Estop = [False]
+# Estop = [False]
 
 
 

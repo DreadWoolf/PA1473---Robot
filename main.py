@@ -41,8 +41,9 @@ def main():
 
     comsExists = False
     beltExists = False
+
     
-    Calibrate(armStartAngle, zoneHeight = zoneHeight)
+    Calibrate(armStartAngle)
     
     # run = 0
     # location = 0 # Go to first 1.
@@ -66,11 +67,14 @@ def main():
         ###############################
         #       start coms thread     #
         ###############################
-        if  not thread2Alive[0] and ('coms' in zoneSort or 'belt' in zoneSort):
+        if  thread2Alive[0] == False and ('coms' in zoneSort or 'belt' in zoneSort):
             print("Starting thread")
             if 'coms' in zoneSort:
                 garbage = 'coms'
                 comsExists = True
+                notpickupzone = (zoneSort['coms'] + 1) % 3
+                rotateBase(zoneLocation[notpickupzone], notpickupzone, packageHeight, operatingSpeed= speed, zoneHeight=zoneHeight)
+
             else:
                 # garbage = None
                 comsExists = False
@@ -80,12 +84,12 @@ def main():
                 beltExists = True
             else:
                 beltExists = False
-                            
-
+            
             # Wait for connection, before startup and then start communication Thread.
             mbox = Connect()
             wait(10)
             # Creates thread and declare the target.
+
             thread2 = th.Thread(target=coms, args=(mbox, ))
             thread2Alive[0] = True
             thread2.start()
@@ -93,12 +97,14 @@ def main():
 
         # Aptempt to Turn of thread2, if zones is changed.
         # elif thread2Alive[0] == True and not ('coms' in zoneSort or 'belt' in zoneSort):
-        elif thread2Alive[0] == True and ('coms' not in zoneSort or 'belt' not in zoneSort):
-            thread2Alive[0] = False
+        elif thread2Alive[0] == True and ('coms' not in zoneSort and 'belt' not in zoneSort):
             comsExists= False
             beltExists= False
             wait(5)
-            if thread2Alive[0]:    thread2.join()
+            if thread2Alive[0]:
+                thread2.join()
+                thread2Alive[0] = False
+
         
         # If thread2 is active, send appropiate messages to companion.
         elif comsExists and cargo == False: # and thread2Alive[0] == True:
@@ -108,7 +114,7 @@ def main():
             # Make sure we are not blocking the coms zone, if no pickup exists.
             if 'pickup' not in zoneSort:
                 print("we fucked up")
-                pickupzone = zoneSort['coms'] % (zoneSort['coms'] + 1)
+                pickupzone = (zoneSort['coms'] + 1) % 3
                 print("pickupzone: ", pickupzone)
                 # Var armstartangle before
                 armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
@@ -173,11 +179,14 @@ def main():
                         # if comsExists:
                         #     send[0]
 
-                        # print(cAngle) 
                         # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed)
                         # Place(goToZone= sortZone, angleTarget=-armStartAngle, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
-                        sort(sortZone, armStartAngle, speed, cargo, comsExists)
-                        
+                        # sort(sortZone, armStartAngle, speed, cargo, comsExists)
+                        sort(sortZone, packageHeight, speed, cargo, comsExists, zoneHeight=zoneHeight)
+                        rotAngle = rotationMotor.angle()
+                        if  rotAngle <= zoneSort[garbage] + 20 and rotAngle <= zoneSort[garbage] - 20:
+                            send[0] = messages[1] # Gift4u
+                            sendMessage(mbox)
                         # rotateBase(zoneLocation[sortZone], sortZone, armStartAngle, speed, zoneHeight=zoneHeight)
                         # Place(goToZone= sortZone, angleTarget=-armStartAngle,zoneHeight= zoneHeight, openClawsFirst=False, operatingspeed= speed/2, potentialCargo= cargo)
                     except NameError:
@@ -192,7 +201,9 @@ def main():
                 # Sort (go to right location etc)
                 ev3.screen.print(str(color) + " to " + str(sortZone + 1))
                 
-                sort(sortZone, armStartAngle, speed, cargo, comsExists)
+                sort(sortZone, armStartAngle, speed, cargo, comsExists, zoneHeight=zoneHeight)
+
+                # sort(sortZone, packageHeight, speed, cargo, comsExists)
                                 
                 
                 # # We sort to coms zone.
@@ -234,7 +245,11 @@ def main():
                 sendMessage(mbox)
                 wait(2)
                 armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
-                rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed, zoneHeight=zoneHeight)
+                # rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed, zoneHeight=zoneHeight)
+                # Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo, belt=False)
+                
+                
+                rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed, zoneHeight=zoneHeight)
                 Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo, belt=False)
 
             else: # when we have no collaborator or won't pick up at coms.
@@ -254,7 +269,7 @@ def main():
                     pickupzone = zoneSort["pickup"]
 
                     armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2) # make sure we are up.
-                    rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed, zoneHeight=zoneHeight)
+                    rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed, zoneHeight=zoneHeight)
                     Pickup(goToZone= pickupzone, angleTarget= -armStartAngle, zoneHeight=zoneHeight, openClawsFirst= True,  operatingspeed= speed/2, potentialCargo= cargo)
                 else:
 
@@ -332,9 +347,9 @@ def EmergencyThread():
 
 
 
-def sort(sortZone, armStartAngle, speed, cargo, comsExists):
+def sort(sortZone, armStartAngle, speed, cargo, comsExists, zoneHeight= {}):
     global zoneSort
-    global zoneHeight
+    
 
     # We sort to coms zone.
     if comsExists and sortZone == zoneSort['coms']:

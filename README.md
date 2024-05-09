@@ -7,9 +7,9 @@ To initiate the project, you'll first need to establish the origin position. Thi
 Features
 - [x] US_01: The robot shall locate, handle, and pick up items from a designated position without dropping them accidentally or harming the packages.
 - [x] REQ02: The robot should place packages at a designated position safely, gently, and reliably with reasonable speed.
-- [x] REQ03: The robot should be able to differentiate between workers and packages. As well, it should be able to find the packages in a designated pickup zone.
-- [x] REQ04: The robot should calibrate for a maximum of three different colours (except safety colour) and tell what colour the package is at a designated position.
-- [x] REQ05: The robot should safely, gently, and reliably place down the different items at designated drop-off zones based on the colour of the Item.
+
+- [x] REQ04: The robot should calibrate for a maximum of three different colours and tell what color the package is at a designated position.
+- [x] REQ05: The robot should safely, gently, and reliably place down the different items at designated drop-off zones based on the color of the Item.
 - [x] REQ06: The robot should be able to pick up items from varying elevated positions within the limitations of the robot at designated pickup positions.
 - [x] REQ07: Robot should be able to warn and communicate by any viable method to prevent collision with forklifts and other robots.
 - [x] REQ08: Should periodically check the pickup location to see if new items have arrived at designated pickup positions.

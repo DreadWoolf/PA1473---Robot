@@ -292,7 +292,7 @@ def zone_hight():
         buttons = ev3.buttons.pressed()
         wait(250)  
         for button in buttons:
-            print(button, "in", buttons)
+            #print(button, "in", buttons)
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(zonenum)
@@ -315,7 +315,7 @@ def zone_hight():
                     smallGear = 8
                     multiplyAngle = -(bigGear/smallGear)
                     weHaveHeight[0] = abs((abs(highest) + packageheight)/multiplyAngle)
-                    print(weHaveHeight[0])
+                    print("weHaveHeight",weHaveHeight[0])
                     print(zonecords)
                     ev3.speaker.beep()
                     ev3.screen.print("back!")
@@ -323,6 +323,7 @@ def zone_hight():
                     ev3.screen.clear()
                     return zonecords
                 else:
+                    ev3.speaker.beep()
                     anothertemp = True
                     ev3.screen.print("changing hight for: \n" + str(zonenum[current_index % len(zonenum)]))
             while anothertemp == True:
@@ -339,7 +340,6 @@ def zone_hight():
                         rotationMotor.run_angle(60,-10)
                     if button_str == "Button.RIGHT":
                         rotationMotor.run_angle(60,10)
-
                     if button_str == "Button.CENTER":
                         ev3.speaker.beep()
                         verangle = elevationMotor.angle()
