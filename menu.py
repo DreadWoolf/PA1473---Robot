@@ -3,43 +3,40 @@ from Parameters import *
 import Parameters 
 
 
-
+# here is where the main menu is defined
 def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
-    choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight","work_times","check_time"]
+    choicelist = ["start_code", "set_origin","zonecolor_selection","zone_hight","work_times"]#,"check_time"] 
     current_index=0
     temp=True
-    #zoneHeight[2] = 30
     inMenu[0]= True
     
     if Estop[0] == False:
         ev3.screen.print("set origin first")
         set_origin()
-        #tempfunc()
         ev3.screen.clear()
         ev3.screen.print(choicelist[current_index])
     else:
         ev3.screen.print(choicelist[current_index])
     while temp:
+        # here is where the code gets all the button inputs 
         buttons= ev3.buttons.pressed()
         wait(250)
-                 
         for button in buttons:
+            #here it cheacks if the button inputed is the left button and changes the highlighted option 
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(choicelist)
                 ev3.screen.print(choicelist[current_index])
-            
+            #here it cheacks if the button inputed is the right button and changes the highlighted option
             if str(button) == "Button.RIGHT":
                 ev3.screen.clear()
                 current_index = (current_index - 1) % len(choicelist)
                 ev3.screen.print(choicelist[current_index])
-            
+            #here it cheacks if the button inputed is the center button and selectes the highlighted option
             if str(button) == "Button.CENTER":
                 ev3.screen.clear()
                 ev3.screen.print("you chose ",choicelist[current_index])
-            
-                    # DO emergency shit!
-                    # if resume pressed Estop = False
+                # here is where it runs the intended code relaited to the selected option
                 if choicelist[current_index] == "zone_hight":
                     ev3.speaker.beep()
                     zoneHeight = zone_hight()
@@ -50,7 +47,6 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
                     ev3.speaker.beep()
                     origin = set_origin()
                     print(origin)
-                    
                     ev3.screen.clear()
                     ev3.screen.print(choicelist[current_index])
                 if choicelist[current_index] == "zonecolor_selection":
@@ -69,7 +65,6 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
                     check_time()
                     ev3.screen.clear()
                     ev3.screen.print(choicelist[current_index])
-
                 if choicelist[current_index] == "start_code":
                     ev3.speaker.beep()
                     inMenu[0] = False
@@ -78,14 +73,15 @@ def menu(zoneHeight = zoneHeight, zoneSort = zoneSort):
                 #     return 0
 
 
-
+# for testing perpuses
 def check_time():
     print(Parameters.stimes())
 
 
 
+# Emergency menu.
 def Emenu(zoneSort:dict, zoneHeight:dict):
-    Echoicelist = ["resume", "manual", "startmenu"] #, "restart"]
+    Echoicelist = ["resume", "manual", "startmenu"]
     current_index=0
     do = True
 
@@ -94,7 +90,6 @@ def Emenu(zoneSort:dict, zoneHeight:dict):
     while do:
         buttons= ev3.buttons.pressed()
         wait(250)
-        #ev3.speaker.say("Emergency!")
         for button in buttons:
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
@@ -110,13 +105,7 @@ def Emenu(zoneSort:dict, zoneHeight:dict):
                 ev3.speaker.beep()
                 ev3.screen.clear()
                 ev3.screen.print("you chose ",Echoicelist[current_index])
-                # if Echoicelist[current_index] == "restart":
-                #     restart = True
-                #     wait(5)
-                #     ev3.screen.clear()
-                #     return
                 if Echoicelist[current_index] == "resume":
-                    # Estop[0] = False
                     wait(5)
                     ev3.screen.clear()
                     ev3.screen.print(Echoicelist[current_index])
@@ -231,7 +220,7 @@ def work_times():
             wait(5000)
             return       
 
-
+    # here is where the user inputs the current time and date
     rsd_year = get_user_input("Enter current\n year:", 2024, 2100)
     rsd_month = get_user_input("Enter current\n month (1-12):", 1, 12)
     rsd_days_in_month = get_month_days(rsd_year, rsd_month)
@@ -241,6 +230,7 @@ def work_times():
     rsd = [rsd_year,rsd_month,rsd_day,rsd_hour,rsd_min]
     print(rsd)
 
+    # here is where the code checks if  
     for i in timestamps:
         print (timestamps[i]) 
         for date in timestamps[i]:
@@ -277,32 +267,6 @@ def work_times():
                 print(Parameters.stimes())
                 return 0
 
-# def tempfunc():
-#     zonecords = {
-#                 0:-200,
-#                 1:0,
-#                 2:0,
-#                 3:0
-#                 }
-#     print(zonecords)
-#     abso = {key: abs(value) for key, value in zonecords.items()}
-#     fartkey = max(abso, key=abso.get)
-#     highest = zonecords[fartkey]
-#     #print("Key with farthest value from 0:", farthest_key)
-#     print("highest in the room: ", highest)
-#     bigGear = 40
-#     smallGear = 8
-#     multiplyAngle = -(bigGear/smallGear)
-
-#     weHaveHeight[0] = abs((abs(highest) + packageheight)/multiplyAngle)
-#     print("weHaveHeight[0] =",weHaveHeight[0])
-#     return 0
-                             
-
-#stop till False
-#reset till True
-
-
 def zone_hight():
     zonenum = [1,2,3,4, "done?"]
     zonecords = {
@@ -311,16 +275,10 @@ def zone_hight():
                  2:0,
                  3:0
                  }
-    #rotationMotor.reset_angle(0)
-    #elevationMotor.reset_angle(0) 
     current_index=0
     verangle = 0
     temp=True
     anothertemp = False
-    # for num in zonenum:
-    #     temp=True
-    #     ev3.screen.clear()
-    #     ev3.screen.print("chose the location \n of zone: ",num)
     ev3.screen.clear()
     ev3.screen.print(zonenum)
     ev3.screen.print("set hight for zone\n"+ str(zonenum[current_index])+"?\n")
@@ -328,7 +286,6 @@ def zone_hight():
         buttons = ev3.buttons.pressed()
         wait(250)  
         for button in buttons:
-            #print(button, "in", buttons)
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(zonenum)
@@ -345,7 +302,6 @@ def zone_hight():
                     abso = {key: abs(value) for key, value in zonecords.items()}
                     fartkey = max(abso, key=abso.get)
                     highest = zonecords[fartkey]
-                    #print("Key with farthest value from 0:", farthest_key)
                     print("highest in the room: ", highest)
                     bigGear = 40
                     smallGear = 8
@@ -387,12 +343,6 @@ def zone_hight():
                         ev3.screen.print("set hight for zone\n"+ str(zonenum[current_index])+"?\n")
                         print(zonecords)
                         anothertemp=False
-                        # if num == :
-                        #     ev3.speaker.beep()
-                        #     ev3.screen.clear()
-                        #     ev3.screen.print("done!")
-                        #     ev3.speaker.beep()
-                        #     return zonecords
                         
 
 def set_origin():
@@ -449,7 +399,7 @@ def colorzones():
         buttons= ev3.buttons.pressed()
         wait(250)
         theend = 5
-        if len(colors) in {1,2,3}: #counter == 4:    #len(colors) in {1, 2}:
+        if len(colors) in {1,2,3}:
             for i in colors:
                 ev3.screen.clear()
                 ev3.screen.print("processing...")
@@ -460,16 +410,12 @@ def colorzones():
             ev3.screen.print("done!")
             ev3.speaker.beep()
             temp = False
-            #keys_to_keep = list(zoneSort.keys())[:-3]
             sorted_items = sorted(zoneSort.items(), key=lambda x: x[1]) # sorts based on number
             sorted_items = sorted_items[:-3] # it looks like a face :-3 and cuts so only 4 left
             zoneSort = dict(sorted_items)
             print("THE NEW DICT: "+ str(zoneSort))                
             return zoneSort
         for button in buttons:
-
-            #elif len(colors) == 0:
-
             if str(button) == "Button.LEFT":
                 ev3.screen.clear()
                 current_index = (current_index + 1) % len(colors)
@@ -492,14 +438,7 @@ def colorzones():
                 wait(500)
                 ev3.screen.clear()
                 ev3.screen.print("set color for zone\n"+"nr"+str(counter+1)+"\n"+colors[current_index % len(colors)])
-                #chosen_zone = zoneSort[chosen.lower()] 
-                #ev3.screen.print("you chose ",choicelist[current_index])
-                #temp=False
-
-            
-###
 
 
 if __name__ =="__main__":
     menu()
-#menu()

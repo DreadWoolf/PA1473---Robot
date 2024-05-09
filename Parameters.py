@@ -48,10 +48,10 @@ RobotIdentity = 'C'
 zoneSort = {
     'Green'     :   2,
     'Blue'      :   1,
-#    'coms'      :   0,
+    # 'coms'      :   0,
     # 'belt'      :   0,
     'pickup'    :   0,
-     'Yellow'    :   3
+    'Yellow'    :   3
 
     }
 
@@ -124,7 +124,7 @@ collaborators = ['A', 'B', 'C', 'D', 'E','F', 'G']
 me = ['server']
 # me = ['client']
 
- # This is the name of the remote EV3 or PC we are connecting to.
+# This is the name of the remote EV3 or PC we are connecting to.
 # SERVERID = 'ev3dev-' + collaborator
 
 messages = ['occupied', 'gift4u', 'feed', 'stop', 'emergency', 'free', 'nothing']
@@ -182,7 +182,8 @@ def stimes():
             if ctime[1] > 12:  # If the month exceeds 12, increment the year and reset the month to 1
                 ctime[1] = 1
                 ctime[0] += 1
-
+        
+        # checks if tis time to run the code  
         for i in tstamps:
             if(tstamps[i][0][0]==ctime[0] and tstamps[i][0][1] == ctime[1] and tstamps[i][0][2] == ctime[2]) and ((tstamps[i][0][3] <= ctime[3] <= tstamps[i][1][3]) and (tstamps[i][0][4] <= ctime[4] <= tstamps[i][1][4])):
                 itstime[0]=True
