@@ -29,8 +29,6 @@ pressureSense = TouchSensor(Port.S1)
 
 
 
-
-
 #########################################
 #            zone parameters            #
 #########################################
@@ -147,45 +145,57 @@ mbox = ''
 
 tstamps = {}
 ctime = []
+last_call_time = [0]  # Initialize the last call time
+stopwatch = StopWatch()
 
+def stimes():
+    global last_call_time  # Make it global so it persists across function calls
 
-def wtii(ctime, tstamps):
-    stopwatch = StopWatch()
-    temp=True
-    if (len(ctime) != 0) and (len(tstamps)!=0):    
-        # Define the number of days in each month
+    if len(ctime)!=0:
+        itstime = [False]
         month_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        while temp:
-            # Get the time passed in seconds since the last update
-            Timepast = stopwatch.time() // 1000
+        stopwatch.pause()
+        # Get the time passed in seconds since the last update
+        current_time = stopwatch.time() // 1000
+        #secpast = current_time - last_call_time[0]  # Calculate the time difference
+        last_call_time[0] = current_time  # Update the last call time
+        stopwatch.resume()
+        # Calculate the new minutes, hours, and days
+        ctime[4] += current_time // 60  # Add the minutes
+        current_time = current_time % 60  # Remaining seconds
 
-            # Calculate the new minutes, hours, and days
-            ctime[4] += Timepast // 60  # Add the minutes
-            if  Timepast // 60 == 1:   
-                stopwatch.reset()
-            ctime[3] += ctime[4] // 60  # Add the hours
-            ctime[2] += ctime[3] // 24  # Add the days
+        ctime[3] += ctime[4] // 60  # Add the hours
+        ctime[4] %= 60  # Remaining minutes
 
-            # Reset the minutes, hours, and days if they exceed their limits
-            ctime[4] %= 60
-            ctime[3] %= 24
+        ctime[2] += ctime[3] // 24  # Add the days
+        ctime[3] %= 24  # Remaining hours
 
-            # Check if it's a leap year
-            if ctime[0] % 4 == 0 and (ctime[0] % 100 != 0 or ctime[0] % 400 == 0):
-                month_days[1] = 29
+        # Check if it's a leap year
+        if ctime[0] % 4 == 0 and (ctime[0] % 100 != 0 or ctime[0] % 400 == 0):
+            month_days[1] = 29
+        else:
+            month_days[1] = 28
+
+        # Update the month and year if the days exceed their limit
+        if ctime[2] > month_days[ctime[1] - 1]:
+            ctime[2] -= month_days[ctime[1] - 1]  # Subtract the number of days in the current month
+            ctime[1] += 1  # Increment the month
+            if ctime[1] > 12:  # If the month exceeds 12, increment the year and reset the month to 1
+                ctime[1] = 1
+                ctime[0] += 1
+
+        for i in tstamps:
+            if(tstamps[i][0][0]==ctime[0] and tstamps[i][0][1] == ctime[1] and tstamps[i][0][2] == ctime[2]) and ((tstamps[i][0][3] <= ctime[3] <= tstamps[i][1][3]) and (tstamps[i][0][4] <= ctime[4] <= tstamps[i][1][4])):
+                itstime[0]=True
+                return itstime[0], current_time , ctime , current_time
+                
             else:
-                month_days[1] = 28
+                itstime[0]=False
+                return itstime[0], current_time , ctime, current_time
 
-            # Update the month and year if the days exceed their limit
-            if ctime[2] > month_days[ctime[1] - 1]:
-                ctime[2] -= month_days[ctime[1] - 1]  # Subtract the number of days in the current month
-                ctime[1] += 1  # Increment the month
-                if ctime[1] > 12:  # If the month exceeds 12, increment the year and reset the month to 1
-                    ctime[1] = 1
-                    ctime[0] += 1
-            print(ctime)
-            for time in tstamps.items():
-                print (time)
+        itstime[0]=False
+        return itstime[0], current_time, ctime, current_time
+
 
 
 
