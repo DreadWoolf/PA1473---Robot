@@ -106,31 +106,6 @@ def main():
                 thread2Alive[0] = False
 
         
-        # If thread2 is active, send appropiate messages to companion.
-        elif comsExists and cargo == False: # and thread2Alive[0] == True:
-            zoneMargin = 200
-            check = zoneLocation[zoneSort['coms']]
-
-            # Make sure we are not blocking the coms zone, if no pickup exists.
-            if 'pickup' not in zoneSort:
-                print("we fucked up")
-                pickupzone = (zoneSort['coms'] + 1) % 3
-                print("pickupzone: ", pickupzone)
-                # Var armstartangle before
-                armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
-                rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed, zoneHeight=zoneHeight)
-                # rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
-
-            # if send[0] != 'nothing' and rotationMotor.angle() >= check + zoneMargin and rotationMotor.angle() <= check - zoneMargin:
-            if send[0] == messages[0] and rotationMotor.angle() >= check + zoneMargin and rotationMotor.angle() <= check - zoneMargin:
-                send[0] = messages[5] # Free
-                sendMessage(mbox)
-                # send[0] = 'nothing'
-
-            
-
-
-
 
 
 
@@ -144,6 +119,30 @@ def main():
             clawMotor.reset_angle(0)
             # print("Reseted claw angle!")
             wait(500)
+
+
+        
+        # If thread2 is active, send appropiate messages to companion.
+        if comsExists and cargo == False: # and thread2Alive[0] == True:
+            zoneMargin = 20
+            check = zoneLocation[zoneSort['coms']]
+
+            # Make sure we are not blocking the coms zone, if no pickup exists.
+            if 'pickup' not in zoneSort:
+                print("we fucked up")
+                pickupzone = (zoneSort['coms'] + 1) % 3
+                print("pickupzone: ", pickupzone)
+                # Var armstartangle before
+                armMovement(pickupzone, angleTarget= packageHeight, operatingspeed= speed/2)
+                rotateBase(zoneLocation[pickupzone], pickupzone, packageHeight, operatingSpeed= speed, zoneHeight=zoneHeight)
+                # rotateBase(zoneLocation[pickupzone], pickupzone, armStartAngle, operatingSpeed= speed)
+
+            # if send[0] != 'nothing' and rotationMotor.angle() >= check + zoneMargin and rotationMotor.angle() <= check - zoneMargin:
+            if send[0] == messages[0] and (rotationMotor.angle() >= check + zoneMargin or rotationMotor.angle() <= check - zoneMargin):
+                send[0] = messages[5] # Free
+                sendMessage(mbox)
+                # send[0] = 'nothing'
+
 
 
 
@@ -171,7 +170,6 @@ def main():
                 if (((cAngle >= -5 ) and  (5 >= cAngle)) or (cAngle <= 5)):
                     try:
                         sortZone = zoneSort[garbage]
-                        # I THINK TRASH VARIABLE NEEDS ERRORHANDLING TOO!!!
                         ##################################################
                         ###################################################
                         # maybe need to send message here!

@@ -159,6 +159,7 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
     else:
         height = 0
 
+    print("height: ", height)
     if calibrate:
         # print("start arm angle " , elevationMotor.angle())
         elevationMotor.run_target(operatingspeed, target_angle = angleTarget * multiplyAngle)
@@ -166,7 +167,7 @@ def armMovement(goToZone, angleTarget: int, zoneHeight:dict = {}, operatingspeed
     if potentialCargo and angleTarget <= 40 * multiplyAngle - 5 and angleTarget >= 40 * multiplyAngle + 5 and height == 0:
         elevationMotor.run_until_stalled(operatingspeed, then=Stop.HOLD, duty_limit=10) #20
         # elevationMotor.run_stall(operatingSpeed,(angleTarget - height) * multiplyAngle)
-    elif height != 0 and not (abs(elevationMotor.angle()) >= abs(height) + 10 and abs(elevationMotor.angle()) >= abs(height) - 10): #pickingup == True:#height != 0:
+    elif height != 0 and (pickingup == True or potentialCargo == True or not (abs(elevationMotor.angle()) >= abs(height) + 10 and abs(elevationMotor.angle()) >= abs(height) - 10)): #pickingup == True:#height != 0:
         # elevationMotor.run_target(operatingspeed,(angleTarget) * multiplyAngle)
         print("go for height")
         elevationMotor.run_target(operatingspeed,(height) * multiplyAngle)

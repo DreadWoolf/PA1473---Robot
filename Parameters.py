@@ -42,16 +42,16 @@ RobotRegister = {
     'G' : 18
 }
 
-RobotIdentity = 'D'
+RobotIdentity = 'C'
  
 
 zoneSort = {
     'Green'     :   2,
     'Blue'      :   1,
-    'coms'      :   0,
+#    'coms'      :   0,
     # 'belt'      :   0,
-    'pickup'    :   3,
-    # 'Yellow'    :   0
+    'pickup'    :   0,
+     'Yellow'    :   3
 
     }
 
