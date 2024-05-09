@@ -46,7 +46,7 @@ def newcolor():
     return condition
 
     
-
+# this function is for the robot to understand what color is it looking at
 def ngetColor():
     aos = 5
     hred,hgreen,hblue = 0,0,0
@@ -56,8 +56,7 @@ def ngetColor():
         hgreen += green
         hblue += blue
         wait(50)
-    # print(hred,hgreen,hblue)
-    # print(abs(hred-hblue))
+
     colors = [
     ("Blue", lambda r, g, b: b > max(r, g)),
     ("Yellow", lambda r, g, b: r > max(g, b) and g > b and 50 >= abs(r - (g+b))),

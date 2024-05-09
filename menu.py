@@ -230,7 +230,7 @@ def work_times():
     rsd = [rsd_year,rsd_month,rsd_day,rsd_hour,rsd_min]
     print(rsd)
 
-    # here is where the code checks if  
+    # here is where the code checks if the time stamps inputed are valid 
     for i in timestamps:
         print (timestamps[i]) 
         for date in timestamps[i]:
