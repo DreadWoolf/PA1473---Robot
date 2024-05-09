@@ -145,25 +145,24 @@ mbox = ''
 
 tstamps = {}
 ctime = []
-last_call_time = [0]  # Initialize the last call time
+offset = [0]  # Initialize the last call time
 stopwatch = StopWatch()
 
 def stimes():
-    global last_call_time  # Make it global so it persists across function calls
+    global offset  # Make it global so it persists across function calls
 
     if len(ctime)!=0:
         itstime = [False]
         month_days = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        stopwatch.pause()
+
         # Get the time passed in seconds since the last update
         current_time = stopwatch.time() // 1000
-        #secpast = current_time - last_call_time[0]  # Calculate the time difference
-        last_call_time[0] = current_time  # Update the last call time
-        stopwatch.resume()
-        # Calculate the new minutes, hours, and days
-        ctime[4] += current_time // 60  # Add the minutes
-        current_time = current_time % 60  # Remaining seconds
 
+
+        # Calculate the new minutes, hours, and days
+        ctime[4] += (current_time+offset[0]) // 60  # Add the minutes
+        offset[0] =  (current_time+offset[0])-(((current_time+offset[0]) // 60) * 60)# Remaining seconds
+        stopwatch.reset()
         ctime[3] += ctime[4] // 60  # Add the hours
         ctime[4] %= 60  # Remaining minutes
 
